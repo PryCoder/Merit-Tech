@@ -1,0 +1,133 @@
+2026-04-25T07:24:09.909Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:24:17.226Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:26:44.507Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:20.908Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:23.246Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:24.120Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:41.926Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:43.409Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:44.307Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:56.063Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:57.635Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:27:58.312Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:28:02.369Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:28:08.152Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:28:25.918Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:28:27.536Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:28:54.539Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:30:35.158Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:30:42.071Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:31:10.276Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:31:11.626Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:31:18.657Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:31:24.152Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:32:48.210Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:33:11.688Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:33:48.530Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:35:49.920Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:35:57.170Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T07:36:12.280Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T08:17:55.312Z INFO MongoDB connected
+2026-04-25T08:17:55.502Z ERROR MongoDB connection failed {"uri":"mongodb://127.0.0.1:27017/merit_loop","name":"MongooseServerSelectionError","message":"connect ECONNREFUSED 127.0.0.1:27017","hint":"MongoDB is unreachable. If you want local dev, start MongoDB (e.g. `docker compose -f docker/docker-compose.dev.yml up -d mongo`) or update MONGODB_URI to a reachable host/port."}
+2026-04-25T08:17:56.628Z INFO MongoDB disconnected
+2026-04-25T08:19:13.359Z ERROR MongoDB connection failed {"uri":"mongodb://127.0.0.1:27017/merit_loop","name":"MongooseServerSelectionError","message":"connect ECONNREFUSED 127.0.0.1:27017","hint":"MongoDB is unreachable. If you want local dev, start MongoDB (e.g. `docker compose -f docker/docker-compose.dev.yml up -d mongo`) or update MONGODB_URI to a reachable host/port."}
+2026-04-25T08:20:04.628Z INFO MongoDB connected
+2026-04-25T08:20:04.651Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T08:40:19.557Z INFO MongoDB connected
+2026-04-25T08:40:19.609Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T08:42:22.817Z INFO MongoDB connected
+2026-04-25T08:42:22.846Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T08:46:47.647Z INFO MongoDB connected
+2026-04-25T08:46:47.679Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:18:26.630Z INFO MongoDB connected
+2026-04-25T14:18:26.659Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:27:33.910Z INFO MongoDB connected
+2026-04-25T14:27:33.934Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:27:39.767Z INFO MongoDB connected
+2026-04-25T14:27:39.794Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:27:47.464Z INFO MongoDB connected
+2026-04-25T14:27:47.490Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:03.736Z INFO MongoDB connected
+2026-04-25T14:28:03.760Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:15.823Z INFO MongoDB connected
+2026-04-25T14:28:15.849Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:26.762Z INFO MongoDB connected
+2026-04-25T14:28:26.790Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:33.211Z INFO MongoDB connected
+2026-04-25T14:28:33.236Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:39.743Z INFO MongoDB connected
+2026-04-25T14:28:39.767Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:47.557Z INFO MongoDB connected
+2026-04-25T14:28:47.583Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:53.993Z INFO MongoDB connected
+2026-04-25T14:28:54.017Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:28:59.458Z INFO MongoDB connected
+2026-04-25T14:28:59.481Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:29:04.617Z INFO MongoDB connected
+2026-04-25T14:29:04.645Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:29:12.044Z INFO MongoDB connected
+2026-04-25T14:29:12.068Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:29:18.626Z INFO MongoDB connected
+2026-04-25T14:29:18.657Z INFO API listening on http://localhost:8080 (development)
+2026-04-25T14:36:50.184Z INFO MongoDB connected
+2026-04-25T14:36:50.212Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:02.120Z INFO MongoDB connected
+2026-04-26T06:42:02.194Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:14.312Z INFO MongoDB connected
+2026-04-26T06:42:14.348Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:20.054Z INFO MongoDB connected
+2026-04-26T06:42:20.087Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:27.957Z INFO MongoDB connected
+2026-04-26T06:42:27.991Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:31.377Z ERROR Unhandled error {"requestId":"6767329a-ffa0-48f0-9e07-147fdb3e73ff","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:7:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:103:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:39:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:42:37.459Z INFO MongoDB connected
+2026-04-26T06:42:37.490Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:44.528Z INFO MongoDB connected
+2026-04-26T06:42:44.557Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:42:50.118Z INFO MongoDB connected
+2026-04-26T06:42:50.148Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:05.164Z INFO MongoDB connected
+2026-04-26T06:43:05.193Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:08.339Z INFO MongoDB connected
+2026-04-26T06:43:08.369Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:12.957Z INFO MongoDB connected
+2026-04-26T06:43:12.989Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:20.697Z INFO MongoDB connected
+2026-04-26T06:43:20.731Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:30.215Z INFO MongoDB connected
+2026-04-26T06:43:30.243Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:31.335Z ERROR Unhandled error {"requestId":"59e72a23-f7ad-47d3-829b-d17f9b9a5ccd","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:150:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:43:42.129Z INFO MongoDB connected
+2026-04-26T06:43:42.158Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:49.759Z INFO MongoDB connected
+2026-04-26T06:43:49.788Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:43:55.080Z INFO MongoDB connected
+2026-04-26T06:43:55.115Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:44:02.896Z INFO MongoDB connected
+2026-04-26T06:44:02.925Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:44:10.434Z INFO MongoDB connected
+2026-04-26T06:44:10.464Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:44:31.640Z ERROR Unhandled error {"requestId":"41ff55b3-3cbd-49a9-8d42-79ee50ffbd6a","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:148:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:44:32.300Z ERROR Unhandled error {"requestId":"3f4be125-33b6-4a90-afd1-3b1dc14264a7","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:148:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:44:43.389Z ERROR Unhandled error {"requestId":"69bc232d-607b-4c6e-a16b-d642022e340d","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:148:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:44:56.327Z ERROR Unhandled error {"requestId":"b1f5eb14-1395-4713-b37d-6747c654fb5d","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:148:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:45:31.346Z ERROR Unhandled error {"requestId":"70e3721c-0b10-4591-84b9-44607f8901d3","status":404,"message":"Assessment not found","stack":"Error: Assessment not found\n    at notFound (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:8:15)\n    at Object.getRankingByAssessment (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\session.service.js:148:28)\n    at getRanking (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\assessment.controller.js:66:35)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\lib\\router\\index.js:376:14)"}
+2026-04-26T06:49:36.193Z INFO MongoDB connected
+2026-04-26T06:49:37.800Z INFO MongoDB disconnected
+2026-04-26T06:50:11.226Z INFO MongoDB connected
+2026-04-26T06:50:11.259Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:55:36.225Z INFO MongoDB connected
+2026-04-26T06:55:36.285Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:57:07.195Z INFO MongoDB connected
+2026-04-26T06:57:07.268Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T06:58:52.452Z INFO MongoDB connected
+2026-04-26T06:58:52.491Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T10:32:44.497Z INFO MongoDB connected
+2026-04-26T10:32:45.831Z INFO MongoDB disconnected
+2026-04-26T11:23:02.886Z INFO MongoDB connected
+2026-04-26T11:23:02.912Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T11:23:48.636Z ERROR Unhandled error {"requestId":"918dd96b-4cb9-4ea2-851f-0353d1b5d97e","status":409,"message":"Email is already registered","stack":"Error: Email is already registered\n    at conflict (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:7:15)\n    at Object.register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:47:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\auth.controller.js:5:20)"}
+2026-04-26T11:30:45.741Z INFO MongoDB connected
+2026-04-26T11:30:45.764Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T14:32:53.887Z INFO MongoDB connected
+2026-04-26T14:32:53.926Z INFO API listening on http://localhost:8080 (development)
