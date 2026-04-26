@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Merit-Loop Engine
 
 Merit-Loop Engine is an AI-powered platform for **skill-first technical hiring**:
@@ -60,3 +61,6 @@ Open:
 
 - The backend supports deterministic mentor hints without any API key.
 - If you want Grok-powered mentoring, add `GROK_API_KEY` in `backend/.env`.
+=======
+# Merit-Tech
+>>>>>>> 9e4de59cd185abf5f8f4a142a8878f8a05e4e8e7
