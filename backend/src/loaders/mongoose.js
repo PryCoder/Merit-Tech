@@ -18,13 +18,21 @@ function buildMongoHint(err, uri) {
   const message = String(err?.message || '');
 
   // Local dev: Mongo not running / wrong port
-  if (err?.name === 'MongoServerSelectionError' || message.includes('ECONNREFUSED')) {
+  if (
+    err?.name === 'MongoServerSelectionError' ||
+    message.includes('ECONNREFUSED')
+  ) {
     return 'MongoDB is unreachable. If you want local dev, start MongoDB (e.g. `docker compose -f docker/docker-compose.dev.yml up -d mongo`) or update MONGODB_URI to a reachable host/port.';
   }
 
   // Auth failures (Atlas or self-hosted)
-  if (message.toLowerCase().includes('authentication failed') || message.toLowerCase().includes('bad auth')) {
-    const isAtlas = String(uri || '').startsWith('mongodb+srv://') || String(err?.codeName || '').includes('Atlas');
+  if (
+    message.toLowerCase().includes('authentication failed') ||
+    message.toLowerCase().includes('bad auth')
+  ) {
+    const isAtlas =
+      String(uri || '').startsWith('mongodb+srv://') ||
+      String(err?.codeName || '').includes('Atlas');
     if (isAtlas) {
       return 'MongoDB Atlas authentication failed. Verify the Atlas database user/password in MONGODB_URI and ensure your IP is allowed in Atlas Network Access.';
     }

@@ -12,9 +12,15 @@ function notFound(code, message) {
 }
 
 const sessionService = {
-  startSession({ assessmentId, candidateName = null, candidateEmail = null, config }) {
+  startSession({
+    assessmentId,
+    candidateName = null,
+    candidateEmail = null,
+    config,
+  }) {
     const assessment = assessmentService.getAssessmentById(assessmentId);
-    if (!assessment) throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
+    if (!assessment)
+      throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
 
     const candidate = candidateService.createCandidate({
       name: candidateName,
@@ -51,7 +57,8 @@ const sessionService = {
 
   async startSessionForUser({ assessmentId, userId, config }) {
     const assessment = assessmentService.getAssessmentById(assessmentId);
-    if (!assessment) throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
+    if (!assessment)
+      throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
 
     if (!config?.mongodb?.enabled) {
       const err = new Error('MongoDB not configured');
@@ -132,11 +139,17 @@ const sessionService = {
       ts: Date.now(),
     });
 
-    const assessment = assessmentService.getAssessmentById(session.assessmentId);
+    const assessment = assessmentService.getAssessmentById(
+      session.assessmentId
+    );
     const candidate = candidateService.getCandidateById(session.candidateId);
 
     // Blind eval: reveal only if score meets threshold
-    if (assessment && candidate && session.score.score >= assessment.revealThreshold) {
+    if (
+      assessment &&
+      candidate &&
+      session.score.score >= assessment.revealThreshold
+    ) {
       candidateService.revealCandidate(candidate.id);
     }
 
@@ -145,10 +158,12 @@ const sessionService = {
 
   getRankingByAssessment({ assessmentId }) {
     const assessment = assessmentService.getAssessmentById(assessmentId);
-    if (!assessment) throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
+    if (!assessment)
+      throw notFound('ASSESSMENT_NOT_FOUND', 'Assessment not found');
 
     const sessions = Array.from(store.sessions.values()).filter(
-      (s) => s.assessmentId === assessmentId && s.status === 'SUBMITTED' && s.score
+      (s) =>
+        s.assessmentId === assessmentId && s.status === 'SUBMITTED' && s.score
     );
 
     sessions.sort((a, b) => b.score.score - a.score.score);

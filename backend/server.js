@@ -13,7 +13,9 @@ async function main() {
   const server = http.createServer(app);
 
   server.listen(config.port, () => {
-    logger.info(`API listening on http://localhost:${config.port} (${config.nodeEnv})`);
+    logger.info(
+      `API listening on http://localhost:${config.port} (${config.nodeEnv})`
+    );
   });
 
   const shutdown = (signal) => {

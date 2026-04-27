@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import NextLink from 'next/link'
-import React from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
+import NextLink from 'next/link';
+import React from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import {
   Badge,
   Box,
@@ -17,125 +17,177 @@ import {
   Text,
   Textarea,
   VStack,
-} from '@chakra-ui/react'
-import { ApiError, fetchJson } from '../../lib/fetchJson'
+} from '@chakra-ui/react';
+import { ApiError, fetchJson } from '../../lib/fetchJson';
 
 type CandidateProfile = {
-  candidate: { publicId: string; revealed: boolean; name?: string | null; email?: string | null }
+  candidate: {
+    publicId: string;
+    revealed: boolean;
+    name?: string | null;
+    email?: string | null;
+  };
   sessions: Array<{
-    id: string
-    assessment: { id: string; title: string; revealThreshold: number } | null
-    status: string
-    createdAt: string
-    submittedAt: string | null
+    id: string;
+    assessment: { id: string; title: string; revealThreshold: number } | null;
+    status: string;
+    createdAt: string;
+    submittedAt: string | null;
     submission: {
-      passed?: boolean
-      timeMs?: number
-      hintsUsed?: number
-      testsPassed?: number
-      testsTotal?: number
-      language?: string
-      notes?: string
-    } | null
-    score: { score: number; breakdown?: any } | null
-  }>
-}
+      passed?: boolean;
+      timeMs?: number;
+      hintsUsed?: number;
+      testsPassed?: number;
+      testsTotal?: number;
+      language?: string;
+      notes?: string;
+    } | null;
+    score: { score: number; breakdown?: any } | null;
+  }>;
+};
 
 type ReplayResponse = {
   replay: {
-    sessionId: string
-    events: Array<{ type: string; payload: any; ts: number }>
-    createdAt: string
-    updatedAt: string
-  }
-}
+    sessionId: string;
+    events: Array<{ type: string; payload: any; ts: number }>;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
 
 export default function CandidateEvaluationPage() {
-  const params = useParams<{ hash: string }>()
-  const searchParams = useSearchParams()
+  const params = useParams<{ hash: string }>();
+  const searchParams = useSearchParams();
 
-  const publicId = params.hash
-  const initialSessionId = searchParams.get('sessionId')
+  const publicId = params?.hash ?? '';
+  const initialSessionId = searchParams?.get('sessionId') ?? null;
 
-  const [profile, setProfile] = React.useState<CandidateProfile | null>(null)
-  const [selectedSessionId, setSelectedSessionId] = React.useState<string | null>(initialSessionId)
-  const [replay, setReplay] = React.useState<ReplayResponse['replay'] | null>(null)
+  const [profile, setProfile] = React.useState<CandidateProfile | null>(null);
+  const [selectedSessionId, setSelectedSessionId] = React.useState<
+    string | null
+  >(initialSessionId);
+  const [replay, setReplay] = React.useState<ReplayResponse['replay'] | null>(
+    null
+  );
 
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [error, setError] = React.useState<string | null>(null)
-  const [isRevealing, setIsRevealing] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [isRevealing, setIsRevealing] = React.useState(false);
 
   async function loadProfile() {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const data = await fetchJson<CandidateProfile>(`/api/candidates/${encodeURIComponent(publicId)}`)
-      setProfile(data)
+    if (!publicId) {
+      setError('Missing candidate id');
+      setProfile(null);
+      setIsLoading(false);
+      return;
+    }
 
-      const preferred = selectedSessionId || initialSessionId || data.sessions?.[0]?.id || null
-      setSelectedSessionId(preferred)
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await fetchJson<CandidateProfile>(
+        `/api/candidates/${encodeURIComponent(publicId)}`
+      );
+      setProfile(data);
+
+      const preferred =
+        selectedSessionId || initialSessionId || data.sessions?.[0]?.id || null;
+      setSelectedSessionId(preferred);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Failed to load candidate')
+      setError(
+        err instanceof ApiError ? err.message : 'Failed to load candidate'
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function loadReplay(sessionId: string) {
-    setReplay(null)
+    setReplay(null);
     try {
-      const data = await fetchJson<ReplayResponse>(`/api/sessions/${encodeURIComponent(sessionId)}/replay`)
-      setReplay(data.replay)
+      const data = await fetchJson<ReplayResponse>(
+        `/api/sessions/${encodeURIComponent(sessionId)}/replay`
+      );
+      setReplay(data.replay);
     } catch {
       // replay is optional
-      setReplay(null)
+      setReplay(null);
     }
   }
 
   React.useEffect(() => {
-    loadProfile()
+    if (!publicId) {
+      setError('Missing candidate id');
+      setProfile(null);
+      setIsLoading(false);
+      return;
+    }
+    loadProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicId])
+  }, [publicId]);
 
   React.useEffect(() => {
     if (!selectedSessionId) {
-      setReplay(null)
-      return
+      setReplay(null);
+      return;
     }
-    loadReplay(selectedSessionId)
+    loadReplay(selectedSessionId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSessionId])
+  }, [selectedSessionId]);
 
-  const selectedSession = profile?.sessions.find((s) => s.id === selectedSessionId) || null
-  const passingThreshold = selectedSession?.assessment?.revealThreshold ?? null
-  const meritScore = selectedSession?.score?.score ?? null
+  const selectedSession =
+    profile?.sessions.find((s) => s.id === selectedSessionId) || null;
+  const passingThreshold = selectedSession?.assessment?.revealThreshold ?? null;
+  const meritScore = selectedSession?.score?.score ?? null;
   const canReveal =
     !profile?.candidate.revealed &&
     typeof passingThreshold === 'number' &&
     typeof meritScore === 'number' &&
-    meritScore >= passingThreshold
+    meritScore >= passingThreshold;
 
-  const hintEvents = (replay?.events || []).filter((e) => e.type === 'HINT')
+  const hintEvents = (replay?.events || []).filter((e) => e.type === 'HINT');
 
   return (
     <Box minH="100dvh" bg="var(--background)" color="var(--foreground)">
       <Container maxW="6xl" py={{ base: 10, md: 14 }}>
-        <HStack justify="space-between" align="start" spacing={6} flexWrap="wrap">
+        <HStack
+          justify="space-between"
+          align="start"
+          spacing={6}
+          flexWrap="wrap"
+        >
           <Box>
-            <Link as={NextLink} href="/dashboard" color="brand.600" fontWeight={600}>
+            <Link
+              as={NextLink}
+              href="/dashboard"
+              color="brand.600"
+              fontWeight={600}
+            >
               ← Back to dashboard
             </Link>
-            <Heading mt={3} fontFamily="var(--font-playfair)" fontSize={{ base: '3xl', md: '4xl' }}>
+            <Heading
+              mt={3}
+              fontFamily="var(--font-playfair)"
+              fontSize={{ base: '3xl', md: '4xl' }}
+            >
               Candidate Evaluation
             </Heading>
             <Text mt={2} color="blackAlpha.700" maxW="90ch">
-              Proof-of-work view: Ghost Replay, mentor transcript, test results, and the identity reveal gate.
+              Proof-of-work view: Ghost Replay, mentor transcript, test results,
+              and the identity reveal gate.
             </Text>
             <HStack mt={4} spacing={3} flexWrap="wrap">
-              <Badge variant="subtle" colorScheme="gray" fontFamily="var(--font-geist-mono)">
+              <Badge
+                variant="subtle"
+                colorScheme="gray"
+                fontFamily="var(--font-geist-mono)"
+              >
                 Hash: {publicId}
               </Badge>
-              <Badge variant="subtle" colorScheme={profile?.candidate.revealed ? 'green' : 'orange'}>
+              <Badge
+                variant="subtle"
+                colorScheme={profile?.candidate.revealed ? 'green' : 'orange'}
+              >
                 {profile?.candidate.revealed ? 'Unlocked' : 'Locked'}
               </Badge>
             </HStack>
@@ -149,7 +201,15 @@ export default function CandidateEvaluationPage() {
         <Divider my={8} borderColor="blackAlpha.200" />
 
         {error ? (
-          <Box borderWidth="1px" borderColor="red.200" bg="red.50" borderRadius="lg" px={4} py={3} mb={8}>
+          <Box
+            borderWidth="1px"
+            borderColor="red.200"
+            bg="red.50"
+            borderRadius="lg"
+            px={4}
+            py={3}
+            mb={8}
+          >
             <Text color="red.700" fontSize="sm">
               {error}
             </Text>
@@ -160,14 +220,26 @@ export default function CandidateEvaluationPage() {
 
         {!isLoading && profile ? (
           <Stack spacing={8}>
-            <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
-              <HStack justify="space-between" align="start" spacing={6} flexWrap="wrap">
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              p={{ base: 6, md: 8 }}
+            >
+              <HStack
+                justify="space-between"
+                align="start"
+                spacing={6}
+                flexWrap="wrap"
+              >
                 <Box>
                   <Heading as="h2" fontSize="2xl">
                     Identity
                   </Heading>
                   <Text color="blackAlpha.700" mt={1}>
-                    Reveal stays locked until the passing Merit Score threshold is met.
+                    Reveal stays locked until the passing Merit Score threshold
+                    is met.
                   </Text>
                 </Box>
 
@@ -180,14 +252,21 @@ export default function CandidateEvaluationPage() {
                     isLoading={isRevealing}
                     loadingText="Revealing"
                     onClick={async () => {
-                      setIsRevealing(true)
+                      setIsRevealing(true);
                       try {
-                        await fetchJson(`/api/candidates/${encodeURIComponent(publicId)}/reveal`, { method: 'POST' })
-                        await loadProfile()
+                        await fetchJson(
+                          `/api/candidates/${encodeURIComponent(publicId)}/reveal`,
+                          { method: 'POST' }
+                        );
+                        await loadProfile();
                       } catch (err) {
-                        setError(err instanceof ApiError ? err.message : 'Failed to reveal identity')
+                        setError(
+                          err instanceof ApiError
+                            ? err.message
+                            : 'Failed to reveal identity'
+                        );
                       } finally {
-                        setIsRevealing(false)
+                        setIsRevealing(false);
                       }
                     }}
                   >
@@ -204,13 +283,17 @@ export default function CandidateEvaluationPage() {
                     <Text color="blackAlpha.600" fontSize="sm">
                       Name
                     </Text>
-                    <Text fontWeight={700}>{profile.candidate.name || '—'}</Text>
+                    <Text fontWeight={700}>
+                      {profile.candidate.name || '—'}
+                    </Text>
                   </Box>
                   <Box>
                     <Text color="blackAlpha.600" fontSize="sm">
                       Email
                     </Text>
-                    <Text fontWeight={700}>{profile.candidate.email || '—'}</Text>
+                    <Text fontWeight={700}>
+                      {profile.candidate.email || '—'}
+                    </Text>
                   </Box>
                 </HStack>
               ) : (
@@ -220,8 +303,19 @@ export default function CandidateEvaluationPage() {
               )}
             </Box>
 
-            <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
-              <HStack justify="space-between" align="start" spacing={6} flexWrap="wrap">
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              p={{ base: 6, md: 8 }}
+            >
+              <HStack
+                justify="space-between"
+                align="start"
+                spacing={6}
+                flexWrap="wrap"
+              >
                 <Box>
                   <Heading as="h2" fontSize="2xl">
                     Session
@@ -235,7 +329,11 @@ export default function CandidateEvaluationPage() {
                   <Select
                     value={selectedSessionId ?? ''}
                     onChange={(e) => setSelectedSessionId(e.target.value)}
-                    placeholder={profile.sessions.length ? 'Select a session' : 'No sessions'}
+                    placeholder={
+                      profile.sessions.length
+                        ? 'Select a session'
+                        : 'No sessions'
+                    }
                   >
                     {profile.sessions.map((s) => (
                       <option key={s.id} value={s.id}>
@@ -249,34 +347,52 @@ export default function CandidateEvaluationPage() {
               <Divider my={6} />
 
               {!selectedSession ? (
-                <Text color="blackAlpha.600">No submitted session selected.</Text>
+                <Text color="blackAlpha.600">
+                  No submitted session selected.
+                </Text>
               ) : (
                 <HStack spacing={8} flexWrap="wrap">
                   <Box>
                     <Text color="blackAlpha.600" fontSize="sm">
                       Merit Score
                     </Text>
-                    <Text fontWeight={700}>{selectedSession.score?.score ?? '—'}</Text>
+                    <Text fontWeight={700}>
+                      {selectedSession.score?.score ?? '—'}
+                    </Text>
                   </Box>
                   <Box>
                     <Text color="blackAlpha.600" fontSize="sm">
                       Passing threshold
                     </Text>
-                    <Text fontWeight={700}>{selectedSession.assessment?.revealThreshold ?? '—'}</Text>
+                    <Text fontWeight={700}>
+                      {selectedSession.assessment?.revealThreshold ?? '—'}
+                    </Text>
                   </Box>
                   <Box>
                     <Text color="blackAlpha.600" fontSize="sm">
                       Submitted
                     </Text>
-                    <Text fontWeight={700} fontFamily="var(--font-geist-mono)" fontSize="sm">
-                      {selectedSession.submittedAt ? new Date(selectedSession.submittedAt).toLocaleString() : '—'}
+                    <Text
+                      fontWeight={700}
+                      fontFamily="var(--font-geist-mono)"
+                      fontSize="sm"
+                    >
+                      {selectedSession.submittedAt
+                        ? new Date(selectedSession.submittedAt).toLocaleString()
+                        : '—'}
                     </Text>
                   </Box>
                 </HStack>
               )}
             </Box>
 
-            <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              p={{ base: 6, md: 8 }}
+            >
               <VStack align="stretch" spacing={5}>
                 <Box>
                   <Heading as="h2" fontSize="2xl">
@@ -288,21 +404,36 @@ export default function CandidateEvaluationPage() {
                 </Box>
 
                 {!selectedSessionId ? (
-                  <Text color="blackAlpha.600">Select a session to view replay.</Text>
+                  <Text color="blackAlpha.600">
+                    Select a session to view replay.
+                  </Text>
                 ) : !replay ? (
-                  <Text color="blackAlpha.600">No replay events captured yet.</Text>
+                  <Text color="blackAlpha.600">
+                    No replay events captured yet.
+                  </Text>
                 ) : (
                   <Textarea
                     fontFamily="var(--font-geist-mono)"
                     readOnly
                     minH="220px"
-                    value={replay.events.map((e) => `${new Date(e.ts).toISOString()}  ${e.type}  ${JSON.stringify(e.payload)}`).join('\n')}
+                    value={replay.events
+                      .map(
+                        (e) =>
+                          `${new Date(e.ts).toISOString()}  ${e.type}  ${JSON.stringify(e.payload)}`
+                      )
+                      .join('\n')}
                   />
                 )}
               </VStack>
             </Box>
 
-            <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              p={{ base: 6, md: 8 }}
+            >
               <VStack align="stretch" spacing={5}>
                 <Box>
                   <Heading as="h2" fontSize="2xl">
@@ -314,12 +445,24 @@ export default function CandidateEvaluationPage() {
                 </Box>
 
                 {hintEvents.length === 0 ? (
-                  <Text color="blackAlpha.600">No mentor transcript captured yet.</Text>
+                  <Text color="blackAlpha.600">
+                    No mentor transcript captured yet.
+                  </Text>
                 ) : (
                   <Stack spacing={3}>
                     {hintEvents.map((e, idx) => (
-                      <Box key={`${e.ts}:${idx}`} borderWidth="1px" borderColor="blackAlpha.100" borderRadius="xl" p={4}>
-                        <Text color="blackAlpha.600" fontSize="xs" fontFamily="var(--font-geist-mono)">
+                      <Box
+                        key={`${e.ts}:${idx}`}
+                        borderWidth="1px"
+                        borderColor="blackAlpha.100"
+                        borderRadius="xl"
+                        p={4}
+                      >
+                        <Text
+                          color="blackAlpha.600"
+                          fontSize="xs"
+                          fontFamily="var(--font-geist-mono)"
+                        >
                           {new Date(e.ts).toLocaleString()}
                         </Text>
                         <Text mt={2} fontWeight={700}>
@@ -341,7 +484,13 @@ export default function CandidateEvaluationPage() {
               </VStack>
             </Box>
 
-            <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
+            <Box
+              bg="white"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="blackAlpha.100"
+              p={{ base: 6, md: 8 }}
+            >
               <VStack align="stretch" spacing={5}>
                 <Box>
                   <Heading as="h2" fontSize="2xl">
@@ -353,28 +502,35 @@ export default function CandidateEvaluationPage() {
                 </Box>
 
                 {!selectedSession?.submission ? (
-                  <Text color="blackAlpha.600">No submission payload recorded.</Text>
+                  <Text color="blackAlpha.600">
+                    No submission payload recorded.
+                  </Text>
                 ) : (
                   <HStack spacing={8} flexWrap="wrap">
                     <Box>
                       <Text color="blackAlpha.600" fontSize="sm">
                         Passed
                       </Text>
-                      <Text fontWeight={700}>{String(!!selectedSession.submission.passed)}</Text>
+                      <Text fontWeight={700}>
+                        {String(!!selectedSession.submission.passed)}
+                      </Text>
                     </Box>
                     <Box>
                       <Text color="blackAlpha.600" fontSize="sm">
                         Tests
                       </Text>
                       <Text fontWeight={700}>
-                        {selectedSession.submission.testsPassed ?? '—'}/{selectedSession.submission.testsTotal ?? '—'}
+                        {selectedSession.submission.testsPassed ?? '—'}/
+                        {selectedSession.submission.testsTotal ?? '—'}
                       </Text>
                     </Box>
                     <Box>
                       <Text color="blackAlpha.600" fontSize="sm">
                         Hints used
                       </Text>
-                      <Text fontWeight={700}>{selectedSession.submission.hintsUsed ?? '—'}</Text>
+                      <Text fontWeight={700}>
+                        {selectedSession.submission.hintsUsed ?? '—'}
+                      </Text>
                     </Box>
                     <Box>
                       <Text color="blackAlpha.600" fontSize="sm">
@@ -394,5 +550,5 @@ export default function CandidateEvaluationPage() {
         ) : null}
       </Container>
     </Box>
-  )
+  );
 }

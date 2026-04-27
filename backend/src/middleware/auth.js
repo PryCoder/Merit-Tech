@@ -7,7 +7,11 @@ function authRequired() {
       const [scheme, token] = header.split(' ');
 
       if (scheme !== 'Bearer' || !token) {
-        return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Missing Bearer token' } });
+        return res
+          .status(401)
+          .json({
+            error: { code: 'UNAUTHORIZED', message: 'Missing Bearer token' },
+          });
       }
 
       const secret = req.app.locals.config?.auth?.jwtSecret;
@@ -21,7 +25,9 @@ function authRequired() {
 
       next();
     } catch (err) {
-      return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } });
+      return res
+        .status(401)
+        .json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } });
     }
   };
 }

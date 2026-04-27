@@ -10,12 +10,19 @@ const {
 } = require('../controllers/assessment.controller');
 const { authRequired } = require('../middleware/auth');
 const { validate } = require('../validators/validate');
-const { createAssessmentSchema, startSessionSchema } = require('../validators/schemas');
+const {
+  createAssessmentSchema,
+  startSessionSchema,
+} = require('../validators/schemas');
 
 const assessmentRoutes = Router();
 
 assessmentRoutes.get('/', getAssessments);
-assessmentRoutes.post('/', validate({ body: createAssessmentSchema }), createAssessment);
+assessmentRoutes.post(
+  '/',
+  validate({ body: createAssessmentSchema }),
+  createAssessment
+);
 
 assessmentRoutes.get('/:assessmentId', getAssessment);
 assessmentRoutes.post(
@@ -23,7 +30,11 @@ assessmentRoutes.post(
   validate({ body: startSessionSchema }),
   startSession
 );
-assessmentRoutes.post('/:assessmentId/sessions/self', authRequired(), startSelfSession);
+assessmentRoutes.post(
+  '/:assessmentId/sessions/self',
+  authRequired(),
+  startSelfSession
+);
 assessmentRoutes.get('/:assessmentId/rankings', getRanking);
 
 module.exports = { assessmentRoutes };

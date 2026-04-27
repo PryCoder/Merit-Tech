@@ -12,8 +12,18 @@ function getAssessments(req, res) {
 }
 
 function getAssessment(req, res) {
-  const assessment = assessmentService.getAssessmentById(req.params.assessmentId);
-  if (!assessment) return res.status(404).json({ error: { code: 'ASSESSMENT_NOT_FOUND', message: 'Assessment not found' } });
+  const assessment = assessmentService.getAssessmentById(
+    req.params.assessmentId
+  );
+  if (!assessment)
+    return res
+      .status(404)
+      .json({
+        error: {
+          code: 'ASSESSMENT_NOT_FOUND',
+          message: 'Assessment not found',
+        },
+      });
   res.json({ assessment });
 }
 
@@ -32,8 +42,16 @@ function startSession(req, res, next) {
     });
 
     res.status(201).json({
-      assessment: { id: assessment.id, title: assessment.title, revealThreshold: assessment.revealThreshold },
-      session: { id: session.id, status: session.status, createdAt: session.createdAt },
+      assessment: {
+        id: assessment.id,
+        title: assessment.title,
+        revealThreshold: assessment.revealThreshold,
+      },
+      session: {
+        id: session.id,
+        status: session.status,
+        createdAt: session.createdAt,
+      },
       candidate: { publicId: candidate.publicId, revealed: candidate.revealed },
     });
   } catch (err) {
@@ -43,17 +61,27 @@ function startSession(req, res, next) {
 
 async function startSelfSession(req, res, next) {
   try {
-    if (req.user?.role !== 'candidate') throw forbidden('FORBIDDEN', 'Candidate role required');
+    if (req.user?.role !== 'candidate')
+      throw forbidden('FORBIDDEN', 'Candidate role required');
 
-    const { session, candidate, assessment } = await sessionService.startSessionForUser({
-      assessmentId: req.params.assessmentId,
-      userId: req.user.id,
-      config: req.app.locals.config,
-    });
+    const { session, candidate, assessment } =
+      await sessionService.startSessionForUser({
+        assessmentId: req.params.assessmentId,
+        userId: req.user.id,
+        config: req.app.locals.config,
+      });
 
     res.status(201).json({
-      assessment: { id: assessment.id, title: assessment.title, revealThreshold: assessment.revealThreshold },
-      session: { id: session.id, status: session.status, createdAt: session.createdAt },
+      assessment: {
+        id: assessment.id,
+        title: assessment.title,
+        revealThreshold: assessment.revealThreshold,
+      },
+      session: {
+        id: session.id,
+        status: session.status,
+        createdAt: session.createdAt,
+      },
       candidate: { publicId: candidate.publicId, revealed: candidate.revealed },
     });
   } catch (err) {
@@ -63,11 +91,20 @@ async function startSelfSession(req, res, next) {
 
 function getRanking(req, res, next) {
   try {
-    const result = sessionService.getRankingByAssessment({ assessmentId: req.params.assessmentId });
+    const result = sessionService.getRankingByAssessment({
+      assessmentId: req.params.assessmentId,
+    });
     res.json(result);
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { getAssessments, getAssessment, createAssessment, startSession, startSelfSession, getRanking };
+module.exports = {
+  getAssessments,
+  getAssessment,
+  createAssessment,
+  startSession,
+  startSelfSession,
+  getRanking,
+};

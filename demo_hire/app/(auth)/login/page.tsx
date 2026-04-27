@@ -582,6 +582,7 @@ type LoginResponse = {
 };
 
 const MotionBox = motion(Box as any);
+const MotionForm = chakra(motion.form);
 
 function LoginForm() {
   const router = useRouter();
@@ -631,12 +632,11 @@ console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
   }
 };
   return (
-    <MotionBox
-      as="form"
+    <MotionForm
       onSubmit={handleSubmit}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] } as any}
       w="full"
       maxW="440px"
     >
@@ -856,7 +856,7 @@ console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
               initial={{ opacity: 0, height: 0, marginBottom: 0 }}
               animate={{ opacity: 1, height: "auto", marginBottom: "20px" }}
               exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-              overflow="hidden"
+              style={{ overflow: "hidden" }}
             >
               <Box
                 bg="rgba(255,77,109,0.08)"
@@ -955,7 +955,7 @@ console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
           ))}
         </HStack>
       </MotionBox>
-    </MotionBox>
+    </MotionForm>
   );
 }
 
@@ -1119,4 +1119,3 @@ export default function LoginPage() {
     </ChakraProvider>
   );
 }
-

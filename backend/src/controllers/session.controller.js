@@ -2,7 +2,12 @@ const { sessionService, ghostReplayService } = require('../services');
 
 function getSession(req, res) {
   const session = sessionService.getSessionById(req.params.sessionId);
-  if (!session) return res.status(404).json({ error: { code: 'SESSION_NOT_FOUND', message: 'Session not found' } });
+  if (!session)
+    return res
+      .status(404)
+      .json({
+        error: { code: 'SESSION_NOT_FOUND', message: 'Session not found' },
+      });
 
   res.json({
     session: {
@@ -33,7 +38,12 @@ function appendEvent(req, res, next) {
 
 function getReplay(req, res) {
   const replay = ghostReplayService.getReplay(req.params.sessionId);
-  if (!replay) return res.status(404).json({ error: { code: 'SESSION_NOT_FOUND', message: 'Session not found' } });
+  if (!replay)
+    return res
+      .status(404)
+      .json({
+        error: { code: 'SESSION_NOT_FOUND', message: 'Session not found' },
+      });
   res.json({ replay });
 }
 
@@ -45,7 +55,11 @@ function submitSession(req, res, next) {
     });
 
     res.json({
-      assessment: { id: assessment.id, title: assessment.title, revealThreshold: assessment.revealThreshold },
+      assessment: {
+        id: assessment.id,
+        title: assessment.title,
+        revealThreshold: assessment.revealThreshold,
+      },
       session: {
         id: session.id,
         status: session.status,
@@ -55,7 +69,9 @@ function submitSession(req, res, next) {
       candidate: {
         publicId: candidate.publicId,
         revealed: candidate.revealed,
-        ...(candidate.revealed ? { name: candidate.name, email: candidate.email } : {}),
+        ...(candidate.revealed
+          ? { name: candidate.name, email: candidate.email }
+          : {}),
       },
     });
   } catch (err) {

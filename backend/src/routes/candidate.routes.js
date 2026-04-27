@@ -1,6 +1,9 @@
 const { Router } = require('express');
 
-const { getCandidate, revealCandidate } = require('../controllers/candidate.controller');
+const {
+  getCandidate,
+  revealCandidate,
+} = require('../controllers/candidate.controller');
 
 const candidateRoutes = Router();
 

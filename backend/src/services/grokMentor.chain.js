@@ -4,7 +4,9 @@ const hintOutputSchema = z
   .object({
     hint: z.string().min(1).max(800),
     style: z.literal('non-spoiler'),
-    doNotProvide: z.array(z.string()).default(['full solution', 'complete code', 'final answer']),
+    doNotProvide: z
+      .array(z.string())
+      .default(['full solution', 'complete code', 'final answer']),
   })
   .strict();
 
@@ -50,24 +52,36 @@ async function createGrokMentor({ grokConfig }) {
     });
 
     // ChatOpenAI returns an AIMessage-like object with .content
-    const content = typeof res?.content === 'string' ? res.content : JSON.stringify(res);
+    const content =
+      typeof res?.content === 'string' ? res.content : JSON.stringify(res);
 
     // Extract JSON in a tolerant way (model sometimes wraps with text)
     const firstBrace = content.indexOf('{');
     const lastBrace = content.lastIndexOf('}');
-    const jsonStr = firstBrace >= 0 && lastBrace >= 0 ? content.slice(firstBrace, lastBrace + 1) : content;
+    const jsonStr =
+      firstBrace >= 0 && lastBrace >= 0
+        ? content.slice(firstBrace, lastBrace + 1)
+        : content;
 
     let parsed;
     try {
       parsed = JSON.parse(jsonStr);
     } catch {
       // fallback: treat whole content as hint
-      parsed = { hint: String(content).slice(0, 800), style: 'non-spoiler', doNotProvide: ['full solution'] };
+      parsed = {
+        hint: String(content).slice(0, 800),
+        style: 'non-spoiler',
+        doNotProvide: ['full solution'],
+      };
     }
 
     const validated = hintOutputSchema.safeParse(parsed);
     if (!validated.success) {
-      return { hint: String(parsed?.hint || content).slice(0, 800), style: 'non-spoiler', doNotProvide: ['full solution'] };
+      return {
+        hint: String(parsed?.hint || content).slice(0, 800),
+        style: 'non-spoiler',
+        doNotProvide: ['full solution'],
+      };
     }
 
     return validated.data;

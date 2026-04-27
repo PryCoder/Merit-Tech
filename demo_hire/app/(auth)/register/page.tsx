@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import NextLink from 'next/link'
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import { fetchJson, ApiError } from '../../lib/fetchJson'
+import NextLink from 'next/link';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { fetchJson, ApiError } from '../../lib/fetchJson';
 import {
   Box,
   Button,
@@ -20,34 +20,41 @@ import {
   Stack,
   Text,
   VStack,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 
 type RegisterResponse = {
-  user: { email: string; name?: string | null; role?: string }
-  token: string
-}
+  user: { email: string; name?: string | null; role?: string };
+  token: string;
+};
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const [name, setName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [role, setRole] = React.useState<'recruiter' | 'candidate'>('recruiter')
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
+  const router = useRouter();
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [role, setRole] = React.useState<'recruiter' | 'candidate'>(
+    'recruiter'
+  );
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   function routeForRole(userRole?: string) {
-    if (userRole === 'recruiter' || userRole === 'company') return '/dashboard'
-    return '/dashboard'
+    if (userRole === 'recruiter' || userRole === 'company') return '/dashboard';
+    return '/dashboard';
   }
 
   React.useEffect(() => {
-    setError(null)
-  }, [name, email, password, confirmPassword, role])
+    setError(null);
+  }, [name, email, password, confirmPassword, role]);
 
   return (
-    <Box minH="100dvh" bg="var(--background)" color="var(--foreground)" display="flex">
+    <Box
+      minH="100dvh"
+      bg="var(--background)"
+      color="var(--foreground)"
+      display="flex"
+    >
       <Container maxW="5xl" py={{ base: 10, md: 16 }}>
         <Stack
           direction={{ base: 'column', md: 'row' }}
@@ -87,14 +94,20 @@ export default function RegisterPage() {
                 </Box>
               </Heading>
               <Text color="blackAlpha.700" fontSize="lg" maxW="44ch">
-                Build assessments, invite candidates, and unlock identity only when a threshold is
-                earned.
+                Build assessments, invite candidates, and unlock identity only
+                when a threshold is earned.
               </Text>
 
               <Stack spacing={3} pt={2} color="blackAlpha.700">
-                <Text fontFamily="var(--font-jakarta)">• Invite-only mentor tools</Text>
-                <Text fontFamily="var(--font-jakarta)">• Configurable reveal thresholds</Text>
-                <Text fontFamily="var(--font-jakarta)">• Repeatable scoring and fairness</Text>
+                <Text fontFamily="var(--font-jakarta)">
+                  • Invite-only mentor tools
+                </Text>
+                <Text fontFamily="var(--font-jakarta)">
+                  • Configurable reveal thresholds
+                </Text>
+                <Text fontFamily="var(--font-jakarta)">
+                  • Repeatable scoring and fairness
+                </Text>
               </Stack>
             </VStack>
           </Box>
@@ -121,31 +134,34 @@ export default function RegisterPage() {
               <Box
                 as="form"
                 onSubmit={async (e: React.FormEvent) => {
-                  e.preventDefault()
+                  e.preventDefault();
 
                   if (password !== confirmPassword) {
-                    setError('Passwords do not match.')
-                    return
+                    setError('Passwords do not match.');
+                    return;
                   }
 
-                  setIsSubmitting(true)
-                  setError(null)
+                  setIsSubmitting(true);
+                  setError(null);
 
                   try {
-                    const result = await fetchJson<RegisterResponse>('/api/auth/register', {
-                      method: 'POST',
-                      body: { name, email, password, role },
-                    })
+                    const result = await fetchJson<RegisterResponse>(
+                      '/api/auth/register',
+                      {
+                        method: 'POST',
+                        body: { name, email, password, role },
+                      }
+                    );
 
-                    router.push(routeForRole(result.user.role))
+                    router.push(routeForRole(result.user.role));
                   } catch (err) {
                     if (err instanceof ApiError) {
-                      setError(err.message)
+                      setError(err.message);
                     } else {
-                      setError('Something went wrong. Please try again.')
+                      setError('Something went wrong. Please try again.');
                     }
                   } finally {
-                    setIsSubmitting(false)
+                    setIsSubmitting(false);
                   }
                 }}
               >
@@ -175,7 +191,11 @@ export default function RegisterPage() {
 
                   <FormControl>
                     <FormLabel>Role</FormLabel>
-                    <Select value={role} onChange={(e) => setRole(e.target.value as any)} isDisabled={isSubmitting}>
+                    <Select
+                      value={role}
+                      onChange={(e) => setRole(e.target.value as any)}
+                      isDisabled={isSubmitting}
+                    >
                       <option value="recruiter">Recruiter</option>
                       <option value="candidate">Candidate</option>
                     </Select>
@@ -236,7 +256,11 @@ export default function RegisterPage() {
 
                   <HStack>
                     <Divider />
-                    <Text fontSize="sm" color="blackAlpha.600" whiteSpace="nowrap">
+                    <Text
+                      fontSize="sm"
+                      color="blackAlpha.600"
+                      whiteSpace="nowrap"
+                    >
                       Already have an account?
                     </Text>
                     <Divider />
@@ -244,7 +268,12 @@ export default function RegisterPage() {
 
                   <Text color="blackAlpha.700">
                     Sign in{' '}
-                    <Link as={NextLink} href="/login" color="brand.600" fontWeight="600">
+                    <Link
+                      as={NextLink}
+                      href="/login"
+                      color="brand.600"
+                      fontWeight="600"
+                    >
                       Login
                     </Link>
                   </Text>
@@ -255,5 +284,5 @@ export default function RegisterPage() {
         </Stack>
       </Container>
     </Box>
-  )
+  );
 }

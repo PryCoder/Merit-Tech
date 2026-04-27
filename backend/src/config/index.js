@@ -11,10 +11,14 @@ function loadConfig() {
   }
 
   const schema = z.object({
-    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    NODE_ENV: z
+      .enum(['development', 'test', 'production'])
+      .default('development'),
     PORT: z.coerce.number().int().min(1).max(65535).default(8080),
     CORS_ORIGIN: z.string().default('*'),
-    LOG_LEVEL: z.enum(['error', 'warn', 'info', 'http', 'debug']).default('info'),
+    LOG_LEVEL: z
+      .enum(['error', 'warn', 'info', 'http', 'debug'])
+      .default('info'),
     HASH_SALT: z.string().min(8).default('dev-only-change-me'),
     GROK_API_KEY: z.string().optional(),
     GROK_BASE_URL: z.string().url().default('https://api.x.ai/v1'),
@@ -27,7 +31,9 @@ function loadConfig() {
 
   const parsed = schema.safeParse(process.env);
   if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('\n');
+    const issues = parsed.error.issues
+      .map((i) => `${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid environment configuration:\n${issues}`);
   }
 

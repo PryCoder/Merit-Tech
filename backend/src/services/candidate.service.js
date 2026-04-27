@@ -48,7 +48,10 @@ const candidateService = {
     if (!uid) return null;
     const candidateId = store.userCandidates.get(uid);
     if (candidateId) return store.candidates.get(candidateId) || null;
-    return Array.from(store.candidates.values()).find((c) => c.userId === uid) || null;
+    return (
+      Array.from(store.candidates.values()).find((c) => c.userId === uid) ||
+      null
+    );
   },
 
   ensureCandidateForUser({ userId, name = null, email = null, hashSalt }) {
@@ -66,25 +69,41 @@ const candidateService = {
   getCandidateByPublicId(publicId) {
     const pid = String(publicId || '').trim();
     if (!pid) return null;
-    return Array.from(store.candidates.values()).find((c) => c.publicId === pid) || null;
+    return (
+      Array.from(store.candidates.values()).find((c) => c.publicId === pid) ||
+      null
+    );
   },
 
   getCandidateSessionsById(candidateId) {
-    return Array.from(store.sessions.values()).filter((s) => s.candidateId === candidateId);
+    return Array.from(store.sessions.values()).filter(
+      (s) => s.candidateId === candidateId
+    );
   },
 
   getCandidateProfileByPublicId(publicId) {
     const candidate = candidateService.getCandidateByPublicId(publicId);
-    if (!candidate) throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
+    if (!candidate)
+      throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
 
-    const sessions = candidateService.getCandidateSessionsById(candidate.id)
+    const sessions = candidateService
+      .getCandidateSessionsById(candidate.id)
       .filter((s) => s.status === 'SUBMITTED')
-      .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+      )
       .map((s) => {
         const assessment = assessmentService.getAssessmentById(s.assessmentId);
         return {
           id: s.id,
-          assessment: assessment ? { id: assessment.id, title: assessment.title, revealThreshold: assessment.revealThreshold } : null,
+          assessment: assessment
+            ? {
+                id: assessment.id,
+                title: assessment.title,
+                revealThreshold: assessment.revealThreshold,
+              }
+            : null,
           status: s.status,
           createdAt: s.createdAt,
           submittedAt: s.submittedAt,
@@ -105,8 +124,12 @@ const candidateService = {
     candidate.revealed = true;
 
     if (assessmentId) {
-      candidate.visibilityLog = Array.isArray(candidate.visibilityLog) ? candidate.visibilityLog : [];
-      const already = candidate.visibilityLog.some((e) => e.assessmentId === assessmentId);
+      candidate.visibilityLog = Array.isArray(candidate.visibilityLog)
+        ? candidate.visibilityLog
+        : [];
+      const already = candidate.visibilityLog.some(
+        (e) => e.assessmentId === assessmentId
+      );
       if (!already) {
         candidate.visibilityLog.push({
           assessmentId,
@@ -120,7 +143,8 @@ const candidateService = {
 
   revealCandidateByPublicId(publicId, { sessionId = null } = {}) {
     const candidate = candidateService.getCandidateByPublicId(publicId);
-    if (!candidate) throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
+    if (!candidate)
+      throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
 
     if (candidate.revealed) {
       return candidate;
@@ -132,7 +156,10 @@ const candidateService = {
       .filter((s) => (!sessionId ? true : s.id === sessionId));
 
     if (sessionId && sessions.length === 0) {
-      throw forbidden('REVEAL_NOT_ALLOWED', 'Candidate identity cannot be revealed for this session');
+      throw forbidden(
+        'REVEAL_NOT_ALLOWED',
+        'Candidate identity cannot be revealed for this session'
+      );
     }
 
     let eligibleAssessment = null;
@@ -145,7 +172,10 @@ const candidateService = {
     });
 
     if (!eligible) {
-      throw forbidden('REVEAL_NOT_ALLOWED', 'Candidate identity cannot be revealed before threshold is met');
+      throw forbidden(
+        'REVEAL_NOT_ALLOWED',
+        'Candidate identity cannot be revealed before threshold is met'
+      );
     }
 
     candidateService.revealCandidate(candidate.id, {

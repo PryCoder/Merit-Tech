@@ -33,7 +33,16 @@ const startSessionSchema = z
 
 const replayEventSchema = z
   .object({
-    type: z.enum(['KEYSTROKE', 'RUN', 'TEST', 'HINT', 'SUBMIT', 'FOCUS', 'BLUR', 'CUSTOM']),
+    type: z.enum([
+      'KEYSTROKE',
+      'RUN',
+      'TEST',
+      'HINT',
+      'SUBMIT',
+      'FOCUS',
+      'BLUR',
+      'CUSTOM',
+    ]),
     payload: z.any().optional(),
     ts: z.number().int().optional(),
   })

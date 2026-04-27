@@ -27,7 +27,10 @@ const DEFAULT_STAGE = STAGES[0];
 
 function ensureStage(stage) {
   if (!STAGES.includes(stage)) {
-    throw badRequest('INVALID_STAGE', `Stage must be one of: ${STAGES.join(', ')}`);
+    throw badRequest(
+      'INVALID_STAGE',
+      `Stage must be one of: ${STAGES.join(', ')}`
+    );
   }
 }
 
@@ -40,7 +43,9 @@ function ensureInPipeline(candidate) {
 
 const pipelineService = {
   listPipeline() {
-    const revealedCandidates = Array.from(store.candidates.values()).filter((c) => c.revealed);
+    const revealedCandidates = Array.from(store.candidates.values()).filter(
+      (c) => c.revealed
+    );
 
     for (const c of revealedCandidates) ensureInPipeline(c);
 
@@ -66,8 +71,10 @@ const pipelineService = {
     ensureStage(toStage);
 
     const candidate = candidateService.getCandidateByPublicId(publicId);
-    if (!candidate) throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
-    if (!candidate.revealed) throw forbidden('CANDIDATE_LOCKED', 'Candidate is not unlocked yet');
+    if (!candidate)
+      throw notFound('CANDIDATE_NOT_FOUND', 'Candidate not found');
+    if (!candidate.revealed)
+      throw forbidden('CANDIDATE_LOCKED', 'Candidate is not unlocked yet');
 
     store.pipelineStages.set(candidate.id, toStage);
     return pipelineService.listPipeline();

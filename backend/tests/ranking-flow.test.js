@@ -51,7 +51,9 @@ describe('Merit-Loop core flow', () => {
       .post(`/api/v1/sessions/${sessionBId}/submit`)
       .send({ passed: true, timeMs: 600_000, hintsUsed: 3 });
 
-    const rankingRes = await request(app).get(`/api/v1/assessments/${assessmentId}/rankings`);
+    const rankingRes = await request(app).get(
+      `/api/v1/assessments/${assessmentId}/rankings`
+    );
 
     expect(rankingRes.statusCode).toBe(200);
     expect(rankingRes.body.ranking.length).toBe(2);
@@ -61,7 +63,9 @@ describe('Merit-Loop core flow', () => {
 
     // anonymity preserved unless threshold met
     expect(first.candidate.publicId).toBeTruthy();
-    expect(Object.prototype.hasOwnProperty.call(first.candidate, 'email')).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(first.candidate, 'email')).toBe(
+      false
+    );
   });
 
   it('reveals candidate identity when merit score meets threshold', async () => {
@@ -74,7 +78,11 @@ describe('Merit-Loop core flow', () => {
 
     const assessmentRes = await request(app)
       .post('/api/v1/assessments')
-      .send({ title: 'Fast', revealThreshold: 50, tasks: [{ title: 'T', prompt: 'P' }] });
+      .send({
+        title: 'Fast',
+        revealThreshold: 50,
+        tasks: [{ title: 'T', prompt: 'P' }],
+      });
 
     const assessmentId = assessmentRes.body.assessment.id;
 
@@ -86,7 +94,13 @@ describe('Merit-Loop core flow', () => {
 
     const submitRes = await request(app)
       .post(`/api/v1/sessions/${sessionId}/submit`)
-      .send({ passed: true, timeMs: 30_000, hintsUsed: 0, testsPassed: 1, testsTotal: 1 });
+      .send({
+        passed: true,
+        timeMs: 30_000,
+        hintsUsed: 0,
+        testsPassed: 1,
+        testsTotal: 1,
+      });
 
     expect(submitRes.statusCode).toBe(200);
     expect(submitRes.body.candidate.revealed).toBe(true);

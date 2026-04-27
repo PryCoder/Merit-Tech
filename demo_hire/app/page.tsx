@@ -42,7 +42,7 @@ import {
   StarIcon as StarSolid,
 } from "@heroicons/react/24/solid";
 import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion";
-
+import {RetroGrid} from "@/components/ui/retro-grid";
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. THEME
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1147,20 +1147,43 @@ function FinalCTA() {
 // ─────────────────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <Box as="footer" borderTop="1px solid rgba(255,255,255,0.06)" py={16} px={6}>
-      <Container maxW="1280px">
+    <Box
+      as="footer"
+      position="relative"
+      overflow="hidden"
+      borderTop="1px solid rgba(255,255,255,0.06)"
+      py={16}
+      px={6}
+    >
+      {/* 🔵 Background Layer */}
+      <Box position="absolute" inset={0} zIndex={0}>
+        <RetroGrid />
+      </Box>
+
+      {/* 🔵 Optional dark overlay (important for readability) */}
+      <Box
+        position="absolute"
+        inset={0}
+        bg="rgba(0,0,0,0.7)"
+        zIndex={1}
+      />
+
+      {/* 🔵 Content Layer */}
+      <Container position="relative" zIndex={2} maxW="1280px">
         <Grid templateColumns={{ base: "1fr", md: "2fr 1fr 1fr 1fr" }} gap={10} mb={12}>
+          
+          {/* Your existing content unchanged */}
           <Box>
             <HStack spacing={3} mb={4}>
               <Box w={8} h={8} bg="brand.lime" borderRadius={8} display="flex" alignItems="center" justifyContent="center">
                 <Icon as={CpuChipIcon} color="brand.ink" w={5} h={5} />
               </Box>
-              <Text fontFamily="'Cabinet Grotesk', sans-serif" fontWeight={900} fontSize="18px" letterSpacing="-0.03em">
+              <Text fontFamily="'Cabinet Grotesk', sans-serif" fontWeight={900} fontSize="18px">
                 SkillProof
               </Text>
             </HStack>
-            <Text fontFamily="'DM Sans', sans-serif" fontSize="14px" color="rgba(255,255,255,0.38)"
-              lineHeight={1.8} maxW="260px">
+
+            <Text fontSize="14px" color="rgba(255,255,255,0.38)" lineHeight={1.8} maxW="260px">
               The platform that hires on skill, not résumés. Blind evaluation powered by AI.
             </Text>
           </Box>
@@ -1171,14 +1194,14 @@ function Footer() {
             { title: "Company", links: ["About", "Blog", "Careers", "Privacy"] },
           ].map((col, i) => (
             <Box key={i}>
-              <Text fontFamily="'Syne', sans-serif" fontWeight={700} fontSize="13px"
-                color="rgba(255,255,255,0.5)" textTransform="uppercase" letterSpacing=".06em" mb={4}>
+              <Text fontWeight={700} fontSize="13px" color="rgba(255,255,255,0.5)" textTransform="uppercase" mb={4}>
                 {col.title}
               </Text>
+
               <VStack spacing={3} align="flex-start">
                 {col.links.map(l => (
-                  <Text key={l} as="a" href="#" fontFamily="'DM Sans', sans-serif" fontSize="14px"
-                    color="rgba(255,255,255,0.38)" _hover={{ color: "#fff" }} transition="color .2s" textDecoration="none">
+                  <Text key={l} as="a" href="#" fontSize="14px"
+                    color="rgba(255,255,255,0.38)" _hover={{ color: "#fff" }}>
                     {l}
                   </Text>
                 ))}
@@ -1190,10 +1213,10 @@ function Footer() {
         <Divider borderColor="rgba(255,255,255,0.06)" mb={8} />
 
         <Flex justify="space-between" align="center" wrap="wrap" gap={4}>
-          <Text fontFamily="'Space Mono', monospace" fontSize="11px" color="rgba(255,255,255,0.22)">
+          <Text fontSize="11px" color="rgba(255,255,255,0.22)">
             © 2026 SkillProof Inc. All rights reserved.
           </Text>
-          <Text fontFamily="'Space Mono', monospace" fontSize="11px" color="rgba(255,255,255,0.22)">
+          <Text fontSize="11px" color="rgba(255,255,255,0.22)">
             Built with ❤️ for engineers who deserve better.
           </Text>
         </Flex>

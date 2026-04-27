@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import NextLink from 'next/link'
-import React from 'react'
-import { fetchJson, ApiError } from '../../lib/fetchJson'
+import NextLink from 'next/link';
+import React from 'react';
+import { fetchJson, ApiError } from '../../lib/fetchJson';
 import {
   Box,
   Button,
@@ -17,15 +17,20 @@ import {
   Stack,
   Text,
   VStack,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = React.useState('')
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [message, setMessage] = React.useState<string | null>(null)
+  const [email, setEmail] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [message, setMessage] = React.useState<string | null>(null);
 
   return (
-    <Box minH="100dvh" bg="var(--background)" color="var(--foreground)" display="flex">
+    <Box
+      minH="100dvh"
+      bg="var(--background)"
+      color="var(--foreground)"
+      display="flex"
+    >
       <Container maxW="lg" py={{ base: 10, md: 16 }}>
         <Box
           borderWidth="1px"
@@ -47,7 +52,11 @@ export default function ForgotPasswordPage() {
               >
                 Account recovery
               </Text>
-              <Heading as="h1" fontFamily="var(--font-playfair)" fontSize={{ base: '3xl', md: '4xl' }}>
+              <Heading
+                as="h1"
+                fontFamily="var(--font-playfair)"
+                fontSize={{ base: '3xl', md: '4xl' }}
+              >
                 Reset your password
               </Heading>
               <Text color="blackAlpha.700" mt={2}>
@@ -58,24 +67,26 @@ export default function ForgotPasswordPage() {
             <Box
               as="form"
               onSubmit={async (e: React.FormEvent) => {
-                e.preventDefault()
-                setIsSubmitting(true)
-                setMessage(null)
+                e.preventDefault();
+                setIsSubmitting(true);
+                setMessage(null);
 
                 try {
                   await fetchJson('/api/auth/forgot-password', {
                     method: 'POST',
                     body: { email },
-                  })
-                  setMessage('If an account exists, a reset link will be sent.')
+                  });
+                  setMessage(
+                    'If an account exists, a reset link will be sent.'
+                  );
                 } catch (err) {
                   if (err instanceof ApiError) {
-                    setMessage(err.message)
+                    setMessage(err.message);
                   } else {
-                    setMessage('Something went wrong. Please try again.')
+                    setMessage('Something went wrong. Please try again.');
                   }
                 } finally {
-                  setIsSubmitting(false)
+                  setIsSubmitting(false);
                 }
               }}
             >
@@ -122,10 +133,19 @@ export default function ForgotPasswordPage() {
                 </Button>
 
                 <HStack justify="space-between" pt={2}>
-                  <Link as={NextLink} href="/login" color="brand.600" fontWeight="600">
+                  <Link
+                    as={NextLink}
+                    href="/login"
+                    color="brand.600"
+                    fontWeight="600"
+                  >
                     Back to login
                   </Link>
-                  <Text fontFamily="var(--font-geist-mono)" fontSize="xs" color="blackAlpha.600">
+                  <Text
+                    fontFamily="var(--font-geist-mono)"
+                    fontSize="xs"
+                    color="blackAlpha.600"
+                  >
                     Encrypted delivery
                   </Text>
                 </HStack>
@@ -135,5 +155,5 @@ export default function ForgotPasswordPage() {
         </Box>
       </Container>
     </Box>
-  )
+  );
 }

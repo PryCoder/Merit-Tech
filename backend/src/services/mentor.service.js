@@ -80,9 +80,12 @@ const mentorService = {
         return await grokMentor.getHint({ prompt, attemptNumber });
       }
     } catch (err) {
-      logger.warn('Grok mentor unavailable; falling back to deterministic hints', {
-        message: err?.message,
-      });
+      logger.warn(
+        'Grok mentor unavailable; falling back to deterministic hints',
+        {
+          message: err?.message,
+        }
+      );
     }
 
     return deterministicMentor.getHint({ prompt, attemptNumber });

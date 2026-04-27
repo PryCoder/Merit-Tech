@@ -31,7 +31,11 @@ describe('Auth', () => {
 
     const reg = await request(app)
       .post('/api/v1/auth/register')
-      .send({ email: 'user@example.com', password: 'Password123!', name: 'User' });
+      .send({
+        email: 'user@example.com',
+        password: 'Password123!',
+        name: 'User',
+      });
 
     expect(reg.statusCode).toBe(201);
     expect(reg.body.token).toBeTruthy();

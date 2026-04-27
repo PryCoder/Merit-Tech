@@ -1,4 +1,8 @@
-const { assessmentService, candidateService, authService } = require('../services');
+const {
+  assessmentService,
+  candidateService,
+  authService,
+} = require('../services');
 
 function forbidden(code, message) {
   const err = new Error(message);
@@ -14,7 +18,9 @@ function buildProgressionPoints({ sessions }) {
       ts: s.submittedAt,
       score: s.score.score,
       assessmentId: s.assessmentId,
-      assessmentTitle: assessmentService.getAssessmentById(s.assessmentId)?.title || 'Assessment',
+      assessmentTitle:
+        assessmentService.getAssessmentById(s.assessmentId)?.title ||
+        'Assessment',
     }))
     .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime());
 
@@ -23,9 +29,13 @@ function buildProgressionPoints({ sessions }) {
 
 async function getDashboard(req, res, next) {
   try {
-    if (req.user?.role !== 'candidate') throw forbidden('FORBIDDEN', 'Candidate role required');
+    if (req.user?.role !== 'candidate')
+      throw forbidden('FORBIDDEN', 'Candidate role required');
 
-    const me = await authService.me({ userId: req.user.id, config: req.app.locals.config });
+    const me = await authService.me({
+      userId: req.user.id,
+      config: req.app.locals.config,
+    });
 
     const candidate = candidateService.ensureCandidateForUser({
       userId: req.user.id,
@@ -38,21 +48,37 @@ async function getDashboard(req, res, next) {
     const sessions = candidateService.getCandidateSessionsById(candidate.id);
 
     const submittedByAssessment = new Set(
-      sessions.filter((s) => s.status === 'SUBMITTED').map((s) => s.assessmentId)
+      sessions
+        .filter((s) => s.status === 'SUBMITTED')
+        .map((s) => s.assessmentId)
     );
 
     const pendingInvites = allAssessments
       .filter((a) => !submittedByAssessment.has(a.id))
-      .map((a) => ({ id: a.id, title: a.title, description: a.description, revealThreshold: a.revealThreshold }));
+      .map((a) => ({
+        id: a.id,
+        title: a.title,
+        description: a.description,
+        revealThreshold: a.revealThreshold,
+      }));
 
     const completed = sessions
       .filter((s) => s.status === 'SUBMITTED')
-      .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+      )
       .map((s) => {
         const assessment = assessmentService.getAssessmentById(s.assessmentId);
         return {
           sessionId: s.id,
-          assessment: assessment ? { id: assessment.id, title: assessment.title, revealThreshold: assessment.revealThreshold } : null,
+          assessment: assessment
+            ? {
+                id: assessment.id,
+                title: assessment.title,
+                revealThreshold: assessment.revealThreshold,
+              }
+            : null,
           submittedAt: s.submittedAt,
           score: s.score,
           submission: s.submission,
@@ -75,9 +101,13 @@ async function getDashboard(req, res, next) {
 
 async function getProfile(req, res, next) {
   try {
-    if (req.user?.role !== 'candidate') throw forbidden('FORBIDDEN', 'Candidate role required');
+    if (req.user?.role !== 'candidate')
+      throw forbidden('FORBIDDEN', 'Candidate role required');
 
-    const me = await authService.me({ userId: req.user.id, config: req.app.locals.config });
+    const me = await authService.me({
+      userId: req.user.id,
+      config: req.app.locals.config,
+    });
 
     const candidate = candidateService.ensureCandidateForUser({
       userId: req.user.id,
@@ -90,7 +120,9 @@ async function getProfile(req, res, next) {
       user: me.user,
       candidate: {
         publicId: candidate.publicId,
-        visibilityLog: Array.isArray(candidate.visibilityLog) ? candidate.visibilityLog : [],
+        visibilityLog: Array.isArray(candidate.visibilityLog)
+          ? candidate.visibilityLog
+          : [],
       },
     });
   } catch (err) {

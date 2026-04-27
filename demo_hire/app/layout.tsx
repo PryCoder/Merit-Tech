@@ -1,33 +1,61 @@
+import type { Metadata } from 'next';
+import {
+  Playfair_Display,
+  Inter,
+  Bebas_Neue,
+  Syne,
+  DM_Sans,
+  Space_Mono,
+  Instrument_Serif,
+} from 'next/font/google';
+import { GeistSans, GeistMono } from 'geist/font';
+import { Providers } from './providers';
+import './globals.css';
+import { cn } from '@/lib/utils';
 
-import type { Metadata } from 'next'
-import localFont from 'next/font/local'
-import { Playfair_Display, Inter } from 'next/font/google'
-import { Providers } from './providers'
-import './globals.css'
-
-const playfair = Playfair_Display({ 
+// Google fonts
+const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '700', '900'],
-  variable: '--font-playfair'
-})
-const inter = Inter({ 
+  variable: '--font-playfair',
+});
+
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter'
-})
+  variable: '--font-inter',
+});
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-})
+const bebas = Bebas_Neue({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-bebas',
+});
 
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
-})
+const syne = Syne({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800'],
+  variable: '--font-syne',
+});
 
-// Note: Metadata cannot be used with 'use client', remove if needed in production
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm',
+});
+
+const spaceMono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-space-mono',
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-instrument-serif',
+});
+
+// Metadata
 export const metadata: Metadata = {
   title: 'The Merit-Loop Engine',
   description: 'Democratize Technical Hiring. Prove Raw Potential.',
@@ -49,18 +77,33 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
-}
+};
 
+// Layout
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} ${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased" style={{ fontFamily: 'var(--font-inter)' }}>
+    <html
+      lang="en"
+      className={cn(
+        playfair.variable,
+        inter.variable,
+        bebas.variable,
+        syne.variable,
+        dmSans.variable,
+        spaceMono.variable,
+        instrumentSerif.variable,
+        GeistSans.variable,
+        GeistMono.variable,
+        'font-sans'
+      )}
+    >
+      <body className="antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import NextLink from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
-import React from 'react'
+import NextLink from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
 import {
   Badge,
   Box,
@@ -20,106 +20,154 @@ import {
   Thead,
   Tr,
   VStack,
-} from '@chakra-ui/react'
-import { ApiError, fetchJson } from '../../lib/fetchJson'
+} from '@chakra-ui/react';
+import { ApiError, fetchJson } from '../../lib/fetchJson';
 
 type Assessment = {
-  id: string
-  title: string
-  description?: string
-  revealThreshold: number
-}
+  id: string;
+  title: string;
+  description?: string;
+  revealThreshold: number;
+};
 
 type RankingRow = {
-  sessionId: string
-  submittedAt: string
-  score: { score: number; breakdown?: any }
-  submission?: { hintsUsed?: number; timeMs?: number; testsPassed?: number; testsTotal?: number; passed?: boolean }
-  candidate: { publicId: string; revealed: boolean }
-}
+  sessionId: string;
+  submittedAt: string;
+  score: { score: number; breakdown?: any };
+  submission?: {
+    hintsUsed?: number;
+    timeMs?: number;
+    testsPassed?: number;
+    testsTotal?: number;
+    passed?: boolean;
+  };
+  candidate: { publicId: string; revealed: boolean };
+};
 
 type RankingResponse = {
-  assessment: { id: string; title: string; revealThreshold: number }
-  ranking: RankingRow[]
-}
+  assessment: { id: string; title: string; revealThreshold: number };
+  ranking: RankingRow[];
+};
 
-type GetAssessmentResponse = { assessment: Assessment }
+type GetAssessmentResponse = { assessment: Assessment };
 
 function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n))
+  return Math.max(min, Math.min(max, n));
 }
 
 function computeAiDependencyIndex(row: RankingRow) {
   const hintsUsed =
-    (typeof row.submission?.hintsUsed === 'number' ? row.submission?.hintsUsed : null) ??
+    (typeof row.submission?.hintsUsed === 'number'
+      ? row.submission?.hintsUsed
+      : null) ??
     (typeof row.score?.breakdown?.hintPenalty === 'number'
       ? Math.round(row.score.breakdown.hintPenalty / 5)
-      : 0)
-  return clamp(Math.round(hintsUsed * 10), 0, 100)
+      : 0);
+  return clamp(Math.round(hintsUsed * 10), 0, 100);
 }
 
 function computeCodeEfficiency(row: RankingRow) {
-  const timeMs = typeof row.submission?.timeMs === 'number' ? row.submission?.timeMs : null
+  const timeMs =
+    typeof row.submission?.timeMs === 'number' ? row.submission?.timeMs : null;
   if (timeMs && timeMs > 0) {
-    const minutes = timeMs / 60_000
-    const timePenalty = clamp(Math.round(minutes * 2), 0, 30)
-    return clamp(Math.round(100 - (timePenalty / 30) * 100), 0, 100)
+    const minutes = timeMs / 60_000;
+    const timePenalty = clamp(Math.round(minutes * 2), 0, 30);
+    return clamp(Math.round(100 - (timePenalty / 30) * 100), 0, 100);
   }
 
-  const timePenalty = typeof row.score?.breakdown?.timePenalty === 'number' ? row.score.breakdown.timePenalty : 0
-  return clamp(Math.round(100 - (timePenalty / 30) * 100), 0, 100)
+  const timePenalty =
+    typeof row.score?.breakdown?.timePenalty === 'number'
+      ? row.score.breakdown.timePenalty
+      : 0;
+  return clamp(Math.round(100 - (timePenalty / 30) * 100), 0, 100);
 }
 
 export default function BlindLeaderboardPage() {
-  const router = useRouter()
-  const params = useParams<{ assessmentId: string }>()
-  const assessmentId = params.assessmentId
+  const router = useRouter();
+  const params = useParams<{ assessmentId: string }>();
+  const assessmentId = params?.assessmentId ?? '';
 
-  const [assessment, setAssessment] = React.useState<Assessment | null>(null)
-  const [ranking, setRanking] = React.useState<RankingResponse | null>(null)
-  const [error, setError] = React.useState<string | null>(null)
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [assessment, setAssessment] = React.useState<Assessment | null>(null);
+  const [ranking, setRanking] = React.useState<RankingResponse | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   async function loadAll() {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const a = await fetchJson<GetAssessmentResponse>(`/api/assessments/${assessmentId}`)
-      setAssessment(a.assessment)
+    if (!assessmentId) {
+      setError('Missing assessment id');
+      setIsLoading(false);
+      return;
+    }
 
-      const r = await fetchJson<RankingResponse>(`/api/assessments/${assessmentId}/rankings`)
-      setRanking(r)
+    setIsLoading(true);
+    setError(null);
+    try {
+      const a = await fetchJson<GetAssessmentResponse>(
+        `/api/assessments/${assessmentId}`
+      );
+      setAssessment(a.assessment);
+
+      const r = await fetchJson<RankingResponse>(
+        `/api/assessments/${assessmentId}/rankings`
+      );
+      setRanking(r);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Failed to load assessment')
+      setError(
+        err instanceof ApiError ? err.message : 'Failed to load assessment'
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   React.useEffect(() => {
-    loadAll()
+    if (!assessmentId) {
+      setIsLoading(false);
+      setError('Missing assessment id');
+      return;
+    }
+    loadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assessmentId])
+  }, [assessmentId]);
 
   return (
     <Box minH="100dvh" bg="var(--background)" color="var(--foreground)">
       <Container maxW="6xl" py={{ base: 10, md: 14 }}>
-        <HStack justify="space-between" align="start" spacing={6} flexWrap="wrap">
+        <HStack
+          justify="space-between"
+          align="start"
+          spacing={6}
+          flexWrap="wrap"
+        >
           <Box>
-            <Link as={NextLink} href="/dashboard" color="brand.600" fontWeight={600}>
+            <Link
+              as={NextLink}
+              href="/dashboard"
+              color="brand.600"
+              fontWeight={600}
+            >
               ← Back to dashboard
             </Link>
-            <Heading mt={3} fontFamily="var(--font-playfair)" fontSize={{ base: '3xl', md: '4xl' }}>
+            <Heading
+              mt={3}
+              fontFamily="var(--font-playfair)"
+              fontSize={{ base: '3xl', md: '4xl' }}
+            >
               {assessment?.title || 'Blind Leaderboard'}
             </Heading>
             <Text mt={2} color="blackAlpha.700" maxW="80ch">
-              A data table listing candidates by hashed IDs only. Unlock Profile remains disabled until the passing threshold is met.
+              A data table listing candidates by hashed IDs only. Unlock Profile
+              remains disabled until the passing threshold is met.
             </Text>
             <HStack mt={4} spacing={3} flexWrap="wrap">
               <Badge bg="brand.100" color="brand.700">
                 Passing threshold: {assessment?.revealThreshold ?? '—'}
               </Badge>
-              <Badge variant="subtle" colorScheme="gray" fontFamily="var(--font-geist-mono)">
+              <Badge
+                variant="subtle"
+                colorScheme="gray"
+                fontFamily="var(--font-geist-mono)"
+              >
                 ID: {assessmentId}
               </Badge>
             </HStack>
@@ -133,22 +181,42 @@ export default function BlindLeaderboardPage() {
         <Divider my={8} borderColor="blackAlpha.200" />
 
         {error ? (
-          <Box borderWidth="1px" borderColor="red.200" bg="red.50" borderRadius="lg" px={4} py={3} mb={8}>
+          <Box
+            borderWidth="1px"
+            borderColor="red.200"
+            bg="red.50"
+            borderRadius="lg"
+            px={4}
+            py={3}
+            mb={8}
+          >
             <Text color="red.700" fontSize="sm">
               {error}
             </Text>
           </Box>
         ) : null}
 
-        <Box bg="white" borderRadius="2xl" borderWidth="1px" borderColor="blackAlpha.100" p={{ base: 6, md: 8 }}>
+        <Box
+          bg="white"
+          borderRadius="2xl"
+          borderWidth="1px"
+          borderColor="blackAlpha.100"
+          p={{ base: 6, md: 8 }}
+        >
           <VStack align="stretch" spacing={5}>
-            <HStack justify="space-between" align="start" flexWrap="wrap" spacing={4}>
+            <HStack
+              justify="space-between"
+              align="start"
+              flexWrap="wrap"
+              spacing={4}
+            >
               <Box>
                 <Heading as="h2" fontSize="2xl">
                   Leaderboard
                 </Heading>
                 <Text color="blackAlpha.700" mt={1}>
-                  Merit Score, AI Dependency Index, and code efficiency are shown per session.
+                  Merit Score, AI Dependency Index, and code efficiency are
+                  shown per session.
                 </Text>
               </Box>
               <Button as={NextLink} href="/pipeline" variant="outline">
@@ -172,12 +240,14 @@ export default function BlindLeaderboardPage() {
                   </Thead>
                   <Tbody>
                     {ranking.ranking.map((row) => {
-                      const threshold = ranking.assessment.revealThreshold
-                      const canUnlock = row.score.score >= threshold
+                      const threshold = ranking.assessment.revealThreshold;
+                      const canUnlock = row.score.score >= threshold;
 
                       return (
                         <Tr key={row.sessionId}>
-                          <Td fontFamily="var(--font-geist-mono)">{row.candidate.publicId}</Td>
+                          <Td fontFamily="var(--font-geist-mono)">
+                            {row.candidate.publicId}
+                          </Td>
                           <Td isNumeric fontWeight={700}>
                             {row.score.score}
                           </Td>
@@ -193,14 +263,14 @@ export default function BlindLeaderboardPage() {
                               onClick={() => {
                                 router.push(
                                   `/candidate/${row.candidate.publicId}?sessionId=${encodeURIComponent(row.sessionId)}`
-                                )
+                                );
                               }}
                             >
                               Unlock profile
                             </Button>
                           </Td>
                         </Tr>
-                      )
+                      );
                     })}
                   </Tbody>
                 </Table>
@@ -210,5 +280,5 @@ export default function BlindLeaderboardPage() {
         </Box>
       </Container>
     </Box>
-  )
+  );
 }

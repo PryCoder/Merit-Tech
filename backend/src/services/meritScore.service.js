@@ -7,7 +7,13 @@ const meritScoreService = {
   // - correctness is the main gate
   // - time + hints penalize
   // - returns score 0..100 with a breakdown
-  computeScore({ passed, timeMs = null, hintsUsed = 0, testsPassed = null, testsTotal = null }) {
+  computeScore({
+    passed,
+    timeMs = null,
+    hintsUsed = 0,
+    testsPassed = null,
+    testsTotal = null,
+  }) {
     const normalizedHints = Number.isFinite(hintsUsed) ? hintsUsed : 0;
 
     let base = passed ? 100 : 40;
@@ -18,7 +24,11 @@ const meritScoreService = {
     const hintPenalty = clamp(Math.round(normalizedHints * 5), 0, 30);
 
     let testBonus = 0;
-    if (Number.isFinite(testsPassed) && Number.isFinite(testsTotal) && testsTotal > 0) {
+    if (
+      Number.isFinite(testsPassed) &&
+      Number.isFinite(testsTotal) &&
+      testsTotal > 0
+    ) {
       const ratio = clamp(testsPassed / testsTotal, 0, 1);
       testBonus = passed ? Math.round(ratio * 5) : Math.round(ratio * 3);
     }

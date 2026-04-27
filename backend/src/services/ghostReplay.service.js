@@ -1,6 +1,15 @@
 const { store } = require('../models/store');
 
-const allowedTypes = new Set(['KEYSTROKE', 'RUN', 'TEST', 'HINT', 'SUBMIT', 'FOCUS', 'BLUR', 'CUSTOM']);
+const allowedTypes = new Set([
+  'KEYSTROKE',
+  'RUN',
+  'TEST',
+  'HINT',
+  'SUBMIT',
+  'FOCUS',
+  'BLUR',
+  'CUSTOM',
+]);
 
 const ghostReplayService = {
   appendEvent({ sessionId, type, payload, ts }) {

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import NextLink from 'next/link'
-import React from 'react'
+import NextLink from 'next/link';
+import React from 'react';
 import {
   Badge,
   Box,
@@ -14,45 +14,64 @@ import {
   Stack,
   Text,
   VStack,
-} from '@chakra-ui/react'
-import { ApiError, fetchJson } from '../lib/fetchJson'
+} from '@chakra-ui/react';
+import { ApiError, fetchJson } from '../lib/fetchJson';
 
 type PipelineResponse = {
-  stages: string[]
-  byStage: Record<string, Array<{ publicId: string; name?: string | null; email?: string | null }>>
-}
+  stages: string[];
+  byStage: Record<
+    string,
+    Array<{ publicId: string; name?: string | null; email?: string | null }>
+  >;
+};
 
 export default function PipelinePage() {
-  const [data, setData] = React.useState<PipelineResponse | null>(null)
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [error, setError] = React.useState<string | null>(null)
+  const [data, setData] = React.useState<PipelineResponse | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   async function refresh() {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     try {
-      const res = await fetchJson<PipelineResponse>('/api/pipeline')
-      setData(res)
+      const res = await fetchJson<PipelineResponse>('/api/pipeline');
+      setData(res);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Failed to load pipeline')
+      setError(
+        err instanceof ApiError ? err.message : 'Failed to load pipeline'
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   React.useEffect(() => {
-    refresh()
-  }, [])
+    refresh();
+  }, []);
 
   return (
     <Box minH="100dvh" bg="var(--background)" color="var(--foreground)">
       <Container maxW="6xl" py={{ base: 10, md: 14 }}>
-        <HStack justify="space-between" align="start" spacing={6} flexWrap="wrap">
+        <HStack
+          justify="space-between"
+          align="start"
+          spacing={6}
+          flexWrap="wrap"
+        >
           <Box>
-            <Link as={NextLink} href="/dashboard" color="brand.600" fontWeight={600}>
+            <Link
+              as={NextLink}
+              href="/dashboard"
+              color="brand.600"
+              fontWeight={600}
+            >
               ← Back to dashboard
             </Link>
-            <Heading mt={3} fontFamily="var(--font-playfair)" fontSize={{ base: '3xl', md: '4xl' }}>
+            <Heading
+              mt={3}
+              fontFamily="var(--font-playfair)"
+              fontSize={{ base: '3xl', md: '4xl' }}
+            >
               Hiring Pipeline
             </Heading>
             <Text mt={2} color="blackAlpha.700" maxW="80ch">
@@ -61,7 +80,14 @@ export default function PipelinePage() {
           </Box>
 
           <HStack spacing={3} pt={2}>
-            <Badge bg="brand.100" color="brand.700" px={3} py={1} borderRadius="full" fontSize="xs">
+            <Badge
+              bg="brand.100"
+              color="brand.700"
+              px={3}
+              py={1}
+              borderRadius="full"
+              fontSize="xs"
+            >
               /pipeline
             </Badge>
             <Button variant="outline" onClick={refresh} isLoading={isLoading}>
@@ -73,7 +99,15 @@ export default function PipelinePage() {
         <Divider my={8} borderColor="blackAlpha.200" />
 
         {error ? (
-          <Box borderWidth="1px" borderColor="red.200" bg="red.50" borderRadius="lg" px={4} py={3} mb={8}>
+          <Box
+            borderWidth="1px"
+            borderColor="red.200"
+            bg="red.50"
+            borderRadius="lg"
+            px={4}
+            py={3}
+            mb={8}
+          >
             <Text color="red.700" fontSize="sm">
               {error}
             </Text>
@@ -94,21 +128,28 @@ export default function PipelinePage() {
                 borderColor="blackAlpha.100"
                 p={{ base: 5, md: 6 }}
                 onDragOver={(e) => {
-                  e.preventDefault()
+                  e.preventDefault();
                 }}
                 onDrop={async (e) => {
-                  e.preventDefault()
-                  const publicId = e.dataTransfer.getData('text/plain')
-                  if (!publicId) return
+                  e.preventDefault();
+                  const publicId = e.dataTransfer.getData('text/plain');
+                  if (!publicId) return;
 
                   try {
-                    const next = await fetchJson<PipelineResponse>('/api/pipeline/move', {
-                      method: 'POST',
-                      body: { publicId, toStage: stage },
-                    })
-                    setData(next)
+                    const next = await fetchJson<PipelineResponse>(
+                      '/api/pipeline/move',
+                      {
+                        method: 'POST',
+                        body: { publicId, toStage: stage },
+                      }
+                    );
+                    setData(next);
                   } catch (err) {
-                    setError(err instanceof ApiError ? err.message : 'Failed to move candidate')
+                    setError(
+                      err instanceof ApiError
+                        ? err.message
+                        : 'Failed to move candidate'
+                    );
                   }
                 }}
               >
@@ -138,11 +179,16 @@ export default function PipelinePage() {
                       bg="blackAlpha.50"
                       draggable
                       onDragStart={(e) => {
-                        e.dataTransfer.setData('text/plain', c.publicId)
+                        e.dataTransfer.setData('text/plain', c.publicId);
                       }}
                     >
                       <Text fontWeight={700}>{c.name || c.publicId}</Text>
-                      <Text mt={1} color="blackAlpha.700" fontSize="sm" fontFamily="var(--font-geist-mono)">
+                      <Text
+                        mt={1}
+                        color="blackAlpha.700"
+                        fontSize="sm"
+                        fontFamily="var(--font-geist-mono)"
+                      >
                         {c.publicId}
                       </Text>
                       <Text mt={1} color="blackAlpha.700" fontSize="sm">
@@ -167,5 +213,5 @@ export default function PipelinePage() {
         )}
       </Container>
     </Box>
-  )
+  );
 }
