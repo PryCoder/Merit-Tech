@@ -131,3 +131,26 @@
 2026-04-26T11:30:45.764Z INFO API listening on http://localhost:8080 (development)
 2026-04-26T14:32:53.887Z INFO MongoDB connected
 2026-04-26T14:32:53.926Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T15:04:01.622Z INFO MongoDB connected
+2026-04-26T15:04:01.686Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T15:07:10.929Z WARN Received SIGINT; shutting down...
+2026-04-26T15:07:15.900Z INFO MongoDB connected
+2026-04-26T15:07:15.927Z INFO API listening on http://localhost:4000 (development)
+2026-04-26T15:19:42.220Z INFO MongoDB connected
+2026-04-26T15:19:42.294Z INFO API listening on http://localhost:4000 (development)
+2026-04-26T15:28:34.945Z WARN Received SIGINT; shutting down...
+2026-04-26T15:28:43.318Z INFO MongoDB connected
+2026-04-26T15:28:43.361Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T15:31:34.311Z WARN Received SIGINT; shutting down...
+2026-04-26T15:31:34.314Z INFO HTTP server closed
+2026-04-26T15:31:44.931Z INFO MongoDB connected
+2026-04-26T15:31:44.975Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T15:32:30.044Z INFO MongoDB connected
+2026-04-26T15:32:30.092Z INFO API listening on http://localhost:8080 (development)
+2026-04-26T15:33:51.521Z INFO MongoDB connected
+2026-04-26T15:33:51.569Z INFO API listening on http://localhost:8080 (development)
+2026-04-27T00:57:36.526Z INFO MongoDB connected
+2026-04-27T00:57:36.590Z INFO API listening on http://localhost:8080 (development)
+2026-04-27T01:03:43.062Z WARN Received SIGINT; shutting down...
+2026-04-27T01:08:28.327Z INFO MongoDB connected
+2026-04-27T01:08:28.387Z INFO API listening on http://localhost:8080 (development)

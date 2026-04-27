@@ -73,6 +73,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { fetchJson } from "@/app/lib/fetchJson";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. THEME
@@ -594,24 +595,41 @@ function LoginForm() {
 
   useEffect(() => { if (email || password) setError(null); }, [email, password]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) { setError("Please fill in all fields."); return; }
-    setSubmitting(true);
-    setError(null);
-    try {
-      // Replace with real API call:
-      // const result = await fetchJson<LoginResponse>("/api/auth/login", { method:"POST", body:{ email, password } });
-      await new Promise(r => setTimeout(r, 1600)); // demo delay
-      setSuccess(true);
-      setTimeout(() => router.push("/dashboard"), 800);
-    } catch (err: any) {
-      setError(err?.message || "Invalid email or password.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  if (!email || !password) {
+    setError("Please fill in all fields.");
+    return;
+  }
+
+  setSubmitting(true);
+  setError(null);
+
+  try {
+    const result = await fetchJson<LoginResponse>(
+      `http://localhost:8080/api/auth/login`,
+      {
+        method: "POST",
+        body: { email, password },
+      }
+    );
+console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+    await new Promise((r) => setTimeout(r, 800));
+
+    setSuccess(true);
+
+    if (result?.token) {
+      localStorage.setItem("token", result.token);
+    }
+
+    setTimeout(() => router.push("/dashboard"), 800);
+  } catch (err: any) {
+    setError(err?.message || "Invalid email or password.");
+  } finally {
+    setSubmitting(false);
+  }
+};
   return (
     <MotionBox
       as="form"
@@ -1101,3 +1119,4 @@ export default function LoginPage() {
     </ChakraProvider>
   );
 }
+
