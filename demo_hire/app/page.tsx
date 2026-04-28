@@ -442,11 +442,14 @@ function Hero() {
     <Box as="section" position="relative" minH="100vh" overflow="hidden"
       display="flex" flexDir="column" alignItems="center" justifyContent="center"
       pt="120px" pb="100px" px={6} textAlign="center">
-<Box position="absolute" inset={0} zIndex={0}>
-  <Spotlight
-    className="top-[-100px] left-[-100px]"
-    fill="#C8F135"
-  />
+<Box
+  position="absolute"
+  inset={0}
+  zIndex={0}
+  transform="translate(-100px, -100px)"
+  pointerEvents="none"
+>
+  <Spotlight />
 </Box>
       {/* Radial glows */}
       <Box position="absolute" top="28%" left="50%" transform="translate(-50%,-50%)"
