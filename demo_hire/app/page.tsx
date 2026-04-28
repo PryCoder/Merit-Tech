@@ -47,8 +47,15 @@ import {Spotlight} from "@/components/ui/spotlight";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BentoDemo} from "@/compo/demo";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Crown, Sparkles, Zap } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
+import CTA from "@/compo/cta";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { WarpBackground } from "@/components/ui/warp-background";
+import { NoiseTexture } from "@/components/ui/noise-texture";
+import { AuroraText } from "@/components/ui/aurora-text";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
+import { MagicCard } from "@/components/ui/magic-card";
 
 const cn = (...args: Array<string | false | null | undefined>) =>
   args.filter(Boolean).join(" ");
@@ -1153,155 +1160,276 @@ function Testimonials() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 14. PRICING
 // ─────────────────────────────────────────────────────────────────────────────
+
+
 function Pricing() {
   const plans = [
     {
-      name: "Developer", price: "Free", period: "",
+      name: "Developer",
+      price: "Free",
+      period: "",
       desc: "For individual developers building their profile.",
-      features: ["Unlimited challenge attempts", "AI mentor (basic hints)", "Ghost Replay viewer", "Merit score + badge", "Community leaderboard"],
-      cta: "Start Solving", variant: "ghost_white" as const, highlight: false,
+      features: [
+        "Unlimited challenge attempts",
+        "AI mentor (basic hints)",
+        "Ghost Replay viewer",
+        "Merit score + badge",
+        "Community leaderboard",
+      ],
+      cta: "Start Solving",
+      highlight: false,
+      icon: Sparkles,
     },
     {
-      name: "Recruiter", price: "$299", period: "/month",
+      name: "Recruiter",
+      price: "$299",
+      period: "/month",
       desc: "For hiring teams serious about skill-based hiring.",
-      features: ["Unlimited candidate evaluations", "Full Ghost Replay for every session", "AI decision insights", "Blind ranking dashboard", "ATS integration (Lever, Greenhouse)", "Dedicated success manager"],
-      cta: "Start Hiring", variant: "lime" as const, highlight: true,
+      features: [
+        "Unlimited candidate evaluations",
+        "Full Ghost Replay for every session",
+        "AI decision insights",
+        "Blind ranking dashboard",
+        "ATS integration",
+        "Dedicated success manager",
+      ],
+      cta: "Start Hiring",
+      highlight: true,
+      icon: Zap,
     },
     {
-      name: "Enterprise", price: "Custom", period: "",
-      desc: "For large orgs with custom workflows and compliance.",
-      features: ["Everything in Recruiter", "Custom challenge library", "SSO + SAML", "SOC 2 Type II compliant", "SLA + dedicated infra", "White-label option"],
-      cta: "Contact Us", variant: "ghost_white" as const, highlight: false,
+      name: "Enterprise",
+      price: "Custom",
+      period: "",
+      desc: "For large orgs with custom workflows.",
+      features: [
+        "Everything in Recruiter",
+        "Custom challenge library",
+        "SSO + SAML",
+        "SOC 2 Type II compliant",
+        "SLA + dedicated infra",
+        "White-label option",
+      ],
+      cta: "Contact Us",
+      highlight: false,
+      icon: Crown,
     },
   ];
 
   return (
-    <Box as="section" py={32} px={6} bg="rgba(255,255,255,0.01)"
-      borderTop="1px solid rgba(255,255,255,0.05)">
-      <Container maxW="1280px">
-        <ScrollReveal>
-          <Box textAlign="center" mb={20}>
-            <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-              color="brand.lime" textTransform="uppercase" mb={5}>
-              // Pricing
-            </Text>
-            <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-              fontSize={{ base: "2.4rem", md: "3.4rem" }} letterSpacing="-0.04em">
-              Simple pricing.{" "}
-              <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="brand.lime">
-                No surprises.
-              </Box>
-            </Heading>
-          </Box>
-        </ScrollReveal>
+    <Box bg="#050507" color="white" minH="100vh" py={24} px={6}>
+      <Container maxW="1200px">
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} alignItems="center">
+        {/* HEADER */}
+        <Box textAlign="center" mb={14}>
+          <Text
+            fontSize="11px"
+            letterSpacing=".12em"
+            color="brand.lime"
+            textTransform="uppercase"
+            mb={3}
+          >
+            // Pricing
+          </Text>
+
+          <Heading fontSize={{ base: "1.8rem", md: "2.8rem" }}>
+            Simple pricing{" "}
+            <AuroraText colors={["#C8F135", "#7C3AED"]}>
+              No surprises.
+            </AuroraText>
+          </Heading>
+        </Box>
+
+        {/* CARDS */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
           {plans.map((p, i) => (
-            <ScrollReveal key={i} delay={i} variant="scaleIn">
-              <Box
-                bg={p.highlight ? "rgba(200,241,53,0.05)" : "#16161E"}
-                border={p.highlight ? "2px solid rgba(200,241,53,0.35)" : "1px solid rgba(255,255,255,0.07)"}
-                borderRadius="24px" p={8} h="full" position="relative"
-                transform={p.highlight ? { base: "none", md: "scale(1.04)" } : "none"}
-              >
-                {p.highlight && (
-                  <Box position="absolute" top="-14px" left="50%" transform="translateX(-50%)">
-                    <Tag bg="brand.lime" color="brand.ink" fontFamily="'Cabinet Grotesk', sans-serif"
-                      fontWeight={800} fontSize="11px" borderRadius="full" px={4} py="4px">
-                      MOST POPULAR
-                    </Tag>
-                  </Box>
-                )}
+            <MagicCard
+              key={i}
+              className="
+                p-6 h-full relative text-white
+                bg-[#0A0A0F]
+                border border-white/10
+                transition-all duration-300
+                hover:border-white/30
+                hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]
+              "
+              
+              // ✅ DARK DEFAULT
+              gradientColor="#1a1a1a"
+            >
 
-                <Text fontFamily="'Syne', sans-serif" fontWeight={700} fontSize="14px"
-                  color="rgba(255,255,255,0.5)" textTransform="uppercase" letterSpacing=".06em" mb={3}>
-                  {p.name}
-                </Text>
-                <HStack align="baseline" mb={3}>
-                  <Text fontFamily="'Bebas Neue', sans-serif" fontSize="52px" lineHeight={1} letterSpacing="-0.02em"
-                    color={p.highlight ? "brand.lime" : "#fff"}>
-                    {p.price}
-                  </Text>
-                  <Text fontFamily="'DM Sans', sans-serif" fontSize="16px" color="rgba(255,255,255,0.35)">{p.period}</Text>
-                </HStack>
-                <Text fontFamily="'DM Sans', sans-serif" fontSize="14px" color="rgba(255,255,255,0.42)"
-                  lineHeight={1.7} mb={7}>
-                  {p.desc}
-                </Text>
+              {/* POPULAR */}
+              {p.highlight && (
+                <Box
+                  position="absolute"
+                  top={-10}
+                  left="50%"
+                  transform="translateX(-50%)"
+                  bg="brand.lime"
+                  color="black"
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  fontSize="10px"
+                >
+                  POPULAR
+                </Box>
+              )}
 
-                <Button variant={p.variant} w="full" size="md" py={6} fontSize="15px" mb={7}>
-                  {p.cta}
-                </Button>
-
-                <Divider borderColor="rgba(255,255,255,0.07)" mb={6} />
-
-                <VStack spacing={3} align="flex-start">
-                  {p.features.map((f, j) => (
-                    <HStack key={j} spacing={3}>
-                      <Icon as={CheckCircleSolid} color={p.highlight ? "brand.lime" : "rgba(255,255,255,0.3)"} w={4} h={4} flexShrink={0} />
-                      <Text fontFamily="'DM Sans', sans-serif" fontSize="14px" color="rgba(255,255,255,0.6)">{f}</Text>
-                    </HStack>
-                  ))}
-                </VStack>
+              {/* ICON */}
+              <Box mb={4}>
+                <Box
+                  w={10}
+                  h={10}
+                  borderRadius="xl"
+                  bg="whiteAlpha.100"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <p.icon size={18} />
+                </Box>
               </Box>
-            </ScrollReveal>
+
+              {/* NAME */}
+              <Text fontSize="18px" mb={2}>
+                {p.name}
+              </Text>
+
+              {/* PRICE */}
+              <HStack align="baseline" mb={3}>
+                <Text fontSize="40px" fontWeight="bold">
+                  {p.price}
+                </Text>
+                <Text opacity={0.5}>{p.period}</Text>
+              </HStack>
+
+              {/* DESC */}
+              <Text fontSize="13px" opacity={0.6} mb={6}>
+                {p.desc}
+              </Text>
+
+              {/* CTA */}
+              <Button
+                w="full"
+                mb={6}
+                bg={p.highlight ? "brand.lime" : "whiteAlpha.100"}
+                color={p.highlight ? "black" : "white"}
+                _hover={{
+                  bg: p.highlight ? "brand.lime" : "whiteAlpha.200",
+                  transform: "scale(1.02)",
+                }}
+              >
+                {p.cta}
+              </Button>
+
+              <Divider borderColor="whiteAlpha.200" mb={5} />
+
+              {/* FEATURES */}
+              <VStack align="start" spacing={2}>
+                {p.features.map((f, j) => (
+                  <Text key={j} fontSize="12px" opacity={0.7}>
+                    • {f}
+                  </Text>
+                ))}
+              </VStack>
+
+            </MagicCard>
           ))}
         </SimpleGrid>
       </Container>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 15. CTA SECTION
 // ─────────────────────────────────────────────────────────────────────────────
+
 function FinalCTA() {
   return (
-    <Box as="section" py={40} px={6} textAlign="center" position="relative" overflow="hidden">
-      <Box position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)"
-        w="900px" h="500px" pointerEvents="none"
-        bg="radial-gradient(ellipse, rgba(200,241,53,0.09) 0%, transparent 65%)" />
+    <Box position="relative" overflow="hidden">
+      {/* Noise Texture Background */}
+      <Box position="absolute" inset={0} pointerEvents="none" zIndex={0}>
+        <NoiseTexture opacity={0.08} />
+      </Box>
 
-      <Container maxW="800px">
-        <ScrollReveal>
-          <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-            color="brand.lime" textTransform="uppercase" mb={8}>
+      {/* Content */}
+      <Box position="relative" zIndex={1} py={12} px={4}>
+        <Box
+          maxW="700px"
+          mx="auto"
+          textAlign="center"
+        >
+          <Text
+            fontFamily="'Space Mono', monospace"
+            fontSize="10px"
+            letterSpacing=".14em"
+            color="brand.lime"
+            textTransform="uppercase"
+            mb={2}
+          >
             // Ready to Prove Yourself?
           </Text>
-        </ScrollReveal>
 
-        <ScrollReveal delay={0.5}>
-          <Heading fontFamily="'Bebas Neue', sans-serif" fontWeight={400}
-            fontSize={{ base: "4rem", md: "7rem", lg: "9rem" }}
-            lineHeight={0.93} letterSpacing="-0.02em" mb={8}>
-            YOUR CODE.
-            <br />
-            <Box as="span" color="brand.lime">YOUR CAREER.</Box>
+          <Heading
+            fontFamily="'Bebas Neue', sans-serif"
+            fontWeight={400}
+            fontSize={{ base: "2rem", md: "2.5rem" }}
+            lineHeight={1.2}
+            mb={3}
+          >
+            YOUR CODE.{' '}
+            <AuroraText
+              colors={["#C8F135", "#7C3AED", "#FF4D6D", "#C8F135"]}
+              speed={0.8}
+              className="font-['Bebas_Neue']"
+            >
+              YOUR CAREER.
+            </AuroraText>
           </Heading>
-        </ScrollReveal>
 
-        <ScrollReveal delay={1}>
-          <Text fontFamily="'Instrument Serif', serif" fontStyle="italic" fontSize={{ base: "1.2rem", md: "1.6rem" }}
-            color="rgba(255,255,255,0.38)" mb={12} lineHeight={1.6}>
-            "LeetCode + AI mentor + hiring platform + no résumés."
+          <Text
+            fontFamily="'Instrument Serif', serif"
+            fontStyle="italic"
+            fontSize="0.9rem"
+            color="rgba(255,255,255,0.5)"
+            mb={5}
+          >
+            LeetCode + AI mentor + hiring platform — no résumés.
           </Text>
-        </ScrollReveal>
 
-        <ScrollReveal delay={1.5}>
-          <HStack spacing={5} justify="center" wrap="wrap">
-            <Button variant="lime" size="lg" px={10} py={7} fontSize="17px">
-              Start Solving — It's Free
-            </Button>
-            <Button variant="ghost_white" size="lg" px={10} py={7} fontSize="17px">
-              Book Recruiter Demo
-            </Button>
+          <HStack spacing={3} justify="center">
+            <ShimmerButton
+              style={{
+                padding: "10px 20px",
+                fontSize: "13px",
+                borderRadius: "8px",
+              }}
+            >
+              Start Solving
+            </ShimmerButton>
+
+            <Box
+              as="button"
+              px={4}
+              py={2}
+              fontSize="13px"
+              border="1px solid rgba(255,255,255,0.2)"
+              borderRadius="8px"
+              color="white"
+              _hover={{
+                borderColor: "brand.lime",
+                color: "brand.lime",
+              }}
+            >
+              Book Demo
+            </Box>
           </HStack>
-        </ScrollReveal>
-      </Container>
+        </Box>
+      </Box>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 16. FOOTER
 // ─────────────────────────────────────────────────────────────────────────────

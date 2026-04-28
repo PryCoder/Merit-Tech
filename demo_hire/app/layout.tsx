@@ -98,7 +98,7 @@ export default function RootLayout({
         instrumentSerif.variable,
         GeistSans.variable,
         GeistMono.variable,
-        'font-sans'
+        'font-sans dark'
       )}
     >
       <body className="antialiased">
