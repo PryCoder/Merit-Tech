@@ -66,6 +66,9 @@ import { Globe } from "@/components/ui/globe";
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import { CanvasText } from "@/components/ui/canvas-text";
+import { Meteors } from "@/components/ui/meteors";
 
 const cn = (...args: Array<string | false | null | undefined>) =>
   args.filter(Boolean).join(" ");
@@ -794,225 +797,353 @@ const GridItem = ({
 function HowItWorks() {
   const steps = [
     {
-      num: "01", icon: CodeBracketIcon, color: "#C8F135", bg: "rgba(200,241,53,0.08)",
-      border: "rgba(200,241,53,0.15)",
+      num: "01",
+      icon: CodeBracketIcon,
+      color: "#C8F135",
       title: "Solve Real Problems",
-      desc: "Tackle actual engineering challenges — not toy puzzles. Our adaptive system matches difficulty to your skill level in real time.",
+      desc: "Adaptive system adjusts difficulty in real time.",
       tags: ["Adaptive Difficulty", "Real-world code"],
     },
     {
-      num: "02", icon: SparklesIcon, color: "#7C3AED", bg: "rgba(124,58,237,0.08)",
-      border: "rgba(124,58,237,0.18)",
-      title: "AI Mentor Guides You",
-      desc: "LangGraph-powered AI gives targeted hints — not answers. It tracks your thinking, not just your output, building a Ghost Replay of your session.",
-      tags: ["LangGraph AI", "Ghost Replay", "Adaptive Hints"],
+      num: "02",
+      icon: SparklesIcon,
+      color: "#7C3AED",
+      title: "AI Thinks With You",
+      desc: "Tracks reasoning, not just output.",
+      tags: ["LangGraph AI", "Ghost Replay"],
     },
     {
-      num: "03", icon: EyeSlashIcon, color: "#FF4D6D", bg: "rgba(255,77,109,0.07)",
-      border: "rgba(255,77,109,0.15)",
+      num: "03",
+      icon: EyeSlashIcon,
+      color: "#FF4D6D",
       title: "Blind Evaluation",
-      desc: "Your identity is cryptographically hashed. Recruiters see only your code quality, problem-solving approach, and performance score.",
-      tags: ["Zero Bias", "Identity Hidden", "Fair Scoring"],
+      desc: "No identity. Only logic is evaluated.",
+      tags: ["Zero Bias", "Hidden Identity"],
     },
     {
-      num: "04", icon: TrophyIcon, color: "#F59E0B", bg: "rgba(245,158,11,0.08)",
-      border: "rgba(245,158,11,0.15)",
-      title: "Merit-Based Reveal",
-      desc: "Only after crossing the skill threshold does your identity unlock. Rankings are purely skill-based — the best engineer wins.",
-      tags: ["Threshold Unlock", "Skill Ranking"],
+      num: "04",
+      icon: TrophyIcon,
+      color: "#F59E0B",
+      title: "Merit Unlock",
+      desc: "Best engineers rise purely by skill.",
+      tags: ["Ranking", "Threshold Unlock"],
     },
   ];
 
   return (
-    <Box as="section" py={32} px={6} position="relative">
-      <Box position="absolute" top="30%" left="50%" transform="translate(-50%,-50%)"
-        w="700px" h="500px" pointerEvents="none"
-        bg="radial-gradient(ellipse, rgba(124,58,237,0.07) 0%, transparent 68%)" />
+    <Box as="section" py={40} position="relative" bg="black" overflow="hidden">
 
-      <Container maxW="1280px">
-        <ScrollReveal>
-          <Box textAlign="center" mb={20}>
-            <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-              color="brand.lime" textTransform="uppercase" mb={5}>
-              // How It Works
-            </Text>
-            <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-              fontSize={{ base: "2.4rem", md: "3.4rem" }} letterSpacing="-0.04em" lineHeight={1.1}>
-              Four steps to a{" "}
-              <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} className="gradient-text">
-                fairer hire.
-              </Box>
-            </Heading>
-          </Box>
-        </ScrollReveal>
- 
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-          {steps.map((s, i) => (
-            <ScrollReveal key={i} delay={i} variant="scaleIn">
-              <Box
-                bg="#16161E" border={`1px solid ${s.border}`} borderRadius="22px"
-                p={8} h="full" position="relative" overflow="hidden"
-                _hover={{ transform: "translateY(-4px)", boxShadow: `0 20px 60px ${s.bg}` }}
-                transition="all 0.3s ease" cursor="default"
-              >
-                {/* Number watermark */}
-                <Text position="absolute" top={4} right={6}
-                  fontFamily="'Bebas Neue', sans-serif" fontSize="72px"
-                  color="rgba(255,255,255,0.04)" lineHeight={1} userSelect="none">
-                  {s.num}
-                </Text>
+      {/* BACKGROUND */}
+      <Box position="absolute" inset={0} opacity={0.9}>
+        <Spotlight />
+        <AnimatedGridPattern
+          numSquares={60}
+          maxOpacity={0.08}
+          duration={3}
+          repeatDelay={1}
+          className="absolute inset-0 w-full h-full"
+        />
+      </Box>
 
-                <Box bg={s.bg} borderRadius="14px" p={3} display="inline-flex" mb={5}>
-                  <Icon as={s.icon} color={s.color} w={6} h={6} />
+      <Container maxW="900px" position="relative" zIndex={1}>
+
+        {/* HEADER */}
+        <Box textAlign="center" mb={20}>
+          <Text color="#C8F135" fontSize="12px" letterSpacing="0.3em">
+           // HOW IT WORKS
+          </Text>
+          <Heading color="white" fontSize={{ base: "2xl", md: "4xl" }}>
+            Step-by-step evaluation system
+          </Heading>
+        </Box>
+
+        {/* ================= TIMELINE ================= */}
+        <Box position="relative">
+
+          {/* vertical line */}
+          <Box
+            position="absolute"
+            left="18px"
+            top={0}
+            bottom={0}
+            width="2px"
+            bg="rgba(200,241,53,0.3)"
+          />
+
+          <VStack spacing={16} align="stretch">
+
+            {steps.map((step, i) => (
+              <Box key={i} position="relative" pl={12}>
+
+                {/* DOT */}
+                <Box
+                  position="absolute"
+                  left="10px"
+                  top="6px"
+                  w="14px"
+                  h="14px"
+                  borderRadius="full"
+                  bg={step.color}
+                  boxShadow={`0 0 20px ${step.color}`}
+                />
+
+                {/* CONTENT CARD */}
+                <Box
+                  bg="#16161E"
+                  border="1px solid rgba(255,255,255,0.06)"
+                  borderRadius="16px"
+                  p={6}
+                  _hover={{
+                    transform: "translateY(-4px)",
+                    boxShadow: `0 0 40px ${step.color}33`,
+                  }}
+                  transition="0.3s"
+                >
+
+                  <HStack spacing={3} mb={3}>
+                    <Icon as={step.icon} color={step.color} w={5} h={5} />
+                    <Text color="white" fontWeight="600">
+                      {step.title}
+                    </Text>
+                  </HStack>
+
+                  <Text color="whiteAlpha.700" fontSize="14px" mb={4}>
+                    {step.desc}
+                  </Text>
+
+                  <HStack spacing={2} wrap="wrap">
+                    {step.tags.map((t) => (
+                      <Tag
+                        key={t}
+                        bg="rgba(255,255,255,0.05)"
+                        color="whiteAlpha.600"
+                        fontSize="10px"
+                      >
+                        {t}
+                      </Tag>
+                    ))}
+                  </HStack>
                 </Box>
 
-                <Heading fontFamily="'Syne', sans-serif" fontWeight={700} fontSize="22px"
-                  letterSpacing="-0.025em" mb={3}>
-                  {s.title}
-                </Heading>
-                <Text fontFamily="'DM Sans', sans-serif" fontSize="15px" fontWeight={300}
-                  color="rgba(255,255,255,0.52)" lineHeight={1.78} mb={5}>
-                  {s.desc}
-                </Text>
-
-                <HStack spacing={2} wrap="wrap">
-                  {s.tags.map(tag => (
-                    <Tag key={tag} bg="rgba(255,255,255,0.05)" color="rgba(255,255,255,0.5)"
-                      fontFamily="'Space Mono', monospace" fontSize="10px" borderRadius="6px" px={2} py={1}>
-                      {tag}
-                    </Tag>
-                  ))}
-                </HStack>
               </Box>
-            </ScrollReveal>
-          ))}
-        </SimpleGrid>
+            ))}
+
+          </VStack>
+        </Box>
       </Container>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 9. AI FEATURE SPOTLIGHT — Ghost Replay
 // ─────────────────────────────────────────────────────────────────────────────
 function GhostReplay() {
   const [active, setActive] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
   const timeline = [
     { t: "0:00", event: "Challenge loaded", code: "function twoSum(nums, target) {", type: "start" },
-    { t: "0:42", event: "Attempted brute-force", code: "// O(n²) nested loop approach", type: "attempt" },
-    { t: "1:15", event: "AI Hint triggered", code: "💡 Think about hash maps for O(n)...", type: "hint" },
-    { t: "2:03", event: "Pivoted strategy", code: "const map = new Map();", type: "pivot" },
-    { t: "3:28", event: "Optimal solution", code: "// ✓ O(n) — 100% test pass", type: "success" },
+    { t: "0:42", event: "Brute-force attempt", code: "// O(n²) nested loop", type: "attempt" },
+    { t: "1:15", event: "AI Hint injected", code: "💡 Try hash map optimization", type: "hint" },
+    { t: "2:03", event: "Strategy pivot", code: "const map = new Map();", type: "pivot" },
+    { t: "3:28", event: "Optimal solution", code: "// ✓ O(n) accepted", type: "success" },
   ];
 
   useEffect(() => {
+    setMounted(true);
     const t = setInterval(() => setActive(a => (a + 1) % timeline.length), 1800);
     return () => clearInterval(t);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    <Box as="section" py={32} px={6}>
-      <Container maxW="1280px">
-        <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={16} alignItems="center">
-          <ScrollReveal>
-            <Box>
-              <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-                color="#7C3AED" textTransform="uppercase" mb={5}>
-                // Core Innovation
-              </Text>
-              <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-                fontSize={{ base: "2.4rem", md: "3.2rem" }} letterSpacing="-0.04em" lineHeight={1.1} mb={6}>
-                Ghost Replay:
-                <br />
-                <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="#7C3AED">
-                  how you think,
-                </Box>
-                <br />
-                not just what you wrote.
+    <Box bg="black" w="100%" overflow="hidden">
+       <Box position="absolute" inset={0} zIndex={0}>
+        <Meteors number={25} />
+      </Box>
+      <ContainerScroll
+        titleComponent={
+          <Box
+            w="100%"
+            minH={{ base: "60vh", md: "80vh" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            px={{ base: 4, md: 10 }}
+            py={{ base: 12, md: 20 }}
+          >
+             <Box position="absolute" inset={0} zIndex={0}>
+        <Meteors number={25} />
+      </Box> <Box position="absolute" inset={0} zIndex={0}>
+        <Meteors number={25} />
+      </Box> 
+            <Box
+              w="100%"
+              maxW="6xl"
+              textAlign="center"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={{ base: 4, md: 6 }}
+            >
+
+               <Text color="#8ccbff" fontSize="12px" letterSpacing="0.3em">
+           // HOW IT WORKS
+          </Text>
+              {/* TITLE */}
+              <Heading
+                as="h2"
+                fontWeight="bold"
+                letterSpacing="-0.02em"
+                color="gray.500"
+                fontSize={{
+                  base: "3xl",
+                  sm: "4xl",
+                  md: "5xl",
+                  lg: "6xl",
+                  xl: "7xl",
+                }}
+                lineHeight="1.1"
+              >
+                Ghost Replay
               </Heading>
-              <Text fontFamily="'DM Sans', sans-serif" fontSize="16px" fontWeight={300}
-                color="rgba(255,255,255,0.52)" lineHeight={1.85} mb={8}>
-                Our AI doesn't just evaluate the final solution. It records every
-                keystroke, every pivot, every hint request — generating a full
-                thinking timeline that reveals problem-solving depth.
-              </Text>
 
-              <VStack spacing={3} align="flex-start">
-                {[
-                  { icon: LightBulbIcon, text: "Adaptive hint engine (LangGraph)" },
-                  { icon: CpuChipIcon, text: "Real-time cognition tracking" },
-                  { icon: ChartBarIcon, text: "Strategy + efficiency scoring" },
-                ].map((f, i) => (
-                  <HStack key={i} spacing={3}>
-                    <Box bg="rgba(124,58,237,0.12)" borderRadius="8px" p={2}>
-                      <Icon as={f.icon} color="#7C3AED" w={4} h={4} />
-                    </Box>
-                    <Text fontFamily="'DM Sans', sans-serif" fontSize="15px" color="rgba(255,255,255,0.65)">
-                      {f.text}
-                    </Text>
-                  </HStack>
-                ))}
-              </VStack>
-            </Box>
-          </ScrollReveal>
-
-          {/* Ghost Replay UI mockup */}
-          <ScrollReveal delay={1} variant="scaleIn">
-            <Box bg="#16161E" border="1px solid rgba(255,255,255,0.07)" borderRadius="24px" p={6} overflow="hidden">
-              <HStack justify="space-between" mb={5}>
-                <HStack spacing={2}>
-                  <Box w="10px" h="10px" borderRadius="full" bg="#FF5F57" />
-                  <Box w="10px" h="10px" borderRadius="full" bg="#FEBC2E" />
-                  <Box w="10px" h="10px" borderRadius="full" bg="#28C840" />
-                </HStack>
-                <Text fontFamily="'Space Mono', monospace" fontSize="11px" color="rgba(255,255,255,0.3)">
-                  ghost_replay.sp
-                </Text>
-              </HStack>
-
-              {/* Timeline */}
-              <VStack spacing={0} align="stretch">
-                {timeline.map((item, i) => (
-                  <Box key={i}
-                    bg={active === i ? "rgba(124,58,237,0.1)" : "transparent"}
-                    border={active === i ? "1px solid rgba(124,58,237,0.25)" : "1px solid transparent"}
-                    borderRadius="12px" p={3} mb={1} transition="all 0.4s ease">
-                    <HStack spacing={3} mb={1}>
-                      <Text fontFamily="'Space Mono', monospace" fontSize="10px" color="rgba(255,255,255,0.3)">{item.t}</Text>
-                      <Box w="1px" h="12px" bg="rgba(255,255,255,0.08)" />
-                      <Text fontFamily="'DM Sans', sans-serif" fontSize="12px"
-                        color={active === i ? "#7C3AED" : "rgba(255,255,255,0.4)"} fontWeight={500}>
-                        {item.event}
-                      </Text>
-                    </HStack>
-                    <Text fontFamily="'Space Mono', monospace" fontSize="12px"
-                      color={item.type === "hint" ? "#C8F135" : item.type === "success" ? "#4ADE80" : "rgba(255,255,255,0.55)"}
-                      pl={8}>
-                      {item.code}
-                    </Text>
-                  </Box>
-                ))}
-              </VStack>
-
-              {/* Score bar */}
-              <Box mt={5} pt={5} borderTop="1px solid rgba(255,255,255,0.06)">
-                <HStack justify="space-between" mb={2}>
-                  <Text fontFamily="'Space Mono', monospace" fontSize="11px" color="rgba(255,255,255,0.35)">PERFORMANCE SCORE</Text>
-                  <Text fontFamily="'Bebas Neue', sans-serif" fontSize="22px" color="#C8F135" lineHeight={1}>94 / 100</Text>
-                </HStack>
-                <Box h="4px" bg="rgba(255,255,255,0.07)" borderRadius="full">
-                  <Box h="full" w="94%" bg="linear-gradient(90deg, #C8F135, #6EE7B7)" borderRadius="full"
-                    transition="width 1s ease" />
-                </Box>
+              {/* CANVAS TEXT (REAL RESPONSIVE FIX) */}
+              <Box w="100%" maxW="1400px"  transform="scale(1.1)">
+                <CanvasText
+                  text="How you think, not just what you write"
+                  backgroundClassName="bg-blue-600 dark:bg-blue-700"
+                  colors={[
+                    "rgba(0, 153, 255, 1)",
+                    "rgba(0, 153, 255, 0.9)",
+                    "rgba(0, 153, 255, 0.8)",
+                    "rgba(0, 153, 255, 0.7)",
+                    "rgba(0, 153, 255, 0.6)",
+                    "rgba(0, 153, 255, 0.5)",
+                    "rgba(0, 153, 255, 0.4)",
+                    "rgba(0, 153, 255, 0.3)",
+                    "rgba(0, 153, 255, 0.2)",
+                    "rgba(0, 153, 255, 0.1)",
+                  ]}
+                  lineGap={8}
+                  animationDuration={20}
+                />
               </Box>
             </Box>
-          </ScrollReveal>
-        </Grid>
-      </Container>
+          </Box>
+        }
+      >
+        {/* PANEL */}
+        <Box
+          bg="#0F0F14"
+          border="1px solid rgba(255,255,255,0.08)"
+          borderRadius={{ base: "14px", md: "24px" }}
+          p={{ base: 4, md: 6 }}
+          w="100%"
+          maxW="100%"
+        >
+          {/* TOP BAR */}
+          <HStack justify="space-between" mb={6}>
+            <HStack spacing={2}>
+              <Box w="10px" h="10px" borderRadius="full" bg="#FF5F57" />
+              <Box w="10px" h="10px" borderRadius="full" bg="#FEBC2E" />
+              <Box w="10px" h="10px" borderRadius="full" bg="#28C840" />
+            </HStack>
+
+            <Text
+              fontFamily="'Space Mono', monospace"
+              fontSize="11px"
+              color="whiteAlpha.400"
+            >
+              cognition.trace
+            </Text>
+          </HStack>
+
+          {/* TIMELINE */}
+          <VStack spacing={3} align="stretch">
+            {timeline.map((item, i) => (
+              <Box
+                key={i}
+                p={{ base: 3, md: 4 }}
+                borderRadius="12px"
+                transition="all 0.25s ease"
+                bg={active === i ? "rgba(124,58,237,0.12)" : "transparent"}
+                border={
+                  active === i
+                    ? "1px solid rgba(124,58,237,0.35)"
+                    : "1px solid transparent"
+                }
+              >
+                <HStack spacing={3} flexWrap="wrap" mb={1}>
+                  <Text
+                    fontSize="10px"
+                    fontFamily="'Space Mono', monospace"
+                    color="whiteAlpha.500"
+                  >
+                    {item.t}
+                  </Text>
+
+                  <Text
+                    fontSize="13px"
+                    color={active === i ? "#C8F135" : "whiteAlpha.700"}
+                  >
+                    {item.event}
+                  </Text>
+                </HStack>
+
+                <Text
+                  fontSize="12px"
+                  fontFamily="'Space Mono', monospace"
+                  color={
+                    item.type === "hint"
+                      ? "#C8F135"
+                      : item.type === "success"
+                      ? "#4ADE80"
+                      : "whiteAlpha.600"
+                  }
+                  pl={6}
+                >
+                  {item.code}
+                </Text>
+              </Box>
+            ))}
+          </VStack>
+
+          {/* SCORE */}
+          <Box mt={6} pt={5} borderTop="1px solid rgba(255,255,255,0.06)">
+            <HStack justify="space-between" flexWrap="wrap">
+              <Text
+                fontSize="11px"
+                fontFamily="'Space Mono', monospace"
+                color="whiteAlpha.400"
+              >
+                PERFORMANCE SCORE
+              </Text>
+
+              <Text
+                fontSize="22px"
+                color="#C8F135"
+                fontFamily="'Bebas Neue', sans-serif"
+              >
+                94 / 100
+              </Text>
+            </HStack>
+
+            <Box mt={2} h="4px" bg="whiteAlpha.100" borderRadius="full">
+              <Box
+                w="94%"
+                h="100%"
+                bgGradient="linear(to-r, #C8F135, #7C3AED)"
+                borderRadius="full"
+              />
+            </Box>
+          </Box>
+        </Box>
+      </ContainerScroll>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 10. FEATURES GRID
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1023,10 +1154,11 @@ function FeaturesBento() {
       position="relative"
       overflow="hidden"
       py={{ base: "6rem", md: "10rem" }}
-      px="1.5rem"
+      px={{ base: "1rem", sm: "1.5rem", md: "2rem", lg: "3rem" }}
       borderTop="1px solid rgba(255,255,255,0.1)"
       borderBottom="1px solid rgba(255,255,255,0.1)"
       bg="#000"
+      width="100%"
     >
       {/* 🔥 FULL SECTION BACKGROUND LAYER */}
       <Box
@@ -1034,12 +1166,14 @@ function FeaturesBento() {
         inset={0}
         zIndex={0}
         pointerEvents="none"
+        width="100%"
+        height="100%"
       >
-     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
-     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
-     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
-     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
-     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+        <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+        <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+        <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+        <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+        <BackgroundLines className="w-full h-full opacity-80 scale-110" />
       </Box>
 
       {/* optional dark overlay for depth */}
@@ -1049,65 +1183,64 @@ function FeaturesBento() {
         zIndex={0}
         bg="radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.9))"
         pointerEvents="none"
+        width="100%"
+        height="100%"
       />
 
       {/* CONTENT */}
-     <Box position="relative" zIndex={1}>
-  
-  {/* HEADER */}
-  <Box
-    maxW="70rem"
-    mx="auto"
-    textAlign="center"
-    mb={{ base: "3rem", md: "5rem" }}
-  >
-    {/* Subtitle */}
-    <Box
-      as="p"
-      fontSize="0.75rem"
-      letterSpacing="0.25em"
-      textTransform="uppercase"
-      color="#A3E635"
-      mb="1rem"
-      fontFamily="DM Sans, sans-serif"
-    >
-      // Key Differentiators
-    </Box>
+      <Box position="relative" zIndex={1} width="100%">
+        {/* HEADER */}
+        <Box
+          maxW="70rem"
+          mx="auto"
+          textAlign="center"
+          mb={{ base: "3rem", md: "5rem" }}
+          px={{ base: "1rem", sm: "2rem", md: "0" }}
+        >
+          {/* Subtitle */}
+          <Box
+            as="p"
+            fontSize="0.75rem"
+            letterSpacing="0.25em"
+            textTransform="uppercase"
+            color="#A3E635"
+            mb="1rem"
+            fontFamily="DM Sans, sans-serif"
+          >
+            // Key Differentiators
+          </Box>
 
-    {/* HEADING (smaller + cleaner scale) */}
-    <Box
-      as="h2"
-      fontSize={{ base: "2.2rem", md: "3.5rem", lg: "4.5rem" }}
-      fontWeight={750}
-      letterSpacing="-0.02em"
-      lineHeight={1.1}
-      color="white"
-      fontFamily="Syne, sans-serif"
-    >
-      Not just a platform.
-      <br />
-      <Box
-        as="span"
-        fontStyle="italic"
-        fontFamily="Instrument Serif, serif"
-        color="#A3E635"
-      >
-        A fair future for hiring.
-      </Box>
-    </Box>
-
-  </Box>
-</Box>
-        {/* BENTO GRID */}
-        <Box>
-          <BentoDemo />
+          {/* HEADING (smaller + cleaner scale) */}
+          <Box
+            as="h2"
+            fontSize={{ base: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4.5rem" }}
+            fontWeight={750}
+            letterSpacing="-0.02em"
+            lineHeight={1.1}
+            color="white"
+            fontFamily="Syne, sans-serif"
+          >
+            Not just a platform.
+            <br />
+            <Box
+              as="span"
+              fontStyle="italic"
+              fontFamily="Instrument Serif, serif"
+              color="#A3E635"
+            >
+              A fair future for hiring.
+            </Box>
+          </Box>
         </Box>
 
+        {/* BENTO GRID */}
+        <Box width="100%">
+          <BentoDemo />
+        </Box>
       </Box>
-    
+    </Box>
   );
 }
-
 
 
 
@@ -1121,19 +1254,19 @@ type Candidate = {
   status: string;
   time: string;
 };
-
 function Dashboard({ candidates }: { candidates: Candidate[] }) {
   return (
     <MotionBox
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6 }}
-      borderRadius="24px"
+      borderRadius={{ base: "16px", md: "24px" }}
       overflow="hidden"
       bg="rgba(255,255,255,0.03)"
       border="1px solid rgba(255,255,255,0.08)"
       backdropFilter="blur(18px)"
       position="relative"
+      width="100%"
     >
       {/* glow */}
       <Box
@@ -1144,58 +1277,108 @@ function Dashboard({ candidates }: { candidates: Candidate[] }) {
 
       {/* HEADER */}
       <HStack
-        px={5}
-        py={4}
+        px={{ base: 3, sm: 4, md: 5 }}
+        py={{ base: 3, md: 4 }}
         borderBottom="1px solid rgba(255,255,255,0.06)"
         justify="space-between"
         position="relative"
+        flexWrap="wrap"
+        gap={2}
       >
         <HStack>
           <Icon as={UserGroupIcon} w={4} h={4} color="whiteAlpha.600" />
-          <Text fontSize="14px">Candidate Rankings</Text>
+          <Text fontSize={{ base: "12px", md: "14px" }}>Candidate Rankings</Text>
         </HStack>
 
-        <Tag bg="rgba(200,241,53,0.1)" color="#C8F135">
+        <Tag bg="rgba(200,241,53,0.1)" color="#C8F135" size={{ base: "sm", md: "md" }}>
           LIVE
         </Tag>
       </HStack>
 
-      {/* ROWS */}
-      {candidates.map((c, i) => (
-        <HStack
-          key={i}
-          px={5}
-          py={3}
-          justify="space-between"
-          borderBottom="1px solid rgba(255,255,255,0.05)"
-          _hover={{ bg: "rgba(255,255,255,0.02)" }}
-          position="relative"
-        >
-          <Text color="whiteAlpha.600">{c.rank}</Text>
-
-          <HStack>
-            {c.skills.map((s) => (
-              <Tag key={s} size="sm" bg="whiteAlpha.100">
-                {s}
-              </Tag>
-            ))}
-          </HStack>
-
-          <Text color={c.score > 90 ? "#4ADE80" : "#F59E0B"}>
-            {c.score}
-          </Text>
-
-          <Text fontSize="12px" color="whiteAlpha.500">
-            {c.time}
-          </Text>
-
-          <Tag
-            bg={c.status === "Revealed" ? "green.500Alpha" : "whiteAlpha.200"}
+      {/* ROWS - Responsive grid/card layout on mobile */}
+      <Box>
+        {candidates.map((c, i) => (
+          <Box
+            key={i}
+            px={{ base: 3, sm: 4, md: 5 }}
+            py={{ base: 3, md: 3 }}
+            borderBottom="1px solid rgba(255,255,255,0.05)"
+            _hover={{ bg: "rgba(255,255,255,0.02)" }}
+            position="relative"
           >
-            {c.status}
-          </Tag>
-        </HStack>
-      ))}
+            {/* Desktop: Horizontal row */}
+            <HStack
+              display={{ base: "none", md: "flex" }}
+              justify="space-between"
+              w="100%"
+            >
+              <Text color="whiteAlpha.600" minW="40px">
+                #{c.rank}
+              </Text>
+
+              <HStack flex="1" justify="flex-start" pl={4}>
+                {c.skills.map((s) => (
+                  <Tag key={s} size="sm" bg="whiteAlpha.100">
+                    {s}
+                  </Tag>
+                ))}
+              </HStack>
+
+              <Text
+                color={c.score > 90 ? "#4ADE80" : "#F59E0B"}
+                fontWeight="medium"
+                minW="45px"
+                textAlign="right"
+              >
+                {c.score}
+              </Text>
+
+              <Text fontSize="12px" color="whiteAlpha.500" minW="50px">
+                {c.time}
+              </Text>
+
+              <Tag
+                bg={c.status === "Revealed" ? "green.500Alpha" : "whiteAlpha.200"}
+                size="sm"
+              >
+                {c.status}
+              </Tag>
+            </HStack>
+
+            {/* Mobile: Card layout */}
+            <Box display={{ base: "block", md: "none" }}>
+              <HStack justify="space-between" mb={2}>
+                <Text color="whiteAlpha.600" fontWeight="bold">
+                  #{c.rank}
+                </Text>
+                <Tag
+                  bg={c.status === "Revealed" ? "green.500Alpha" : "whiteAlpha.200"}
+                  size="sm"
+                >
+                  {c.status}
+                </Tag>
+              </HStack>
+
+              <HStack flexWrap="wrap" gap={2} mb={2}>
+                {c.skills.map((s) => (
+                  <Tag key={s} size="sm" bg="whiteAlpha.100">
+                    {s}
+                  </Tag>
+                ))}
+              </HStack>
+
+              <HStack justify="space-between">
+                <Text color={c.score > 90 ? "#4ADE80" : "#F59E0B"} fontWeight="bold">
+                  Score: {c.score}
+                </Text>
+                <Text fontSize="11px" color="whiteAlpha.500">
+                  Time: {c.time}
+                </Text>
+              </HStack>
+            </Box>
+          </Box>
+        ))}
+      </Box>
     </MotionBox>
   );
 }
@@ -1213,37 +1396,36 @@ function RecruiterSection() {
     <Box
       as="section"
       position="relative"
-      py={32}
-      px={6}
+      py={{ base: 16, sm: 20, md: 28, lg: 32 }}
+      px={{ base: 3, sm: 4, md: 6, lg: 8 }}
       overflow="hidden"
       bg="black"
     >
       {/* ================= SPOTLIGHT LAYER (MAIN FOCUS) ================= */}
       <Box
-  position="absolute"
-  inset={0}
-  zIndex={0}
-  opacity={1}
-  filter="brightness(1.3) contrast(1.2)"
->
-  <Spotlight />
-</Box>
+        position="absolute"
+        inset={0}
+        zIndex={0}
+        opacity={1}
+        filter="brightness(1.3) contrast(1.2)"
+      >
+        <Spotlight />
+      </Box>
 
       {/* ================= GRID BACKGROUND ================= */}
-     <Box
-          position="absolute"
-          inset={0}
-          transform="skewY(12deg)"
-          opacity={0.35}
-        >
-          <AnimatedGridPattern
-            numSquares={30}
-            maxOpacity={0.15}
-            duration={3}
-            repeatDelay={1}
-            className="absolute inset-0 w-full h-full"
-          />
-        
+      <Box
+        position="absolute"
+        inset={0}
+        transform={{ base: "skewY(6deg)", md: "skewY(12deg)" }}
+        opacity={0.35}
+      >
+        <AnimatedGridPattern
+          numSquares={30}
+          maxOpacity={0.15}
+          duration={3}
+          repeatDelay={1}
+          className="absolute inset-0 w-full h-full"
+        />
       </Box>
 
       {/* ================= FLICKER LAYER ================= */}
@@ -1260,31 +1442,49 @@ function RecruiterSection() {
       />
 
       {/* ================= CONTENT ================= */}
-      <Container maxW="1280px" position="relative" zIndex={1}>
-        <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={16} alignItems="center">
-
-          {/* LEFT */}
+      <Container maxW="1280px" position="relative" zIndex={1} px={{ base: 0, sm: 2, md: 4 }}>
+        <Grid
+          templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+          gap={{ base: 8, md: 12, lg: 16 }}
+          alignItems="center"
+        >
+          {/* LEFT - Dashboard */}
           <Dashboard candidates={candidates} />
 
-          {/* RIGHT */}
+          {/* RIGHT - Content */}
           <MotionBox
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Text color="#C8F135" fontSize="12px" mb={4}>
+            <Text
+              color="#C8F135"
+              fontSize={{ base: "10px", sm: "11px", md: "12px" }}
+              mb={{ base: 3, md: 4 }}
+              letterSpacing="0.05em"
+            >
               // For Recruiters
             </Text>
 
-            <Text fontSize="3xl" fontWeight="bold" color="white" mb={4}>
+            <Text
+              fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "5xl" }}
+              fontWeight="bold"
+              color="white"
+              mb={{ base: 3, md: 4 }}
+              lineHeight={{ base: 1.3, md: 1.2 }}
+            >
               See ability, not background.
             </Text>
 
-            <Text color="whiteAlpha.700" mb={8}>
+            <Text
+              color="whiteAlpha.700"
+              mb={{ base: 6, md: 8 }}
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Spotlight-driven UI highlights top candidates and removes bias.
             </Text>
 
-            <VStack align="start" spacing={3} mb={10}>
+            <VStack align="start" spacing={{ base: 2.5, md: 3 }} mb={{ base: 6, md: 8, lg: 10 }}>
               {[
                 "Real-time ranked candidate feed",
                 "Watch full Ghost Replay sessions",
@@ -1292,9 +1492,11 @@ function RecruiterSection() {
                 "Identity revealed after merit threshold",
                 "Zero manual screening",
               ].map((t) => (
-                <HStack key={t}>
-                  <Icon as={CheckCircleIcon} color="#C8F135" />
-                  <Text color="whiteAlpha.700">{t}</Text>
+                <HStack key={t} alignItems="flex-start">
+                  <Icon as={CheckCircleIcon} color="#C8F135" mt={0.5} boxSize={{ base: 4, md: 5 }} />
+                  <Text color="whiteAlpha.700" fontSize={{ base: "13px", sm: "14px", md: "15px" }}>
+                    {t}
+                  </Text>
                 </HStack>
               ))}
             </VStack>
@@ -1304,11 +1506,14 @@ function RecruiterSection() {
               color="black"
               _hover={{ bg: "#d4ff4a" }}
               rightIcon={<ArrowRightIcon width={16} />}
+              size={{ base: "sm", sm: "md", md: "lg" }}
+              px={{ base: 4, md: 6 }}
+              py={{ base: 5, md: 6 }}
+              fontSize={{ base: "13px", md: "14px" }}
             >
               Book Demo
             </Button>
           </MotionBox>
-
         </Grid>
       </Container>
     </Box>
@@ -1337,8 +1542,8 @@ function StatCard({
       transition={{ duration: 0.6, delay: index * 0.12 }}
       whileHover={{ y: -6, scale: 1.04 }}
       textAlign="center"
-      p={6}
-      borderRadius="18px"
+      p={{ base: 4, md: 6 }}
+      borderRadius={{ base: "16px", md: "18px" }}
       position="relative"
       overflow="hidden"
       bg="rgba(255,255,255,0.03)"
@@ -1361,11 +1566,11 @@ function StatCard({
       <Text
         position="relative"
         fontFamily="'Bebas Neue', sans-serif"
-        fontSize={{ base: "3rem", md: "4.5rem" }}
+        fontSize={{ base: "2.5rem", sm: "3rem", md: "4.5rem" }}
         color={stat.color}
         lineHeight={1}
         letterSpacing="-0.02em"
-        mb={2}
+        mb={{ base: 1, md: 2 }}
         textShadow={`0 0 25px ${stat.color}55`}
       >
         {stat.num}
@@ -1375,7 +1580,7 @@ function StatCard({
       <Text
         position="relative"
         fontFamily="'DM Sans', sans-serif"
-        fontSize="14px"
+        fontSize={{ base: "12px", md: "14px" }}
         fontWeight={300}
         color="rgba(255,255,255,0.5)"
       >
@@ -1400,8 +1605,8 @@ function StatsRow() {
     <Box
       as="section"
       position="relative"
-      py={24}
-      px={6}
+      py={{ base: 16, md: 24 }}
+      px={{ base: 4, md: 6 }}
       overflow="hidden"
       bg="black"
       borderTop="1px solid rgba(255,255,255,0.05)"
@@ -1410,7 +1615,7 @@ function StatsRow() {
       {/* ======================================
           🔥 BACKGROUND LAYER (FIXED VISIBILITY)
       ====================================== */}
-       <AnimatedGridPattern
+      <AnimatedGridPattern
         numSquares={30}
         maxOpacity={0.1}
         duration={3}
@@ -1437,7 +1642,10 @@ function StatsRow() {
           🔥 CONTENT
       ====================================== */}
       <Container maxW="1280px" position="relative" zIndex={1}>
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={10}>
+        <SimpleGrid 
+          columns={{ base: 1, sm: 2, md: 4 }} 
+          spacing={{ base: 6, md: 10 }}
+        >
           {stats.map((stat, i) => (
             <StatCard key={i} stat={stat} index={i} />
           ))}
