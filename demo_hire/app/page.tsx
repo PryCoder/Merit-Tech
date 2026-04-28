@@ -24,10 +24,11 @@
 
    import React, { useState, useEffect, useRef, ReactNode } from "react";
 import {
-  Box, Flex, Grid, GridItem, Text, Heading, Button, Badge,
+  Box, Flex, Grid, Text, Heading, Button, Badge,
   Container, Stack, HStack, VStack, Tag, Divider, Icon,
   useColorModeValue, ChakraProvider, extendTheme, Image,
   SimpleGrid, Circle, Square, AspectRatio,
+  IconButton, chakra,
 } from "@chakra-ui/react";
 import {
   EyeSlashIcon, SparklesIcon, TrophyIcon, UserGroupIcon,
@@ -47,7 +48,7 @@ import {Spotlight} from "@/components/ui/spotlight";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BentoDemo} from "@/compo/demo";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
-import { ChevronRight, Crown, Sparkles, Zap } from "lucide-react";
+import { CheckCircleIcon, ChevronRight, Cpu, Crown, Menu, Sparkles, X, Zap } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import CTA from "@/compo/cta";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
@@ -56,6 +57,15 @@ import { NoiseTexture } from "@/components/ui/noise-texture";
 import { AuroraText } from "@/components/ui/aurora-text";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { MagicCard } from "@/components/ui/magic-card";
+import { BlurFade } from "@/components/ui/blur-fade";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { BackgroundLines } from "@/components/ui/background-lines";
+import { Globe } from "@/components/ui/globe";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
+import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
+import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
 
 const cn = (...args: Array<string | false | null | undefined>) =>
   args.filter(Boolean).join(" ");
@@ -159,9 +169,9 @@ const theme = extendTheme({
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. MOTION HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
-const MotionBox = motion(Box as any);
-const MotionFlex = motion(Flex as any);
-const MotionText = motion(Text as any);
+const MotionBox = motion(chakra.div);
+const MotionFlex = motion(chakra.div);
+const MotionText = motion(chakra.p);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -223,58 +233,165 @@ function GlobalCSS() {
 // 4. NAVBAR
 // ─────────────────────────────────────────────────────────────────────────────
 function Navbar() {
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 36);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const links = ["Platform", "How It Works", "Pricing"];
 
   return (
     <Box
-      as="nav" position="fixed" top={0} left={0} right={0} zIndex={200}
-      px={8} py={0}
-      bg={scrolled ? "rgba(10,10,15,0.88)" : "transparent"}
-      backdropFilter={scrolled ? "blur(24px)" : "none"}
-      borderBottom={scrolled ? "1px solid rgba(255,255,255,0.06)" : "none"}
-      transition="all 0.4s ease"
+      position="fixed"
+      top={0}
+      w="100%"
+      zIndex={1000}
+      pt={{ base: 2, md: 4 }}
+      px={{ base: 3, md: 6 }}
     >
-      <Flex maxW="1280px" mx="auto" h="70px" align="center" justify="space-between">
-        {/* Logo */}
-        <HStack spacing={3}>
-          <Box w={8} h={8} bg="brand.lime" borderRadius={8} display="flex" alignItems="center" justifyContent="center">
-            <Icon as={CpuChipIcon} color="brand.ink" w={5} h={5} />
-          </Box>
-          <Text fontFamily="'Cabinet Grotesk', sans-serif" fontWeight={900} fontSize="20px" letterSpacing="-0.03em">
-            SkillProof
-          </Text>
-        </HStack>
+      {/* NAV CONTAINER */}
+      <Box
+        maxW="1100px"
+        mx="auto"
+        borderRadius={{ base: "18px", md: "999px" }} // ✅ FIX: no extreme curve on mobile
+        boxShadow="0 10px 30px rgba(0,0,0,0.45)"
+        bg={scrolled ? "rgba(15,15,15,0.9)" : "rgba(10,10,10,0.85)"}
+        backdropFilter="blur(14px)"
+        border="1px solid rgba(255,255,255,0.06)"
+      >
+        <Container maxW="1200px" py={{ base: 2, md: 3 }}>
+          <HStack justify="space-between" align="center">
 
-        {/* Links */}
-        <HStack spacing={9} display={{ base: "none", md: "flex" }}>
-          {["Platform", "How It Works", "For Recruiters", "Pricing"].map(l => (
-            <Text key={l} as="a" href="#" fontFamily="'DM Sans', sans-serif" fontSize="14px" fontWeight={400}
-              color="rgba(255,255,255,0.55)" _hover={{ color: "#fff" }} transition="color .2s" textDecoration="none">
-              {l}
-            </Text>
-          ))}
-        </HStack>
+            {/* LOGO */}
+            <HStack spacing={3}>
+              <Box
+                w="34px"
+                h="34px"
+                borderRadius="10px"
+                bg="#C8F135"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Cpu size={18} color="#000" />
+              </Box>
 
-        {/* CTA */}
-        <HStack spacing={3}>
-          <Text as="a" href="#" fontFamily="'DM Sans', sans-serif" fontSize="14px" color="rgba(255,255,255,0.6)"
-            _hover={{ color: "#fff" }} transition="color .2s" textDecoration="none">
-            Sign in
-          </Text>
-          <Button variant="lime" size="sm" px={5} py={2} fontSize="14px">
-            Get Early Access
-          </Button>
-        </HStack>
-      </Flex>
+              <Text fontWeight={800} color="white">
+                SkillProof
+              </Text>
+            </HStack>
+
+            {/* DESKTOP LINKS */}
+            <HStack
+              spacing={8}
+              display={{ base: "none", md: "flex" }}
+            >
+              {links.map((link) => (
+                <Text
+                  key={link}
+                  fontSize="14px"
+                  color="whiteAlpha.700"
+                  cursor="pointer"
+                  _hover={{ color: "#C8F135" }}
+                  transition="0.2s"
+                >
+                  {link}
+                </Text>
+              ))}
+            </HStack>
+
+            {/* CTA DESKTOP */}
+            <HStack spacing={3} display={{ base: "none", md: "flex" }}>
+              <Text fontSize="14px" color="whiteAlpha.600">
+                Sign in
+              </Text>
+
+              <Button
+                size="sm"
+                bg="#C8F135"
+                color="black"
+                borderRadius="full"
+                _hover={{ bg: "#d4ff4a" }}
+              >
+                Get Started
+              </Button>
+            </HStack>
+
+            {/* MOBILE BUTTON (FIXED SHAPE) */}
+            <IconButton
+              display={{ base: "flex", md: "none" }}
+              aria-label="menu"
+              icon={open ? <X size={20} /> : <Menu size={20} />}
+              onClick={() => setOpen(!open)}
+              variant="ghost"
+              color="white"
+              w="42px"
+              h="42px"
+              borderRadius="12px" // ✅ FIX: removes circular feel
+              _hover={{ bg: "whiteAlpha.100" }}
+              _active={{ bg: "whiteAlpha.200", transform: "scale(0.96)" }}
+              _focusVisible={{ boxShadow: "none" }}
+            />
+          </HStack>
+
+          {/* MOBILE MENU (FIXED CARD STYLE) */}
+          <AnimatePresence>
+            {open && (
+              <MotionBox
+                initial={{ height: 0, opacity: 0, y: -10 }}
+                animate={{ height: "auto", opacity: 1, y: 0 }}
+                exit={{ height: 0, opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+                overflow="hidden"
+                mt={3}
+              >
+                {/* MOBILE CARD (FIXED SHAPE) */}
+                <Box
+                  bg="rgba(15,15,15,0.95)"
+                  border="1px solid rgba(255,255,255,0.08)"
+                  borderRadius="16px" // ✅ FIX: no huge curve anymore
+                  p={4}
+                  backdropFilter="blur(12px)"
+                >
+                  <VStack align="stretch" spacing={4}>
+                    
+                    {links.map((link) => (
+                      <Text
+                        key={link}
+                        fontSize="15px"
+                        color="whiteAlpha.800"
+                        cursor="pointer"
+                        _hover={{ color: "#C8F135" }}
+                      >
+                        {link}
+                      </Text>
+                    ))}
+
+                    <Box h="1px" bg="whiteAlpha.200" />
+
+                    <Button
+                      w="full"
+                      bg="#C8F135"
+                      color="black"
+                      borderRadius="12px"
+                    >
+                      Get Started
+                    </Button>
+
+                  </VStack>
+                </Box>
+              </MotionBox>
+            )}
+          </AnimatePresence>
+        </Container>
+      </Box>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 5. HERO
 // ─────────────────────────────────────────────────────────────────────────────
@@ -468,67 +585,206 @@ function LogoMarquee() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 7. PROBLEM SECTION
 // ─────────────────────────────────────────────────────────────────────────────
-function Problem() {
+export function Problem() {
   const problems = [
-    { icon: XCircleIcon, title: "College bias", stat: "78%", desc: "of candidates filtered before any code is seen", color: "#FF4D6D" },
-    { icon: DocumentMagnifyingGlassIcon, title: "Résumé theater", stat: "r=0.27", desc: "correlation between résumé & job performance", color: "#FF4D6D" },
-    { icon: ClockIcon, title: "Time drain", stat: "23 hrs", desc: "wasted per hire on manual screening on average", color: "#FF4D6D" },
+    {
+      icon: XCircleIcon,
+      title: "College bias",
+      stat: "78%",
+      desc: "of candidates filtered before any code is seen",
+    },
+    {
+      icon: DocumentMagnifyingGlassIcon,
+      title: "Résumé theater",
+      stat: "r=0.27",
+      desc: "correlation between résumé & job performance",
+    },
+    {
+      icon: ClockIcon,
+      title: "Time drain",
+      stat: "23 hrs",
+      desc: "wasted per hire on manual screening on average",
+    },
   ];
 
   return (
-    <Box as="section" py={32} px={6}>
-      <Container maxW="1280px">
-        <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={20} alignItems="center">
-          <ScrollReveal>
-            <Box>
-              <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-                color="brand.red" textTransform="uppercase" mb={5}>
-                // The Problem
-              </Text>
-              <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-                fontSize={{ base: "2.6rem", md: "3.8rem" }} lineHeight={1.08} letterSpacing="-0.04em" mb={6}>
-                Hiring is{" "}
-                <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="brand.red">
-                  broken
-                </Box>{" "}
-                by design.
-              </Heading>
-              <Text fontFamily="'DM Sans', sans-serif" fontSize="17px" fontWeight={300}
-                color="rgba(255,255,255,0.5)" lineHeight={1.85} maxW="480px">
-                Companies filter by college names and previous employers before ever
-                seeing a single line of code. The best engineers from non-traditional
-                backgrounds never get a chance.
-              </Text>
-            </Box>
-          </ScrollReveal>
+    <Box as="section" py={28} px={6} position="relative" overflow="hidden">
 
-          <VStack spacing={4} align="stretch">
-            {problems.map((p, i) => (
-              <ScrollReveal key={i} delay={i}>
-                <HStack spacing={5} bg="rgba(255,77,109,0.06)" border="1px solid rgba(255,77,109,0.12)"
-                  borderRadius="16px" p={5} align="flex-start"
-                  _hover={{ bg: "rgba(255,77,109,0.1)", borderColor: "rgba(255,77,109,0.22)" }}
-                  transition="all 0.25s">
-                  <Box flexShrink={0} bg="rgba(255,77,109,0.12)" borderRadius="10px" p={2}>
-                    <Icon as={p.icon} color={p.color} w={5} h={5} />
-                  </Box>
-                  <Box>
-                    <HStack spacing={3} mb={1}>
-                      <Text fontFamily="'Syne', sans-serif" fontWeight={700} fontSize="15px">{p.title}</Text>
-                      <Text fontFamily="'Space Mono', monospace" fontSize="12px" color={p.color} fontWeight={700}>{p.stat}</Text>
-                    </HStack>
-                    <Text fontFamily="'DM Sans', sans-serif" fontSize="13px" color="rgba(255,255,255,0.42)" lineHeight={1.6}>{p.desc}</Text>
-                  </Box>
-                </HStack>
-              </ScrollReveal>
-            ))}
-          </VStack>
-        </Grid>
+      {/* 🌌 Background */}
+      <BackgroundBeams className="absolute inset-0 opacity-40" />
+
+      <Box
+        position="absolute"
+        inset={0}
+        bg="linear-gradient(to bottom, rgba(0,0,0,0.92), transparent, rgba(0,0,0,0.92))"
+        pointerEvents="none"
+      />
+
+      <Container maxW="1200px" position="relative">
+
+        {/* HEADER */}
+        <Box mb={12}>
+          <Text
+            fontFamily="'Space Mono', monospace"
+            fontSize="11px"
+            color="#FF4D6D"
+            letterSpacing=".12em"
+            textTransform="uppercase"
+            mb={5}
+          >
+            // The Problem
+          </Text>
+
+          <Heading
+            fontFamily="'Syne', sans-serif"
+            fontWeight={800}
+            fontSize={{ base: "2.4rem", md: "3.6rem" }}
+            color="white"
+            mb={6}
+          >
+            Hiring is{" "}
+            <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" color="#FF4D6D">
+              broken
+            </Box>{" "}
+            by design.
+          </Heading>
+
+          <Text color="whiteAlpha.600" maxW="520px" lineHeight={1.8}>
+            Companies filter by college names and previous employers before ever
+            seeing a single line of code.
+          </Text>
+        </Box>
+
+        {/* BENTO GRID */}
+        <SimpleGrid columns={{ base: 1, md: 12 }} spacing={6}>
+
+          <GridItem
+            area="md:col-span-6"
+            icon={<XCircleIcon className="h-4 w-4 text-[#FF4D6D]" />}
+            title="College bias"
+            stat="78%"
+            description="of candidates filtered before any code is seen"
+          />
+
+          <GridItem
+            area="md:col-span-6"
+            icon={<DocumentMagnifyingGlassIcon className="h-4 w-4 text-[#FF4D6D]" />}
+            title="Résumé theater"
+            stat="r=0.27"
+            description="correlation between résumé & job performance"
+          />
+
+          <GridItem
+            area="md:col-span-12"
+            icon={<ClockIcon className="h-4 w-4 text-[#FF4D6D]" />}
+            title="Time drain"
+            stat="23 hrs"
+            description="wasted per hire on manual screening on average"
+          />
+
+        </SimpleGrid>
+
       </Container>
     </Box>
   );
 }
 
+/* ========================= */
+/* FIXED GRID ITEM (IMPORTANT) */
+/* ========================= */
+
+interface GridItemProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  stat: string;
+  area: string;
+}
+
+const GridItem = ({
+  icon,
+  title,
+  description,
+  stat,
+  area,
+}: GridItemProps) => {
+  return (
+    <Box
+      className={area}
+      position="relative"
+      borderRadius="20px"
+      bg="#0F0F14"
+      border="1px solid rgba(255,255,255,0.08)"
+      minH="180px"
+      overflow="visible"   // 🔥 IMPORTANT FIX
+    >
+
+      {/* 🔥 GLOW MUST BE FIRST CHILD */}
+      <GlowingEffect
+        blur={0}
+        borderWidth={3}
+        spread={90}
+        glow={true}
+        disabled={false}
+        proximity={120}
+        inactiveZone={0.01}
+      />
+
+      {/* glow blob */}
+      <Box
+        position="absolute"
+        top="-40px"
+        right="-40px"
+        w="160px"
+        h="160px"
+        bg="#FF4D6D"
+        opacity={0.12}
+        filter="blur(50px)"
+        borderRadius="full"
+      />
+
+      {/* watermark */}
+      <Box
+        position="absolute"
+        bottom="-10px"
+        right="-10px"
+        fontSize="90px"
+        fontWeight="black"
+        color="whiteAlpha.100"
+        userSelect="none"
+      >
+        {stat}
+      </Box>
+
+      {/* CONTENT */}
+      <Box
+        position="relative"
+        zIndex={10}
+        p={6}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        h="100%"
+      >
+
+        <HStack spacing={3} mb={4}>
+          <Box p={2} bg="whiteAlpha.100" borderRadius="10px">
+            {icon}
+          </Box>
+
+          <Text fontWeight={600} color="white">
+            {title}
+          </Text>
+        </HStack>
+
+        <Text fontSize="14px" color="whiteAlpha.600" lineHeight={1.6}>
+          {description}
+        </Text>
+
+      </Box>
+    </Box>
+  );
+};
 // ─────────────────────────────────────────────────────────────────────────────
 // 8. HOW IT WORKS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -586,7 +842,7 @@ function HowItWorks() {
             </Heading>
           </Box>
         </ScrollReveal>
-
+ 
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
           {steps.map((s, i) => (
             <ScrollReveal key={i} delay={i} variant="scaleIn">
@@ -759,77 +1015,189 @@ function GhostReplay() {
 // ─────────────────────────────────────────────────────────────────────────────
 function FeaturesBento() {
   return (
-    <section
-      style={{
-        paddingTop: "10rem",
-        paddingBottom: "10rem",
-        paddingLeft: "1.5rem",
-        paddingRight: "1.5rem",
-        borderTop: "1px solid rgba(255,255,255,0.1)",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
-        background: "#000",
-      }}
+    <Box
+      as="section"
+      position="relative"
+      overflow="hidden"
+      py={{ base: "6rem", md: "10rem" }}
+      px="1.5rem"
+      borderTop="1px solid rgba(255,255,255,0.1)"
+      borderBottom="1px solid rgba(255,255,255,0.1)"
+      bg="#000"
     >
-      <div
-        style={{
-          maxWidth: "80rem",
-          margin: "0 auto",
-          textAlign: "center",
-          marginBottom: "6rem",
-        }}
+      {/* 🔥 FULL SECTION BACKGROUND LAYER */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={0}
+        pointerEvents="none"
       >
-        {/* Subtitle */}
-        <p
-          style={{
-            fontSize: "0.875rem",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase",
-            color: "#A3E635", // lime-400
-            marginBottom: "1.5rem",
-            fontFamily: "DM Sans, sans-serif",
-          }}
-        >
-          // Key Differentiators
-        </p>
+     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+     <BackgroundLines className="w-full h-full opacity-80 scale-110" />
+      </Box>
 
-        {/* Heading */}
-        <h2
-          style={{
-            fontSize: "clamp(3rem, 5vw, 6rem)", // responsive replacement for text-6xl md:text-7xl lg:text-8xl
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.05,
-            color: "#fff",
-            fontFamily: "Syne, sans-serif",
-          }}
-        >
-          Not just a platform.
-          <br />
-          <span
-            style={{
-              fontStyle: "italic",
-              fontFamily: "Instrument Serif, serif",
-              color: "#A3E635",
-            }}
-          >
-            A fair future for hiring.
-          </span>
-        </h2>
-      </div>
+      {/* optional dark overlay for depth */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={0}
+        bg="radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.9))"
+        pointerEvents="none"
+      />
 
-      {/* Bento grid goes here */}
-      <div>
-        <BentoDemo />
-      </div>
-    </section>
+      {/* CONTENT */}
+     <Box position="relative" zIndex={1}>
+  
+  {/* HEADER */}
+  <Box
+    maxW="70rem"
+    mx="auto"
+    textAlign="center"
+    mb={{ base: "3rem", md: "5rem" }}
+  >
+    {/* Subtitle */}
+    <Box
+      as="p"
+      fontSize="0.75rem"
+      letterSpacing="0.25em"
+      textTransform="uppercase"
+      color="#A3E635"
+      mb="1rem"
+      fontFamily="DM Sans, sans-serif"
+    >
+      // Key Differentiators
+    </Box>
+
+    {/* HEADING (smaller + cleaner scale) */}
+    <Box
+      as="h2"
+      fontSize={{ base: "2.2rem", md: "3.5rem", lg: "4.5rem" }}
+      fontWeight={750}
+      letterSpacing="-0.02em"
+      lineHeight={1.1}
+      color="white"
+      fontFamily="Syne, sans-serif"
+    >
+      Not just a platform.
+      <br />
+      <Box
+        as="span"
+        fontStyle="italic"
+        fontFamily="Instrument Serif, serif"
+        color="#A3E635"
+      >
+        A fair future for hiring.
+      </Box>
+    </Box>
+
+  </Box>
+</Box>
+        {/* BENTO GRID */}
+        <Box>
+          <BentoDemo />
+        </Box>
+
+      </Box>
+    
   );
 }
+
 
 
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 11. RECRUITER SECTION
 // ─────────────────────────────────────────────────────────────────────────────
+type Candidate = {
+  rank: number;
+  score: number;
+  skills: string[];
+  status: string;
+  time: string;
+};
+
+function Dashboard({ candidates }: { candidates: Candidate[] }) {
+  return (
+    <MotionBox
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6 }}
+      borderRadius="24px"
+      overflow="hidden"
+      bg="rgba(255,255,255,0.03)"
+      border="1px solid rgba(255,255,255,0.08)"
+      backdropFilter="blur(18px)"
+      position="relative"
+    >
+      {/* glow */}
+      <Box
+        position="absolute"
+        inset={0}
+        bg="radial-gradient(circle at top, rgba(200,241,53,0.08), transparent 60%)"
+      />
+
+      {/* HEADER */}
+      <HStack
+        px={5}
+        py={4}
+        borderBottom="1px solid rgba(255,255,255,0.06)"
+        justify="space-between"
+        position="relative"
+      >
+        <HStack>
+          <Icon as={UserGroupIcon} w={4} h={4} color="whiteAlpha.600" />
+          <Text fontSize="14px">Candidate Rankings</Text>
+        </HStack>
+
+        <Tag bg="rgba(200,241,53,0.1)" color="#C8F135">
+          LIVE
+        </Tag>
+      </HStack>
+
+      {/* ROWS */}
+      {candidates.map((c, i) => (
+        <HStack
+          key={i}
+          px={5}
+          py={3}
+          justify="space-between"
+          borderBottom="1px solid rgba(255,255,255,0.05)"
+          _hover={{ bg: "rgba(255,255,255,0.02)" }}
+          position="relative"
+        >
+          <Text color="whiteAlpha.600">{c.rank}</Text>
+
+          <HStack>
+            {c.skills.map((s) => (
+              <Tag key={s} size="sm" bg="whiteAlpha.100">
+                {s}
+              </Tag>
+            ))}
+          </HStack>
+
+          <Text color={c.score > 90 ? "#4ADE80" : "#F59E0B"}>
+            {c.score}
+          </Text>
+
+          <Text fontSize="12px" color="whiteAlpha.500">
+            {c.time}
+          </Text>
+
+          <Tag
+            bg={c.status === "Revealed" ? "green.500Alpha" : "whiteAlpha.200"}
+          >
+            {c.status}
+          </Tag>
+        </HStack>
+      ))}
+    </MotionBox>
+  );
+}
+
+/* ---------------- MAIN ---------------- */
 function RecruiterSection() {
   const candidates = [
     { rank: 1, score: 97, skills: ["DP", "Graphs"], status: "Revealed", time: "28m" },
@@ -839,130 +1207,177 @@ function RecruiterSection() {
   ];
 
   return (
-    <Box as="section" py={32} px={6}>
-      <Container maxW="1280px">
+    <Box
+      as="section"
+      position="relative"
+      py={32}
+      px={6}
+      overflow="hidden"
+      bg="black"
+    >
+      {/* ================= BACKGROUND LAYER WRAPPER ================= */}
+      <Box position="absolute" inset={0} zIndex={0} overflow="hidden">
+
+        {/* 🌐 Interactive Grid (MAIN BACKGROUND) */}
+    
+         <AnimatedGridPattern
+        numSquares={30}
+        maxOpacity={0.1}
+        duration={3}
+        repeatDelay={1}
+        className={cn(
+          "absolute inset-0 w-full h-full",
+          "mask-[radial-gradient(500px_circle_at_center,white,transparent)]",
+          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
+        )}
+      />
+      
+
+        {/* ⚡ Flickering overlay (adds motion depth) */}
+        <Box position="absolute" inset={0} opacity={0.25}>
+          <FlickeringGrid className="w-full h-full" />
+        </Box>
+
+        {/* 🌟 glow layer */}
+        <Box
+          position="absolute"
+          inset={0}
+          bg="radial-gradient(circle at top, rgba(200,241,53,0.08), transparent 60%)"
+          pointerEvents="none"
+        />
+      </Box>
+
+      {/* ================= CONTENT ================= */}
+      <Container maxW="1280px" position="relative" zIndex={1}>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={16} alignItems="center">
-          {/* Dashboard mockup */}
-          <ScrollReveal variant="scaleIn">
-            <Box bg="#16161E" border="1px solid rgba(255,255,255,0.07)" borderRadius="24px" overflow="hidden">
-              {/* Header */}
-              <Box px={6} py={4} borderBottom="1px solid rgba(255,255,255,0.06)"
-                bg="rgba(255,255,255,0.02)">
-                <HStack justify="space-between">
-                  <HStack spacing={2}>
-                    <Icon as={UserGroupIcon} color="rgba(255,255,255,0.4)" w={4} h={4} />
-                    <Text fontFamily="'Syne', sans-serif" fontWeight={600} fontSize="14px">
-                      Candidate Rankings
-                    </Text>
-                  </HStack>
-                  <Tag bg="rgba(200,241,53,0.1)" color="brand.lime" fontFamily="'Space Mono', monospace"
-                    fontSize="10px" borderRadius="6px" px={2}>
-                    LIVE
-                  </Tag>
+
+          {/* LEFT */}
+          <Dashboard candidates={candidates} />
+
+          {/* RIGHT */}
+          <MotionBox
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Text color="#C8F135" fontSize="12px" mb={4}>
+              // For Recruiters
+            </Text>
+
+            <Text fontSize="3xl" fontWeight="bold" color="white" mb={4}>
+              See ability, not background.
+            </Text>
+
+            <Text color="whiteAlpha.700" mb={8}>
+              AI ranking + blind evaluation ensures only skill matters.
+            </Text>
+
+            <VStack align="start" spacing={3} mb={10}>
+              {[
+                "Real-time ranked candidate feed",
+                "Watch full Ghost Replay sessions",
+                "AI decision insights per candidate",
+                "Identity revealed after merit threshold",
+                "Zero manual screening",
+              ].map((t) => (
+                <HStack key={t}>
+                  <Icon as={CheckCircleIcon} color="#C8F135" />
+                  <Text color="whiteAlpha.700">{t}</Text>
                 </HStack>
-              </Box>
-
-              {/* Table header */}
-              <Grid templateColumns="50px 1fr 80px 80px 70px" px={6} py={3}
-                borderBottom="1px solid rgba(255,255,255,0.04)">
-                {["#", "Skills", "Score", "Time", "Status"].map(h => (
-                  <Text key={h} fontFamily="'Space Mono', monospace" fontSize="10px"
-                    color="rgba(255,255,255,0.25)" textTransform="uppercase">
-                    {h}
-                  </Text>
-                ))}
-              </Grid>
-
-              {candidates.map((c, i) => (
-                <Grid key={i} templateColumns="50px 1fr 80px 80px 70px" px={6} py={4}
-                  borderBottom={i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none"}
-                  bg={i === 0 ? "rgba(200,241,53,0.03)" : "transparent"}
-                  _hover={{ bg: "rgba(255,255,255,0.02)" }} transition="bg 0.2s" alignItems="center">
-                  <Text fontFamily="'Bebas Neue', sans-serif" fontSize="22px"
-                    color={i === 0 ? "brand.lime" : "rgba(255,255,255,0.25)"}>
-                    {c.rank}
-                  </Text>
-                  <HStack spacing={2} wrap="wrap">
-                    {c.skills.map(s => (
-                      <Tag key={s} bg="rgba(255,255,255,0.05)" color="rgba(255,255,255,0.5)"
-                        fontFamily="'Space Mono', monospace" fontSize="9px" borderRadius="5px" px={2} py="2px">
-                        {s}
-                      </Tag>
-                    ))}
-                  </HStack>
-                  <Text fontFamily="'Bebas Neue', sans-serif" fontSize="20px"
-                    color={c.score >= 90 ? "#4ADE80" : c.score >= 80 ? "#F59E0B" : "rgba(255,255,255,0.5)"}>
-                    {c.score}
-                  </Text>
-                  <Text fontFamily="'Space Mono', monospace" fontSize="12px" color="rgba(255,255,255,0.35)">
-                    {c.time}
-                  </Text>
-                  <Box px={2} py={1} borderRadius="6px" display="inline-flex" alignItems="center"
-                    bg={c.status === "Revealed" ? "rgba(74,222,128,0.12)" : "rgba(255,255,255,0.05)"}>
-                    <Text fontFamily="'Space Mono', monospace" fontSize="9px"
-                      color={c.status === "Revealed" ? "#4ADE80" : "rgba(255,255,255,0.3)"}>
-                      {c.status === "Hidden" ? "🔒" : "✓"} {c.status}
-                    </Text>
-                  </Box>
-                </Grid>
               ))}
-            </Box>
-          </ScrollReveal>
+            </VStack>
 
-          <ScrollReveal delay={1}>
-            <Box>
-              <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-                color="brand.lime" textTransform="uppercase" mb={5}>
-                // For Recruiters
-              </Text>
-              <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-                fontSize={{ base: "2.4rem", md: "3.2rem" }} letterSpacing="-0.04em" lineHeight={1.1} mb={6}>
-                See{" "}
-                <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="brand.lime">
-                  ability,
-                </Box>
-                <br />not background.
-              </Heading>
-              <Text fontFamily="'DM Sans', sans-serif" fontSize="16px" fontWeight={300}
-                color="rgba(255,255,255,0.52)" lineHeight={1.85} mb={8}>
-                Your dashboard shows ranked candidates with skill scores, Ghost Replay
-                sessions, and decision insights — all before you ever see a name.
-              </Text>
+            <Button
+              bg="#C8F135"
+              color="black"
+              _hover={{ bg: "#d4ff4a" }}
+              rightIcon={<ArrowRightIcon width={16} />}
+            >
+              Book Demo
+            </Button>
+          </MotionBox>
 
-              <VStack spacing={4} align="flex-start">
-                {[
-                  "Real-time ranked candidate feed",
-                  "Watch full Ghost Replay of any session",
-                  "AI-generated decision insights per candidate",
-                  "Identity reveal only after merit threshold",
-                  "Zero manual screening overhead",
-                ].map((item, i) => (
-                  <HStack key={i} spacing={3}>
-                    <Icon as={CheckCircleSolid} color="brand.lime" w={5} h={5} flexShrink={0} />
-                    <Text fontFamily="'DM Sans', sans-serif" fontSize="15px" color="rgba(255,255,255,0.65)">
-                      {item}
-                    </Text>
-                  </HStack>
-                ))}
-              </VStack>
-
-              <Button variant="lime" size="lg" mt={10} px={8} py={6} fontSize="16px"
-                rightIcon={<Icon as={ArrowRightIcon} w={4} h={4} />}>
-                Book a Recruiter Demo
-              </Button>
-            </Box>
-          </ScrollReveal>
         </Grid>
       </Container>
     </Box>
   );
 }
-
+type Stat = {
+  num: string;
+  label: string;
+  color: string;
+};
 // ─────────────────────────────────────────────────────────────────────────────
 // 12. STATS ROW
 // ─────────────────────────────────────────────────────────────────────────────
+function StatCard({
+  stat,
+  index,
+}: {
+  stat: Stat;
+  index: number;
+}) {
+  return (
+    <MotionBox
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.12 }}
+      whileHover={{ y: -6, scale: 1.04 }}
+      textAlign="center"
+      p={6}
+      borderRadius="18px"
+      position="relative"
+      overflow="hidden"
+      bg="rgba(255,255,255,0.03)"
+      border="1px solid rgba(255,255,255,0.08)"
+      backdropFilter="blur(14px)"
+      _hover={{
+        borderColor: stat.color,
+        boxShadow: `0 0 40px ${stat.color}30`,
+      }}
+    >
+      {/* Glow layer */}
+      <Box
+        position="absolute"
+        inset={0}
+        bg={`radial-gradient(circle at center, ${stat.color}18, transparent 70%)`}
+        pointerEvents="none"
+      />
+
+      {/* Number */}
+      <Text
+        position="relative"
+        fontFamily="'Bebas Neue', sans-serif"
+        fontSize={{ base: "3rem", md: "4.5rem" }}
+        color={stat.color}
+        lineHeight={1}
+        letterSpacing="-0.02em"
+        mb={2}
+        textShadow={`0 0 25px ${stat.color}55`}
+      >
+        {stat.num}
+      </Text>
+
+      {/* Label */}
+      <Text
+        position="relative"
+        fontFamily="'DM Sans', sans-serif"
+        fontSize="14px"
+        fontWeight={300}
+        color="rgba(255,255,255,0.5)"
+      >
+        {stat.label}
+      </Text>
+    </MotionBox>
+  );
+}
+
+// ===============================
+// 🔥 MAIN STATS SECTION
+// ===============================
 function StatsRow() {
-  const stats = [
+  const stats: Stat[] = [
     { num: "2,400+", label: "Devs already solving", color: "#C8F135" },
     { num: "3.2×", label: "Better hire quality", color: "#7C3AED" },
     { num: "0%", label: "Bias in evaluation", color: "#4ADE80" },
@@ -970,31 +1385,55 @@ function StatsRow() {
   ];
 
   return (
-    <Box as="section" py={20} px={6}
-      borderTop="1px solid rgba(255,255,255,0.05)" borderBottom="1px solid rgba(255,255,255,0.05)"
-      bg="rgba(255,255,255,0.015)">
-      <Container maxW="1280px">
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
-          {stats.map((s, i) => (
-            <ScrollReveal key={i} delay={i * 0.5}>
-              <Box textAlign="center">
-                <Text fontFamily="'Bebas Neue', sans-serif" fontSize={{ base: "3rem", md: "4.5rem" }}
-                  color={s.color} lineHeight={1} letterSpacing="-0.02em" mb={2}>
-                  {s.num}
-                </Text>
-                <Text fontFamily="'DM Sans', sans-serif" fontSize="14px" fontWeight={300}
-                  color="rgba(255,255,255,0.4)">
-                  {s.label}
-                </Text>
-              </Box>
-            </ScrollReveal>
+    <Box
+      as="section"
+      position="relative"
+      py={24}
+      px={6}
+      overflow="hidden"
+      bg="black"
+      borderTop="1px solid rgba(255,255,255,0.05)"
+      borderBottom="1px solid rgba(255,255,255,0.05)"
+    >
+      {/* ======================================
+          🔥 BACKGROUND LAYER (FIXED VISIBILITY)
+      ====================================== */}
+       <AnimatedGridPattern
+        numSquares={30}
+        maxOpacity={0.1}
+        duration={3}
+        repeatDelay={1}
+        className={cn(
+          "absolute inset-0 w-full h-full",
+          "mask-[radial-gradient(500px_circle_at_center,white,transparent)]",
+          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
+        )}
+      />
+
+      {/* ======================================
+          🔥 GLOW OVERLAY (DEPTH EFFECT)
+      ====================================== */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={0}
+        pointerEvents="none"
+        bg="radial-gradient(circle at top, rgba(200,241,53,0.10), transparent 60%)"
+      />
+
+      {/* ======================================
+          🔥 CONTENT
+      ====================================== */}
+      <Container maxW="1280px" position="relative" zIndex={1}>
+        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={10}>
+          {stats.map((stat, i) => (
+            <StatCard key={i} stat={stat} index={i} />
           ))}
         </SimpleGrid>
       </Container>
     </Box>
   );
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 13. TESTIMONIALS
 // ─────────────────────────────────────────────────────────────────────────────

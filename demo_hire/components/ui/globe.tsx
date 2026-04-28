@@ -81,7 +81,7 @@ export function Globe({
     onResize()
 
     const onRender = (state: { phi: number; width: number; height: number }) => {
-      if (!pointerInteracting.current) phiRef.current += 0.005
+      if (pointerInteracting.current === null) phiRef.current += 0.005
       state.phi = phiRef.current + rs.get()
       state.width = widthRef.current * 2
       state.height = widthRef.current * 2
@@ -107,7 +107,7 @@ export function Globe({
   return (
     <div
       className={cn(
-        "absolute inset-0 mx-auto aspect-square w-full max-w-150",
+        "relative mx-auto aspect-square w-full",
         className
       )}
     >
