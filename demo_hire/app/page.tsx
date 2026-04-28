@@ -43,6 +43,68 @@ import {
 } from "@heroicons/react/24/solid";
 import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion";
 import {RetroGrid} from "@/components/ui/retro-grid";
+import {Spotlight} from "@/components/ui/spotlight";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import { BentoDemo} from "@/compo/demo";
+import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
+import { ChevronRight } from "lucide-react";
+import { Marquee } from "@/components/ui/marquee";
+
+const cn = (...args: Array<string | false | null | undefined>) =>
+  args.filter(Boolean).join(" ");
+
+const features = [
+  {
+    Icon: SparklesIcon,
+    name: "AI Mentor",
+    description:
+      "LangGraph-powered hints that adapt to your exact approach — not generic suggestions.",
+    href: "#",
+    cta: "Try AI Mentor",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-lime-500/10 via-transparent to-transparent" />
+    ),
+  },
+  {
+    Icon: EyeSlashIcon,
+    name: "Blind Hiring",
+    description:
+      "Cryptographic identity hashing hides name, college, and company until merit threshold is crossed.",
+    href: "#",
+    cta: "Explore Blind Mode",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent" />
+    ),
+  },
+  {
+    Icon: CursorArrowRaysIcon,
+    name: "Ghost Replay",
+    description:
+      "Full thinking timeline — recruiters see how you solved, not just final answers.",
+    href: "#",
+    cta: "Watch Replay",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent" />
+    ),
+  },
+  {
+    Icon: FingerPrintIcon,
+    name: "Merit Scoring",
+    description:
+      "Multi-dimensional scoring: correctness, efficiency, readability, and reasoning quality.",
+    href: "#",
+    cta: "View Score Model",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent" />
+    ),
+  },
+]
+
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. THEME
 // ─────────────────────────────────────────────────────────────────────────────
@@ -251,11 +313,17 @@ function HeroFloatCard({ top, left, right, bottom, children }: any) {
 }
 
 function Hero() {
+
   return (
     <Box as="section" position="relative" minH="100vh" overflow="hidden"
       display="flex" flexDir="column" alignItems="center" justifyContent="center"
       pt="120px" pb="100px" px={6} textAlign="center">
-
+<Box position="absolute" inset={0} zIndex={0}>
+  <Spotlight
+    className="top-[-100px] left-[-100px]"
+    fill="#C8F135"
+  />
+</Box>
       {/* Radial glows */}
       <Box position="absolute" top="28%" left="50%" transform="translate(-50%,-50%)"
         w="900px" h="600px" pointerEvents="none"
@@ -266,15 +334,28 @@ function Hero() {
         bg="radial-gradient(ellipse, rgba(255,77,109,0.08) 0%, transparent 68%)" />
 
       {/* Badge */}
-      <MotionBox initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <HStack spacing={2} bg="rgba(200,241,53,0.09)" border="1px solid rgba(200,241,53,0.22)"
-          borderRadius="full" px={4} py="6px" display="inline-flex" mb={8}>
-          <Box w="6px" h="6px" borderRadius="full" bg="brand.lime" animation="pulseLime 2s infinite" />
-          <Text fontFamily="'Space Mono', monospace" fontSize="11px" color="brand.lime" letterSpacing=".1em">
-            NOW IN PRIVATE BETA
-          </Text>
-        </HStack>
-      </MotionBox>
+      
+     <div className="group relative mx-auto flex items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f]">
+      <span
+        className={cn(
+          "animate-gradient absolute inset-0 block h-full w-full rounded-[inherit] bg-gradient-to-r from-[#ffaa40]/50 via-[#9c40ff]/50 to-[#ffaa40]/50 bg-[length:300%_100%] p-[1px]"
+        )}
+        style={{
+          WebkitMask:
+            "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "destination-out",
+          mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          maskComposite: "subtract",
+          WebkitClipPath: "padding-box",
+        }}
+      />
+      🎉 <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
+      <AnimatedGradientText className="text-sm font-medium">
+        Introducing SkillTech
+      </AnimatedGradientText>
+      <ChevronRight className="ml-1 size-4 stroke-neutral-500 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+    </div>
+  
 
       {/* Headline */}
       <MotionBox initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
@@ -282,8 +363,8 @@ function Hero() {
           fontFamily="'Bebas Neue', sans-serif" fontWeight={400}
           fontSize={{ base: "4.5rem", md: "7rem", lg: "9rem" }}
           lineHeight={0.95} letterSpacing="-0.02em" mb={5}
-        >
-          HIRED ON YOUR
+         className="mt-10 pointer-events-none bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-center text-8xl leading-none font-extrabold tracking-tight whitespace-pre-wrap text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.25)]"
+         > HIRED ON YOUR
           <br />
           <Typewriter />
         </Heading>
@@ -669,85 +750,74 @@ function GhostReplay() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 10. FEATURES GRID
 // ─────────────────────────────────────────────────────────────────────────────
-function Features() {
-  const features = [
-    {
-      icon: SparklesIcon, color: "#C8F135", title: "AI Mentor",
-      desc: "LangGraph-powered hints that adapt to your exact approach — not generic suggestions.",
-    },
-    {
-      icon: EyeSlashIcon, color: "#7C3AED", title: "Blind Hiring",
-      desc: "Cryptographic identity hashing. Recruiters cannot see name, school, or company until threshold is crossed.",
-    },
-    {
-      icon: CursorArrowRaysIcon, color: "#FF4D6D", title: "Ghost Replay",
-      desc: "Full thinking timeline. Recruiters watch how decisions were made, not just the final answer.",
-    },
-    {
-      icon: ArrowTrendingUpIcon, color: "#F59E0B", title: "Adaptive Difficulty",
-      desc: "Problem difficulty adjusts dynamically to maintain optimal challenge vs. ability balance.",
-    },
-    {
-      icon: FingerPrintIcon, color: "#4ADE80", title: "Merit Scoring",
-      desc: "Multi-dimensional score: correctness, efficiency, readability, approach quality.",
-    },
-    {
-      icon: RocketLaunchIcon, color: "#38BDF8", title: "Instant Ranking",
-      desc: "Recruiter dashboard shows live ranked candidates — no manual screening needed.",
-    },
-  ];
-
+export function FeaturesBento() {
   return (
-    <Box as="section" py={32} px={6} bg="rgba(255,255,255,0.01)"
-      borderTop="1px solid rgba(255,255,255,0.05)" borderBottom="1px solid rgba(255,255,255,0.05)">
-      <Container maxW="1280px">
-        <ScrollReveal>
-          <Box textAlign="center" mb={20}>
-            <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-              color="brand.lime" textTransform="uppercase" mb={5}>
-              // Key Differentiators
-            </Text>
-            <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-              fontSize={{ base: "2.4rem", md: "3.4rem" }} letterSpacing="-0.04em">
-              Not just a platform.
-              <br />
-              <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="brand.lime">
-                A fair future for hiring.
-              </Box>
-            </Heading>
-          </Box>
-        </ScrollReveal>
+    <section
+      style={{
+        paddingTop: "10rem",
+        paddingBottom: "10rem",
+        paddingLeft: "1.5rem",
+        paddingRight: "1.5rem",
+        borderTop: "1px solid rgba(255,255,255,0.1)",
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        background: "#000",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "80rem",
+          margin: "0 auto",
+          textAlign: "center",
+          marginBottom: "6rem",
+        }}
+      >
+        {/* Subtitle */}
+        <p
+          style={{
+            fontSize: "0.875rem",
+            letterSpacing: "0.3em",
+            textTransform: "uppercase",
+            color: "#A3E635", // lime-400
+            marginBottom: "1.5rem",
+            fontFamily: "DM Sans, sans-serif",
+          }}
+        >
+          // Key Differentiators
+        </p>
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5}>
-          {features.map((f, i) => (
-            <ScrollReveal key={i} delay={i * 0.5} variant="scaleIn">
-              <Box
-                bg="#16161E" border="1px solid rgba(255,255,255,0.06)" borderRadius="20px"
-                p={7} h="full" position="relative" overflow="hidden"
-                _hover={{ borderColor: f.color, transform: "translateY(-3px)" }}
-                transition="all 0.28s ease" cursor="default"
-              >
-                <Box position="absolute" top={0} left={0} right={0} h="2px"
-                  bg={`linear-gradient(90deg, ${f.color}00, ${f.color}, ${f.color}00)`} opacity={0.6} />
-                <Box bg={`${f.color}14`} borderRadius="12px" p="10px" display="inline-flex" mb={5}>
-                  <Icon as={f.icon} color={f.color} w={6} h={6} />
-                </Box>
-                <Heading fontFamily="'Syne', sans-serif" fontWeight={700} fontSize="19px"
-                  letterSpacing="-0.025em" mb={3}>
-                  {f.title}
-                </Heading>
-                <Text fontFamily="'DM Sans', sans-serif" fontSize="14px" fontWeight={300}
-                  color="rgba(255,255,255,0.48)" lineHeight={1.78}>
-                  {f.desc}
-                </Text>
-              </Box>
-            </ScrollReveal>
-          ))}
-        </SimpleGrid>
-      </Container>
-    </Box>
+        {/* Heading */}
+        <h2
+          style={{
+            fontSize: "clamp(3rem, 5vw, 6rem)", // responsive replacement for text-6xl md:text-7xl lg:text-8xl
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.05,
+            color: "#fff",
+            fontFamily: "Syne, sans-serif",
+          }}
+        >
+          Not just a platform.
+          <br />
+          <span
+            style={{
+              fontStyle: "italic",
+              fontFamily: "Instrument Serif, serif",
+              color: "#A3E635",
+            }}
+          >
+            A fair future for hiring.
+          </span>
+        </h2>
+      </div>
+
+      {/* Bento grid goes here */}
+      <div>
+        <BentoDemo />
+      </div>
+    </section>
   );
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 11. RECRUITER SECTION
@@ -920,76 +990,165 @@ function StatsRow() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 13. TESTIMONIALS
 // ─────────────────────────────────────────────────────────────────────────────
-function Testimonials() {
-  const quotes = [
-    {
-      quote: "I got interviews at three top-tier companies after years of being filtered out by ATS. SkillProof let my code speak.",
-      name: "Arjun M.", role: "Backend Eng → Hired at Series B startup", avatar: "#7C3AED",
-    },
-    {
-      quote: "We cut screening time from 3 weeks to 4 days. The Ghost Replay alone is worth it — you actually see how engineers think.",
-      name: "Sarah K.", role: "Engineering Manager @ Fintech", avatar: "#FF4D6D",
-    },
-    {
-      quote: "I never went to a top school. But my score was #1 in the cohort. That's a feeling I can't describe.",
-      name: "Chen W.", role: "Fullstack Dev → Hired at Seed startup", avatar: "#C8F135",
-    },
-  ];
 
+
+const testimonials = [
+  {
+    name: "Arjun M.",
+    username: "Backend Eng → Series B startup",
+    body: "I got interviews at three top-tier companies after years of being filtered out by ATS. SkillProof let my code speak.",
+    img: "https://avatar.vercel.sh/arjun",
+  },
+  {
+    name: "Sarah K.",
+    username: "Engineering Manager @ Fintech",
+    body: "We cut screening time from 3 weeks to 4 days. The Ghost Replay alone is worth it — you actually see how engineers think.",
+    img: "https://avatar.vercel.sh/sarah",
+  },
+  {
+    name: "Chen W.",
+    username: "Fullstack Dev → Seed startup",
+    body: "I never went to a top school. But my score was #1 in the cohort. That's a feeling I can't describe.",
+    img: "https://avatar.vercel.sh/chen",
+  },
+  {
+    name: "Rohit S.",
+    username: "Frontend Dev → Google",
+    body: "Finally a platform where my skills mattered more than my resume. Got shortlisted instantly.",
+    img: "https://avatar.vercel.sh/rohit",
+  },
+  {
+    name: "Ayesha P.",
+    username: "SWE → Amazon",
+    body: "The AI mentor actually improved how I think about problems. This is next level.",
+    img: "https://avatar.vercel.sh/ayesha",
+  },
+  {
+    name: "Daniel T.",
+    username: "ML Engineer → Stripe",
+    body: "Ghost Replay is insane. Recruiters finally see how I solve problems, not just results.",
+    img: "https://avatar.vercel.sh/daniel",
+  },
+]
+
+const firstRow = testimonials.slice(0, 3)
+const secondRow = testimonials.slice(3, 6)
+
+const TestimonialCard = ({
+  img,
+  name,
+  username,
+  body,
+}: {
+  img: string
+  name: string
+  username: string
+  body: string
+}) => {
   return (
-    <Box as="section" py={32} px={6}>
-      <Container maxW="1280px">
-        <ScrollReveal>
-          <Box textAlign="center" mb={16}>
-            <Text fontFamily="'Space Mono', monospace" fontSize="11px" letterSpacing=".12em"
-              color="rgba(255,255,255,0.3)" textTransform="uppercase" mb={5}>
-              // Testimonials
-            </Text>
-            <Heading fontFamily="'Syne', sans-serif" fontWeight={800}
-              fontSize={{ base: "2.2rem", md: "3rem" }} letterSpacing="-0.04em">
-              Real people.{" "}
-              <Box as="span" fontFamily="'Instrument Serif', serif" fontStyle="italic" fontWeight={400} color="rgba(255,255,255,0.4)">
-                Real results.
-              </Box>
-            </Heading>
-          </Box>
-        </ScrollReveal>
+    <figure
+      className={cn(
+        "relative h-full w-80 cursor-pointer overflow-hidden rounded-2xl border p-5",
+        "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]",
+        "transition-all"
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <img
+          className="rounded-full"
+          width="40"
+          height="40"
+          alt={name}
+          src={img}
+        />
+        <div>
+          <figcaption className="text-sm font-semibold text-white">
+            {name}
+          </figcaption>
+          <p className="text-xs text-white/40">{username}</p>
+        </div>
+      </div>
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-          {quotes.map((q, i) => (
-            <ScrollReveal key={i} delay={i} variant="scaleIn">
-              <Box bg="#16161E" border="1px solid rgba(255,255,255,0.06)" borderRadius="20px"
-                p={7} h="full" position="relative">
-                <HStack mb={4}>
-                  {Array(5).fill(0).map((_, j) => (
-                    <Icon key={j} as={StarSolid} color="#F59E0B" w={4} h={4} />
-                  ))}
-                </HStack>
-                <Text fontFamily="'Instrument Serif', serif" fontStyle="italic" fontSize="17px"
-                  color="rgba(255,255,255,0.72)" lineHeight={1.7} mb={6}>
-                  "{q.quote}"
-                </Text>
-                <HStack spacing={3} pt={4} borderTop="1px solid rgba(255,255,255,0.06)">
-                  <Box w={10} h={10} borderRadius="full" bg={q.avatar}
-                    display="flex" alignItems="center" justifyContent="center">
-                    <Text fontFamily="'Cabinet Grotesk', sans-serif" fontWeight={800} fontSize="14px" color="#0A0A0F">
-                      {q.name[0]}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text fontFamily="'Syne', sans-serif" fontWeight={600} fontSize="14px">{q.name}</Text>
-                    <Text fontFamily="'DM Sans', sans-serif" fontSize="12px" color="rgba(255,255,255,0.38)">{q.role}</Text>
-                  </Box>
-                </HStack>
-              </Box>
-            </ScrollReveal>
-          ))}
-        </SimpleGrid>
-      </Container>
-    </Box>
-  );
+      <blockquote className="mt-4 text-sm text-white/70 leading-relaxed">
+        “{body}”
+      </blockquote>
+    </figure>
+  )
 }
 
+export function Testimonials() {
+  return (
+    <section
+  style={{
+    paddingTop: "12rem",
+    paddingBottom: "12rem",
+    paddingLeft: "1.5rem",
+    paddingRight: "1.5rem",
+    backgroundColor: "black",
+    position: "relative",
+    overflow: "hidden",
+  }}
+>
+  {/* Heading */}
+  <div style={{ textAlign: "center", marginBottom: "5rem" }}>
+    
+    <p
+      style={{
+        fontSize: "1.25rem",
+        letterSpacing: "0.35em",
+        textTransform: "uppercase",
+        color: "#A3E635",
+        marginBottom: "1.5rem",
+        fontWeight: 500,
+      }}
+    >
+      // Testimonials
+    </p>
+
+    <h2
+      style={{
+        fontSize: "clamp(3.5rem, 6vw, 6.5rem)",
+        fontWeight: 800,
+        color: "#ffffff",
+        lineHeight: 1,
+      }}
+    >
+      Real people.{" "}
+      <span
+        style={{
+          fontStyle: "italic",
+          color: "#A3E635",
+          fontFamily: "serif",
+        }}
+      >
+        Real results.
+      </span>
+    </h2>
+
+  </div>
+
+
+      {/* Marquee */}
+      <div className="relative flex flex-col items-center justify-center overflow-hidden">
+        <Marquee pauseOnHover className="[--duration:25s]">
+          {firstRow.map((t) => (
+            <TestimonialCard key={t.name} {...t} />
+          ))}
+        </Marquee>
+
+        <Marquee reverse pauseOnHover className="[--duration:25s]">
+          {secondRow.map((t) => (
+            <TestimonialCard key={t.name} {...t} />
+          ))}
+        </Marquee>
+
+        {/* fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black" />
+      </div>
+    </section>
+  )
+}
 // ─────────────────────────────────────────────────────────────────────────────
 // 14. PRICING
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1240,7 +1399,7 @@ export default function App() {
         <Problem />
         <HowItWorks />
         <GhostReplay />
-        <Features />
+        <FeaturesBento />
         <StatsRow />
         <RecruiterSection />
         <Testimonials />
