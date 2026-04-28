@@ -750,7 +750,7 @@ function GhostReplay() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 10. FEATURES GRID
 // ─────────────────────────────────────────────────────────────────────────────
-export function FeaturesBento() {
+function FeaturesBento() {
   return (
     <section
       style={{
@@ -817,6 +817,7 @@ export function FeaturesBento() {
     </section>
   );
 }
+
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1076,7 +1077,7 @@ const TestimonialCard = ({
   )
 }
 
-export function Testimonials() {
+function Testimonials() {
   return (
     <section
   style={{

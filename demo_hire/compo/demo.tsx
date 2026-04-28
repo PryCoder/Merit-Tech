@@ -20,8 +20,7 @@ import { AnimatedList } from "@/components/ui/animated-list"
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid"
 import { Marquee } from "@/components/ui/marquee"
 import { Globe } from "@/components/ui/globe"
-import type React from "react"
-import { useRef, useState, useEffect } from "react"
+import React, { forwardRef, useEffect, useRef, useState } from "react"
 import { AnimatedBeamDemo } from "./beam"
 
 const files = [
@@ -48,7 +47,12 @@ const files = [
 ]
 
 // Circle component for nodes
-const Circle = ({ ref, className, children }: { ref: React.RefObject<HTMLDivElement | null>, className?: string, children?: React.ReactNode }) => (
+type CircleProps = {
+  className?: string
+  children?: React.ReactNode
+}
+
+const Circle = forwardRef<HTMLDivElement, CircleProps>(({ className, children }, ref) => (
   <div
     ref={ref}
     className={cn(
@@ -58,7 +62,9 @@ const Circle = ({ ref, className, children }: { ref: React.RefObject<HTMLDivElem
   >
     {children}
   </div>
-)
+))
+
+Circle.displayName = "Circle"
 
 // Component for Ghost Replay with properly connected beam (multi-node like the demo)
 function GhostReplayBackground() {
