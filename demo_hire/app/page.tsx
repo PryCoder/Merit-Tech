@@ -44,7 +44,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion";
 import {RetroGrid} from "@/components/ui/retro-grid";
-import {Spotlight} from "@/components/ui/spotlight";
+import {Spotlight} from "@/components/ui/spotlight-new";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BentoDemo} from "@/compo/demo";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
@@ -585,7 +585,7 @@ function LogoMarquee() {
 // ─────────────────────────────────────────────────────────────────────────────
 // 7. PROBLEM SECTION
 // ─────────────────────────────────────────────────────────────────────────────
-export function Problem() {
+function Problem() {
   const problems = [
     {
       icon: XCircleIcon,
@@ -1215,37 +1215,46 @@ function RecruiterSection() {
       overflow="hidden"
       bg="black"
     >
-      {/* ================= BACKGROUND LAYER WRAPPER ================= */}
-      <Box position="absolute" inset={0} zIndex={0} overflow="hidden">
+      {/* ================= SPOTLIGHT LAYER (MAIN FOCUS) ================= */}
+      <Box
+  position="absolute"
+  inset={0}
+  zIndex={0}
+  opacity={1}
+  filter="brightness(1.3) contrast(1.2)"
+>
+  <Spotlight />
+</Box>
 
-        {/* 🌐 Interactive Grid (MAIN BACKGROUND) */}
-    
-         <AnimatedGridPattern
-        numSquares={30}
-        maxOpacity={0.1}
-        duration={3}
-        repeatDelay={1}
-        className={cn(
-          "absolute inset-0 w-full h-full",
-          "mask-[radial-gradient(500px_circle_at_center,white,transparent)]",
-          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
-        )}
-      />
-      
-
-        {/* ⚡ Flickering overlay (adds motion depth) */}
-        <Box position="absolute" inset={0} opacity={0.25}>
-          <FlickeringGrid className="w-full h-full" />
-        </Box>
-
-        {/* 🌟 glow layer */}
-        <Box
+      {/* ================= GRID BACKGROUND ================= */}
+     <Box
           position="absolute"
           inset={0}
-          bg="radial-gradient(circle at top, rgba(200,241,53,0.08), transparent 60%)"
-          pointerEvents="none"
-        />
+          transform="skewY(12deg)"
+          opacity={0.35}
+        >
+          <AnimatedGridPattern
+            numSquares={30}
+            maxOpacity={0.15}
+            duration={3}
+            repeatDelay={1}
+            className="absolute inset-0 w-full h-full"
+          />
+        
       </Box>
+
+      {/* ================= FLICKER LAYER ================= */}
+      <Box position="absolute" inset={0} zIndex={0} opacity={0.15}>
+        <FlickeringGrid className="w-full h-full" />
+      </Box>
+
+      {/* ================= DARK GRADIENT DEPTH ================= */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={0}
+        bg="radial-gradient(circle at top, rgba(200,241,53,0.08), transparent 60%)"
+      />
 
       {/* ================= CONTENT ================= */}
       <Container maxW="1280px" position="relative" zIndex={1}>
@@ -1269,7 +1278,7 @@ function RecruiterSection() {
             </Text>
 
             <Text color="whiteAlpha.700" mb={8}>
-              AI ranking + blind evaluation ensures only skill matters.
+              Spotlight-driven UI highlights top candidates and removes bias.
             </Text>
 
             <VStack align="start" spacing={3} mb={10}>
