@@ -52,9 +52,9 @@ export const StickyScroll = ({
     setActiveCard(closestBreakpointIndex);
   });
 
-  const [backgroundGradient, setBackgroundGradient] = useState(
-    STICKY_SCROLL_LINEAR_GRADIENTS[0]
-  );
+  const [backgroundGradient, setBackgroundGradient] = useState<
+    (typeof STICKY_SCROLL_LINEAR_GRADIENTS)[number]
+  >(STICKY_SCROLL_LINEAR_GRADIENTS[0]);
 
   useEffect(() => {
     setBackgroundGradient(
