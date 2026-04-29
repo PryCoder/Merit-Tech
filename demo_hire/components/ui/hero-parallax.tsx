@@ -1,14 +1,14 @@
-"use client";
-import React from "react";
+'use client';
+
+/* eslint-disable @next/next/no-img-element */
+import React from 'react';
 import {
   motion,
   useScroll,
   useTransform,
   useSpring,
   MotionValue,
-} from "motion/react";
-
-
+} from 'motion/react';
 
 export const HeroParallax = ({
   products,
@@ -25,7 +25,7 @@ export const HeroParallax = ({
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ['start start', 'end start'],
   });
 
   const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
@@ -138,10 +138,7 @@ export const ProductCard = ({
       key={product.title}
       className="group/product h-96 w-[30rem] relative shrink-0"
     >
-      <a
-        href={product.link}
-        className="block group-hover/product:shadow-2xl "
-      >
+      <a href={product.link} className="block group-hover/product:shadow-2xl ">
         <img
           src={product.thumbnail}
           height="600"

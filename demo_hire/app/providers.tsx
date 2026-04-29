@@ -10,10 +10,8 @@ export function Providers({ children }: { children: ReactNode }) {
     <CacheProvider>
       {/* ✅ THIS FIXES WHITE FLASH */}
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      
-      <ChakraProvider theme={theme}>
-        {children}
-      </ChakraProvider>
+
+      <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </CacheProvider>
   );
 }

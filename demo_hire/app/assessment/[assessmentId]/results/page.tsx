@@ -33,7 +33,12 @@ export default function AssessmentResultsPage() {
               Results
             </Heading>
             <Text color="blackAlpha.700">Missing assessment id.</Text>
-            <Button as={NextLink} href="/dashboard" variant="outline" alignSelf="start">
+            <Button
+              as={NextLink}
+              href="/dashboard"
+              variant="outline"
+              alignSelf="start"
+            >
               Back to dashboard
             </Button>
           </Stack>

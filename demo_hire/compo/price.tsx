@@ -9,63 +9,63 @@ import {
   Divider,
   Tag,
   Icon,
-} from "@chakra-ui/react";
-import { CheckCircleIcon } from "@chakra-ui/icons";
+} from '@chakra-ui/react';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 
 // 🔥 UI Components
-import { MagicCard } from "@/components/ui/magic-card";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { TextReveal } from "@/components/ui/text-reveal";
-import { Spotlight } from "@/components/ui/spotlight";
+import { MagicCard } from '@/components/ui/magic-card';
+import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
+import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { TextReveal } from '@/components/ui/text-reveal';
+import { Spotlight } from '@/components/ui/spotlight';
 
 function Pricings() {
   const plans = [
     {
-      name: "Developer",
-      price: "Free",
-      period: "",
-      desc: "For individual developers building their profile.",
+      name: 'Developer',
+      price: 'Free',
+      period: '',
+      desc: 'For individual developers building their profile.',
       features: [
-        "Unlimited challenge attempts",
-        "AI mentor (basic hints)",
-        "Ghost Replay viewer",
-        "Merit score + badge",
-        "Community leaderboard",
+        'Unlimited challenge attempts',
+        'AI mentor (basic hints)',
+        'Ghost Replay viewer',
+        'Merit score + badge',
+        'Community leaderboard',
       ],
-      cta: "Start Solving",
+      cta: 'Start Solving',
       highlight: false,
     },
     {
-      name: "Recruiter",
-      price: "$299",
-      period: "/month",
-      desc: "For hiring teams serious about skill-based hiring.",
+      name: 'Recruiter',
+      price: '$299',
+      period: '/month',
+      desc: 'For hiring teams serious about skill-based hiring.',
       features: [
-        "Unlimited candidate evaluations",
-        "Full Ghost Replay for every session",
-        "AI decision insights",
-        "Blind ranking dashboard",
-        "ATS integration",
-        "Dedicated success manager",
+        'Unlimited candidate evaluations',
+        'Full Ghost Replay for every session',
+        'AI decision insights',
+        'Blind ranking dashboard',
+        'ATS integration',
+        'Dedicated success manager',
       ],
-      cta: "Start Hiring",
+      cta: 'Start Hiring',
       highlight: true,
     },
     {
-      name: "Enterprise",
-      price: "Custom",
-      period: "",
-      desc: "For large orgs with custom workflows and compliance.",
+      name: 'Enterprise',
+      price: 'Custom',
+      period: '',
+      desc: 'For large orgs with custom workflows and compliance.',
       features: [
-        "Everything in Recruiter",
-        "Custom challenge library",
-        "SSO + SAML",
-        "SOC 2 Type II compliant",
-        "SLA + dedicated infra",
-        "White-label option",
+        'Everything in Recruiter',
+        'Custom challenge library',
+        'SSO + SAML',
+        'SOC 2 Type II compliant',
+        'SLA + dedicated infra',
+        'White-label option',
       ],
-      cta: "Contact Us",
+      cta: 'Contact Us',
       highlight: false,
     },
   ];
@@ -76,12 +76,12 @@ function Pricings() {
       position="relative"
       overflow="hidden"
       style={{
-        paddingTop: "10rem",
-        paddingBottom: "10rem",
-        paddingLeft: "1.5rem",
-        paddingRight: "1.5rem",
-        background: "rgba(255,255,255,0.01)",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
+        paddingTop: '10rem',
+        paddingBottom: '10rem',
+        paddingLeft: '1.5rem',
+        paddingRight: '1.5rem',
+        background: 'rgba(255,255,255,0.01)',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
       }}
     >
       {/* 🔥 Spotlight Background */}
@@ -91,7 +91,6 @@ function Pricings() {
       />
 
       <Container maxW="1280px" position="relative" zIndex={2}>
-        
         {/* 🔥 Heading */}
         <Box textAlign="center" mb={24}>
           <Text
@@ -108,13 +107,11 @@ function Pricings() {
           <Heading
             fontFamily="'Syne', sans-serif"
             fontWeight={800}
-            fontSize={{ base: "3rem", md: "4.5rem" }}
+            fontSize={{ base: '3rem', md: '4.5rem' }}
             letterSpacing="-0.04em"
           >
             {/* ✅ FIX: TextReveal gets STRING only */}
-            <TextReveal>
-  {"Simple pricing."}
-</TextReveal>
+            <TextReveal>{'Simple pricing.'}</TextReveal>
 
             {/* Styled part separate */}
             <Box
@@ -134,20 +131,18 @@ function Pricings() {
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
           {plans.map((p, i) => (
             <MagicCard
-  key={i}
-  className={p.highlight ? "ring-2 ring-lime-400/40" : ""}
->
+              key={i}
+              className={p.highlight ? 'ring-2 ring-lime-400/40' : ''}
+            >
               <HoverBorderGradient>
                 <Box
-                  bg={p.highlight ? "rgba(200,241,53,0.05)" : "#16161E"}
+                  bg={p.highlight ? 'rgba(200,241,53,0.05)' : '#16161E'}
                   borderRadius="28px"
                   p={10}
                   h="full"
                   position="relative"
                   transform={
-                    p.highlight
-                      ? { base: "none", md: "scale(1.05)" }
-                      : "none"
+                    p.highlight ? { base: 'none', md: 'scale(1.05)' } : 'none'
                   }
                   transition="all 0.3s ease"
                 >
@@ -192,7 +187,7 @@ function Pricings() {
                       fontFamily="'Bebas Neue', sans-serif"
                       fontSize="64px"
                       lineHeight={1}
-                      color={p.highlight ? "brand.lime" : "#fff"}
+                      color={p.highlight ? 'brand.lime' : '#fff'}
                     >
                       {p.price}
                     </Text>
@@ -213,7 +208,7 @@ function Pricings() {
 
                   {/* CTA */}
                   <ShimmerButton
-                    style={{ width: "100%", marginBottom: "2rem" }}
+                    style={{ width: '100%', marginBottom: '2rem' }}
                   >
                     {p.cta}
                   </ShimmerButton>
@@ -227,15 +222,10 @@ function Pricings() {
                         <Icon
                           as={CheckCircleIcon}
                           color={
-                            p.highlight
-                              ? "brand.lime"
-                              : "rgba(255,255,255,0.3)"
+                            p.highlight ? 'brand.lime' : 'rgba(255,255,255,0.3)'
                           }
                         />
-                        <Text
-                          color="rgba(255,255,255,0.65)"
-                          fontSize="14px"
-                        >
+                        <Text color="rgba(255,255,255,0.65)" fontSize="14px">
                           {f}
                         </Text>
                       </HStack>

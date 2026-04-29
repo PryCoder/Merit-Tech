@@ -1,32 +1,32 @@
-"use client"
+'use client';
 
-import { useId, type ComponentProps } from "react"
+import { useId, type ComponentProps } from 'react';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-export interface NoiseTextureProps extends ComponentProps<"svg"> {
+export interface NoiseTextureProps extends ComponentProps<'svg'> {
   /** Extra classes merged onto the root `svg` element. */
-  className?: string
+  className?: string;
   /**
    * `baseFrequency` for `feTurbulence`; higher values yield finer-grained noise.
    * @default 0.4
    */
-  frequency?: number
+  frequency?: number;
   /**
    * `numOctaves` for `feTurbulence`; more octaves add detail at smaller scales.
    * @default 6
    */
-  octaves?: number
+  octaves?: number;
   /**
    * Linear slope on each channel after desaturation; adjusts contrast of the noise.
    * @default 0.15
    */
-  slope?: number
+  slope?: number;
   /**
    * Opacity of the filled noise layer (`rect`).
    * @default 0.6
    */
-  noiseOpacity?: number
+  noiseOpacity?: number;
 }
 
 export const NoiseTexture = ({
@@ -37,12 +37,12 @@ export const NoiseTexture = ({
   noiseOpacity = 0.6,
   ...props
 }: NoiseTextureProps) => {
-  const filterId = useId()
+  const filterId = useId();
 
   return (
     <svg
       className={cn(
-        "pointer-events-none absolute inset-0 z-0 size-full opacity-50 select-none dark:opacity-[0.75]",
+        'pointer-events-none absolute inset-0 z-0 size-full opacity-50 select-none dark:opacity-[0.75]',
         className
       )}
       xmlns="http://www.w3.org/2000/svg"
@@ -69,5 +69,5 @@ export const NoiseTexture = ({
         opacity={noiseOpacity}
       />
     </svg>
-  )
-}
+  );
+};

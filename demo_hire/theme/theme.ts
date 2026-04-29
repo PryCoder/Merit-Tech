@@ -1,24 +1,24 @@
 // theme.ts
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "dark",
+    initialColorMode: 'dark',
     useSystemColorMode: false,
   },
 
   styles: {
     global: {
-      "html, body": {
-        backgroundColor: "#050507",
-        color: "white",
+      'html, body': {
+        backgroundColor: '#050507',
+        color: 'white',
       },
     },
   },
 
   colors: {
     brand: {
-      lime: "#C8F135",
+      lime: '#C8F135',
     },
   },
 });
