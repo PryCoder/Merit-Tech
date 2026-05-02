@@ -15,8 +15,6 @@ import {
   extendTheme,
   Input,
   useToast,
-  FormControl,
-  FormLabel,
   Select,
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
@@ -30,7 +28,6 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
   UserIcon,
-  BriefcaseIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -131,31 +128,39 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/api/auth/register`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password, role }),
-        }
-      );
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.message || data.error || 'Registration failed');
       }
 
       if (data.token) {
+        // Store token in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('userRole', role);
+        
+        // Also store user info if available
+        if (data.user) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
+        
         toast({
           title: 'Welcome aboard!',
           description: 'Account created successfully',
           status: 'success',
           duration: 2000,
         });
-        setTimeout(() => router.push('/dashboard'), 1500);
+        
+        // Redirect to dashboard after short delay
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1500);
       }
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');

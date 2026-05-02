@@ -28,9 +28,7 @@ async function createApp({ config }) {
 
   app.use(express.json({ limit: '2mb' }));
   app.use(express.urlencoded({ extended: true }));
-  app.use('/', (req, res) => {
-    res.send('hello');
-  });
+  
   // Log HTTP requests (pipe into our logger)
   app.use(
     morgan('combined', {

@@ -4,6 +4,7 @@ const { createApp } = require('./src/app');
 const { loadConfig } = require('./src/config');
 const { bootstrap } = require('./src/loaders');
 const { logger } = require('./src/utils/logger');
+const cors = require('cors');
 
 async function main() {
   const config = loadConfig();

@@ -15,38 +15,51 @@ function buildAuthCookie(token: string) {
 
 export async function POST(req: Request) {
   const apiBaseUrl = process.env.API_BASE_URL || DEFAULT_API_BASE_URL;
-
-  let body: unknown;
+  
   try {
-    body = await req.json();
-  } catch {
-    body = null;
+    // Parse the request body
+    const body = await req.json();
+    
+    console.log('Proxying registration request to:', `${apiBaseUrl}/api/v1/auth/register`);
+    console.log('Request body:', { ...body, password: '[REDACTED]' });
+    
+    // Make request to backend
+    const response = await fetch(`${apiBaseUrl}/api/v1/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    
+    // Get the response data
+    const data = await response.json();
+    
+    console.log('Backend response status:', response.status);
+    
+    // Create the Next.js response
+    const nextResponse = NextResponse.json(data, { 
+      status: response.status 
+    });
+    
+    // If registration was successful and we have a token, set the cookie
+    if (response.ok && data.token) {
+      nextResponse.headers.set('Set-Cookie', buildAuthCookie(data.token));
+      console.log('Auth cookie set successfully');
+    }
+    
+    return nextResponse;
+    
+  } catch (error: any) {
+    console.error('Registration proxy error:', error);
+    
+    return NextResponse.json(
+      { 
+        error: 'Registration failed',
+        message: error.message || 'Internal server error',
+        code: error.code || 'INTERNAL_ERROR'
+      },
+      { status: 500 }
+    );
   }
-
-  const upstream = await fetch(`${apiBaseUrl}/api/v1/auth/register`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      ...(req.headers.get('authorization')
-        ? { authorization: req.headers.get('authorization') as string }
-        : {}),
-    },
-    body: JSON.stringify(body ?? {}),
-    cache: 'no-store',
-  });
-
-  const contentType = upstream.headers.get('content-type') || '';
-  const isJson = contentType.includes('application/json');
-  const payload = isJson
-    ? await upstream.json().catch(() => null)
-    : await upstream.text().catch(() => null);
-
-  const res = NextResponse.json(payload, { status: upstream.status });
-
-  const token = (payload as any)?.token;
-  if (upstream.ok && typeof token === 'string' && token.length > 0) {
-    res.headers.set('set-cookie', buildAuthCookie(token));
-  }
-
-  return res;
 }
