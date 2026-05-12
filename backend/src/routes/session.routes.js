@@ -4,6 +4,7 @@ const {
   getSession,
   appendEvent,
   getReplay,
+  getResults,
   submitSession,
 } = require('../controllers/session.controller');
 const { validate } = require('../validators/validate');
@@ -13,6 +14,7 @@ const sessionRoutes = Router();
 
 sessionRoutes.get('/:sessionId', getSession);
 sessionRoutes.get('/:sessionId/replay', getReplay);
+sessionRoutes.get('/:sessionId/results', getResults);
 sessionRoutes.post(
   '/:sessionId/events',
   validate({ body: replayEventSchema }),

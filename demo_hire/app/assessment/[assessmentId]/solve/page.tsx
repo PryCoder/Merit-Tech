@@ -3,6 +3,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import Editor from '@monaco-editor/react';
 import {
   Badge,
   Box,
@@ -14,7 +15,6 @@ import {
   Input,
   Stack,
   Text,
-  Textarea,
   VStack,
 } from '@chakra-ui/react';
 
@@ -52,7 +52,18 @@ export default function AssessmentSolvePage() {
   const [error, setError] = React.useState<string | null>(null);
 
   const [code, setCode] = React.useState('// Write your solution here\n');
+  const [language] = React.useState('javascript');
+
   const [mentor, setMentor] = React.useState('');
+  const [mentorStream, setMentorStream] = React.useState('');
+  const [mentorLastHint, setMentorLastHint] = React.useState<string | null>(null);
+
+  const [wsStatus, setWsStatus] = React.useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
+  const wsRef = React.useRef<WebSocket | null>(null);
+  const versionRef = React.useRef<number>(0);
+  const sendTimerRef = React.useRef<number | null>(null);
+  const pendingCodeRef = React.useRef<string>('');
+  const [hintsUsed, setHintsUsed] = React.useState(0);
 
   const [timerStartedAt] = React.useState(() => Date.now());
 
@@ -87,12 +98,183 @@ export default function AssessmentSolvePage() {
     };
   }, [assessmentId]);
 
-  function submit() {
-    // MVP: backend submit endpoint isn’t exposed in the proxy set yet.
-    // For now, take the user to results using the sessionId.
-    router.push(
-      `/assessment/${assessmentId}/results?sessionId=${encodeURIComponent(sessionId)}`
-    );
+  React.useEffect(() => {
+    if (!sessionId) return;
+
+    const base =
+      process.env.NEXT_PUBLIC_WS_BASE_URL ||
+      (process.env.NEXT_PUBLIC_API_BASE_URL
+        ? process.env.NEXT_PUBLIC_API_BASE_URL.replace(/^http/, 'ws')
+        : null) ||
+      'ws://localhost:8081';
+
+    const url = `${base.replace(/\/$/, '')}/ws?sessionId=${encodeURIComponent(sessionId)}`;
+
+    let closed = false;
+    let reconnectAttempt = 0;
+
+    function connect() {
+      if (closed) return;
+      setWsStatus('connecting');
+      const ws = new WebSocket(url);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        reconnectAttempt = 0;
+        setWsStatus('connected');
+        ws.send(JSON.stringify({ type: 'PING' }));
+      };
+
+      ws.onmessage = (evt) => {
+        let msg: any = null;
+        try {
+          msg = JSON.parse(String(evt.data));
+        } catch {
+          msg = null;
+        }
+        if (!msg?.type) return;
+
+        if (msg.type === 'WELCOME') {
+          const snapshotCode = typeof msg?.snapshot?.code === 'string' ? msg.snapshot.code : '';
+          const snapshotVersion = Number.isFinite(msg?.snapshot?.version) ? msg.snapshot.version : 0;
+          setCode(snapshotCode || '// Write your solution here\n');
+          versionRef.current = snapshotVersion;
+          setHintsUsed(Number.isFinite(msg?.hintsUsed) ? msg.hintsUsed : 0);
+          return;
+        }
+
+        if (msg.type === 'CODE_UPDATE') {
+          if (typeof msg.code === 'string') setCode(msg.code);
+          if (Number.isFinite(msg.version)) versionRef.current = msg.version;
+          return;
+        }
+
+        if (msg.type === 'HINT_STREAM_START') {
+          setMentorStream('');
+          return;
+        }
+
+        if (msg.type === 'HINT_STREAM_CHUNK') {
+          if (typeof msg.chunk === 'string') {
+            setMentorStream((s) => s + msg.chunk);
+          }
+          return;
+        }
+
+        if (msg.type === 'HINT_STREAM_END') {
+          const hint = typeof msg.hint === 'string' ? msg.hint : '';
+          setMentorStream('');
+          setMentorLastHint(hint || null);
+          setHintsUsed((n) => n + 1);
+          return;
+        }
+
+        if (msg.type === 'ERROR') {
+          const m = typeof msg.message === 'string' ? msg.message : 'Realtime error';
+          setError(m);
+        }
+      };
+
+      ws.onclose = () => {
+        wsRef.current = null;
+        setWsStatus('disconnected');
+        if (closed) return;
+        reconnectAttempt += 1;
+        const waitMs = Math.min(1500 * reconnectAttempt, 8000);
+        window.setTimeout(connect, waitMs);
+      };
+    }
+
+    connect();
+
+    return () => {
+      closed = true;
+      setWsStatus('disconnected');
+      wsRef.current?.close();
+      wsRef.current = null;
+    };
+  }, [sessionId]);
+
+  async function submit() {
+    if (!sessionId) return;
+    setError(null);
+
+    const timeMs = Math.max(0, Date.now() - timerStartedAt);
+
+    // Best-effort flush of the latest code snapshot.
+    if (sendTimerRef.current) {
+      window.clearTimeout(sendTimerRef.current);
+      sendTimerRef.current = null;
+    }
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      versionRef.current += 1;
+      wsRef.current.send(
+        JSON.stringify({
+          type: 'EDITOR_SYNC',
+          code,
+          language,
+          version: versionRef.current,
+          ts: Date.now(),
+        })
+      );
+    }
+
+    try {
+      await fetchJson(`/api/sessions/${encodeURIComponent(sessionId)}/submit`, {
+        method: 'POST',
+        body: {
+          passed: true,
+          timeMs,
+          hintsUsed,
+          language,
+        },
+      });
+
+      router.push(
+        `/assessment/${assessmentId}/results?sessionId=${encodeURIComponent(sessionId)}`
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Failed to submit');
+    }
+  }
+
+  function queueSync(nextCode: string) {
+    pendingCodeRef.current = nextCode;
+
+    if (sendTimerRef.current) {
+      window.clearTimeout(sendTimerRef.current);
+      sendTimerRef.current = null;
+    }
+
+    sendTimerRef.current = window.setTimeout(() => {
+      const ws = wsRef.current;
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+
+      versionRef.current += 1;
+
+      ws.send(
+        JSON.stringify({
+          type: 'EDITOR_SYNC',
+          code: pendingCodeRef.current,
+          language,
+          version: versionRef.current,
+          ts: Date.now(),
+        })
+      );
+    }, 120);
+  }
+
+  async function askHint() {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      setError('Realtime connection not ready');
+      return;
+    }
+    setError(null);
+    setMentorLastHint(null);
+    setMentorStream('');
+    ws.send(JSON.stringify({ type: 'REQUEST_HINT', prompt: mentor }));
+    setMentor('');
   }
 
   return (
@@ -130,6 +312,14 @@ export default function AssessmentSolvePage() {
               · Time elapsed:{' '}
               <Box as="span" fontFamily="var(--font-geist-mono)">
                 {elapsedSec}s
+              </Box>
+              {' '}· Realtime:{' '}
+              <Box as="span" fontFamily="var(--font-geist-mono)">
+                {wsStatus}
+              </Box>
+              {' '}· Hints:{' '}
+              <Box as="span" fontFamily="var(--font-geist-mono)">
+                {hintsUsed}
               </Box>
             </Text>
           </Box>
@@ -309,21 +499,32 @@ export default function AssessmentSolvePage() {
               p={{ base: 6, md: 8 }}
             >
               <Heading as="h2" fontSize="2xl">
-                Code editor (MVP)
+                Code editor
               </Heading>
               <Text color="blackAlpha.700" mt={1}>
-                Use this text area as the editor for now.
+                Live-sync to server via WebSockets (session resumes after reconnect).
               </Text>
 
               <Divider my={6} />
-
-              <Textarea
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                minH="360px"
-                fontFamily="var(--font-geist-mono)"
-                fontSize="sm"
-              />
+              <Box borderWidth="1px" borderColor="blackAlpha.100" borderRadius="lg" overflow="hidden">
+                <Editor
+                  height="420px"
+                  defaultLanguage="javascript"
+                  value={code}
+                  onChange={(v) => {
+                    const next = v ?? '';
+                    setCode(next);
+                    queueSync(next);
+                  }}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 13,
+                    fontFamily: 'var(--font-geist-mono)',
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                  }}
+                />
+              </Box>
             </Box>
 
             <Box
@@ -336,21 +537,53 @@ export default function AssessmentSolvePage() {
               p={{ base: 6, md: 8 }}
             >
               <Heading as="h2" fontSize="2xl">
-                Mentor (MVP)
+                Mentor
               </Heading>
               <Text color="blackAlpha.700" mt={1}>
-                Ask for hints. (Wiring to mentor API can be added next.)
+                Auto-hints appear if you’re idle; you can also ask.
               </Text>
 
               <Divider my={6} />
 
               <VStack align="stretch" spacing={3}>
+                {mentorStream ? (
+                  <Box
+                    borderWidth="1px"
+                    borderColor="blackAlpha.100"
+                    borderRadius="lg"
+                    p={3}
+                    bg="blackAlpha.50"
+                  >
+                    <Text fontSize="sm" whiteSpace="pre-wrap">
+                      {mentorStream}
+                    </Text>
+                  </Box>
+                ) : null}
+
+                {mentorLastHint ? (
+                  <Box
+                    borderWidth="1px"
+                    borderColor="blackAlpha.100"
+                    borderRadius="lg"
+                    p={3}
+                    bg="blackAlpha.50"
+                  >
+                    <Text fontSize="sm" whiteSpace="pre-wrap">
+                      {mentorLastHint}
+                    </Text>
+                  </Box>
+                ) : null}
+
                 <Input
                   value={mentor}
                   onChange={(e) => setMentor(e.target.value)}
                   placeholder="Ask a question…"
                 />
-                <Button variant="outline" isDisabled>
+                <Button
+                  variant="outline"
+                  onClick={askHint}
+                  isDisabled={!sessionId || wsStatus !== 'connected' || !mentor.trim()}
+                >
                   Send
                 </Button>
               </VStack>

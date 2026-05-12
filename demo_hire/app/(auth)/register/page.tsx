@@ -140,28 +140,23 @@ export default function RegisterPage() {
         throw new Error(data.message || data.error || 'Registration failed');
       }
 
-      if (data.token) {
-        // Store token in localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userRole', role);
-        
-        // Also store user info if available
-        if (data.user) {
-          localStorage.setItem('user', JSON.stringify(data.user));
-        }
-        
-        toast({
-          title: 'Welcome aboard!',
-          description: 'Account created successfully',
-          status: 'success',
-          duration: 2000,
-        });
-        
-        // Redirect to dashboard after short delay
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
+      localStorage.setItem('userRole', role);
+
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
       }
+
+      toast({
+        title: 'Welcome aboard!',
+        description: 'Account created successfully',
+        status: 'success',
+        duration: 2000,
+      });
+
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1500);
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
       toast({

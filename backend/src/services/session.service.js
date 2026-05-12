@@ -36,6 +36,20 @@ const sessionService = {
       status: 'IN_PROGRESS',
       createdAt: new Date().toISOString(),
       submittedAt: null,
+      live: {
+        code: '// Write your solution here\n',
+        language: 'javascript',
+        version: 0,
+        lastEditAt: null,
+        lastActivityAt: Date.now(),
+        hintsUsed: 0,
+        hintAttempts: 0,
+        lastHintAt: null,
+        memoryBank: {
+          mistakes: {},
+          lastRun: null,
+        },
+      },
       replay: {
         sessionId,
         events: [],
@@ -85,6 +99,20 @@ const sessionService = {
       status: 'IN_PROGRESS',
       createdAt: new Date().toISOString(),
       submittedAt: null,
+      live: {
+        code: '// Write your solution here\n',
+        language: 'javascript',
+        version: 0,
+        lastEditAt: null,
+        lastActivityAt: Date.now(),
+        hintsUsed: 0,
+        hintAttempts: 0,
+        lastHintAt: null,
+        memoryBank: {
+          mistakes: {},
+          lastRun: null,
+        },
+      },
       replay: {
         sessionId,
         events: [],
@@ -115,12 +143,18 @@ const sessionService = {
       throw err;
     }
 
-    const computed = meritScoreService.computeScore(submission);
+    const mergedSubmission = {
+      ...submission,
+      hintsUsed:
+        submission?.hintsUsed ?? session?.live?.hintsUsed ?? submission?.hints,
+    };
+
+    const computed = meritScoreService.computeScore(mergedSubmission);
 
     session.status = 'SUBMITTED';
     session.submittedAt = new Date().toISOString();
     session.submission = {
-      ...submission,
+      ...mergedSubmission,
       createdAt: session.submittedAt,
     };
     session.score = {
@@ -132,9 +166,9 @@ const sessionService = {
     session.replay.events.push({
       type: 'SUBMIT',
       payload: {
-        passed: !!submission.passed,
-        timeMs: submission.timeMs ?? null,
-        hintsUsed: submission.hintsUsed ?? 0,
+        passed: !!mergedSubmission.passed,
+        timeMs: mergedSubmission.timeMs ?? null,
+        hintsUsed: mergedSubmission.hintsUsed ?? 0,
       },
       ts: Date.now(),
     });

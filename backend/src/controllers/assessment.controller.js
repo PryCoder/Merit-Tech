@@ -1,4 +1,4 @@
-const { assessmentService, sessionService } = require('../services');
+const { assessmentService, sessionService, taskCreatorService } = require('../services');
 
 function forbidden(code, message) {
   const err = new Error(message);
@@ -100,6 +100,42 @@ function getRanking(req, res, next) {
   }
 }
 
+async function generateAssessment(req, res, next) {
+  try {
+    if (!req.user || (req.user.role !== 'recruiter' && req.user.role !== 'company'))
+      throw forbidden('FORBIDDEN', 'Recruiter or company role required');
+
+    const draft = await taskCreatorService.generateAssessmentDraft({
+      jobDescription: req.body.jobDescription,
+      titleHint: req.body.titleHint,
+      difficulty: req.body.difficulty,
+      techStack: req.body.techStack,
+      tasksCount: req.body.tasksCount,
+      revealThreshold: req.body.revealThreshold,
+      config: req.app.locals.config,
+    });
+
+    const assessment = assessmentService.createAssessment({
+      companyId: req.body.companyId ?? req.user.id,
+      title: draft.title,
+      description: draft.description || '',
+      tasks: draft.tasks,
+      revealThreshold: draft.revealThreshold ?? req.body.revealThreshold ?? 70,
+      techStack: draft.techStack || req.body.techStack || [],
+      mentorStrictness: draft.mentorStrictness ?? 5,
+    });
+
+    res.status(201).json({
+      assessment,
+      draftSource: req.app.locals.config?.groq?.enabled
+        ? req.app.locals.config?.groq?.provider || 'groq'
+        : 'deterministic',
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getAssessments,
   getAssessment,
@@ -107,4 +143,5 @@ module.exports = {
   startSession,
   startSelfSession,
   getRanking,
+  generateAssessment,
 };

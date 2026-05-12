@@ -3,29 +3,47 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner, Center, Box } from '@chakra-ui/react';
+import { fetchJson } from '../lib/fetchJson';
+
+type MeResponse = {
+  user: {
+    role?: string;
+  };
+};
 
 export default function DashboardRouter() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
+    let cancelled = false;
 
-    if (!token) {
-      router.push('/login');
-      return;
-    }
+    (async () => {
+      try {
+        const me = await fetchJson<MeResponse>('/api/auth/me');
+        const role = String(me?.user?.role || '').toLowerCase();
 
-    // Route based on role
-    if (userRole === 'recruiter') {
-      router.push('/dashboard/recruiter');
-    } else if (userRole === 'candidate') {
-      router.push('/dashboard/candidate');
-    } else {
-      // Fallback to login if role is invalid
-      router.push('/login');
-    }
+        if (role) localStorage.setItem('userRole', role);
+
+        if (cancelled) return;
+
+        if (role === 'recruiter') {
+          router.push('/dashboard/recruiter');
+        } else if (role === 'candidate') {
+          router.push('/dashboard/candidate');
+        } else {
+          router.push('/login');
+        }
+      } catch {
+        if (!cancelled) router.push('/login');
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   return (

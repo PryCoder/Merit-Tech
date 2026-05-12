@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const DEFAULT_API_BASE_URL = 'http://localhost:4000';
+const DEFAULT_API_BASE_URL = 'http://localhost:8081';
 
 type ProxyOptions = {
   apiPath: string;
@@ -26,7 +26,10 @@ function pickAuthHeader(req: Request) {
 }
 
 export async function proxyToBackend(req: Request, { apiPath }: ProxyOptions) {
-  const apiBaseUrl = process.env.API_BASE_URL || DEFAULT_API_BASE_URL;
+  const apiBaseUrl =
+    process.env.API_BASE_URL ||
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    DEFAULT_API_BASE_URL;
 
   let body: unknown = undefined;
   if (req.method !== 'GET' && req.method !== 'HEAD') {

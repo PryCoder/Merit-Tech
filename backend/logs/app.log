@@ -191,3 +191,96 @@
 2026-05-02T13:09:37.303Z INFO API listening on http://localhost:8080 (development)
 2026-05-02T13:22:40.538Z INFO MongoDB connected
 2026-05-02T13:22:40.701Z INFO API listening on http://localhost:8080 (development)
+2026-05-02T14:12:35.769Z INFO MongoDB connected
+2026-05-02T14:12:35.807Z INFO API listening on http://localhost:8080 (development)
+2026-05-11T07:35:28.006Z INFO MongoDB connected
+2026-05-11T07:35:28.052Z INFO API listening on http://localhost:8080 (development)
+2026-05-11T07:46:11.411Z INFO MongoDB connected
+2026-05-11T07:46:11.447Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T07:51:41.544Z ERROR Unhandled error {"requestId":"455ced89-299b-4f0b-b8cb-a4189b2d9747","status":409,"message":"Email already exists","stack":"Error: Email already exists\n    at Object.register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:46:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\auth.controller.js:5:20)"}
+2026-05-11T08:12:53.642Z WARN Received SIGINT; shutting down...
+2026-05-11T08:12:53.646Z INFO HTTP server closed
+2026-05-11T08:12:58.611Z INFO MongoDB connected
+2026-05-11T08:12:58.639Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:14:08.616Z ERROR Unhandled error {"requestId":"57ef5ff9-b4cb-4b30-990e-4da149abf0c5","status":409,"message":"Email already exists","stack":"Error: Email already exists\n    at Object.register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:46:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\auth.controller.js:5:20)"}
+2026-05-11T08:15:29.879Z ERROR Unhandled error {"requestId":"5701cd19-a4e9-409e-91f8-0cdf4e2ffd8b","status":409,"message":"Email already exists","stack":"Error: Email already exists\n    at Object.register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:46:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\auth.controller.js:5:20)"}
+2026-05-11T08:15:45.500Z ERROR Unhandled error {"requestId":"86257bc1-49f1-4f0f-aacc-02abd2848697","status":409,"message":"Email already exists","stack":"Error: Email already exists\n    at Object.register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\services\\auth.service.js:46:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async register (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\src\\controllers\\auth.controller.js:5:20)"}
+2026-05-11T08:57:15.708Z INFO MongoDB connected
+2026-05-11T08:57:15.742Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:57:35.435Z INFO MongoDB connected
+2026-05-11T08:57:35.461Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:57:48.653Z INFO MongoDB connected
+2026-05-11T08:57:48.679Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:57:52.246Z INFO MongoDB connected
+2026-05-11T08:57:52.271Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:58:05.577Z INFO MongoDB connected
+2026-05-11T08:58:05.602Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:58:13.244Z INFO MongoDB connected
+2026-05-11T08:58:13.268Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:58:26.142Z INFO MongoDB connected
+2026-05-11T08:58:26.166Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T08:59:31.095Z INFO MongoDB connected
+2026-05-11T08:59:32.449Z INFO MongoDB disconnected
+2026-05-11T09:03:25.218Z ERROR Unhandled error {"requestId":"800c2909-ea1b-49d2-b59e-9308098aec84","status":400,"message":"Expected property name or '}' in JSON at position 1 (line 1 column 2)","stack":"SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)\n    at JSON.parse (<anonymous>)\n    at parse (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\node_modules\\body-parser\\lib\\types\\json.js:92:19)\n    at C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\express\\node_modules\\body-parser\\lib\\read.js:128:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:211:14)\n    at invokeCallback (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\raw-body\\index.js:238:16)\n    at done (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\raw-body\\index.js:227:7)\n    at IncomingMessage.onEnd (C:\\Users\\priya\\Videos\\Merit-Tech\\backend\\node_modules\\raw-body\\index.js:287:7)\n    at IncomingMessage.emit (node:events:518:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)"}
+2026-05-11T09:04:06.201Z INFO MongoDB connected
+2026-05-11T09:04:06.226Z INFO API listening on http://localhost:8081 (development)
+2026-05-11T09:06:16.737Z INFO MongoDB connected
+2026-05-11T09:06:16.762Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T17:52:39.048Z INFO MongoDB connected
+2026-05-12T17:52:39.082Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T17:58:56.432Z INFO MongoDB connected
+2026-05-12T17:58:56.500Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T17:59:42.177Z INFO MongoDB connected
+2026-05-12T17:59:42.208Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:00:29.794Z INFO MongoDB connected
+2026-05-12T18:00:29.822Z INFO WebSocket server attached at /ws
+2026-05-12T18:00:29.827Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:00:40.483Z INFO MongoDB connected
+2026-05-12T18:00:40.510Z INFO WebSocket server attached at /ws
+2026-05-12T18:00:40.516Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:01:18.551Z INFO MongoDB connected
+2026-05-12T18:01:18.582Z INFO WebSocket server attached at /ws
+2026-05-12T18:01:18.589Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:06:58.496Z WARN Received SIGINT; shutting down...
+2026-05-12T18:06:58.499Z INFO HTTP server closed
+2026-05-12T18:07:47.502Z INFO MongoDB connected
+2026-05-12T18:07:47.524Z INFO WebSocket server attached at /ws
+2026-05-12T18:07:47.530Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:18:56.687Z INFO MongoDB connected
+2026-05-12T18:18:56.722Z INFO WebSocket server attached at /ws
+2026-05-12T18:18:56.727Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:19:09.813Z INFO MongoDB connected
+2026-05-12T18:19:09.837Z INFO WebSocket server attached at /ws
+2026-05-12T18:19:09.842Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:19:44.929Z INFO MongoDB connected
+2026-05-12T18:19:44.965Z INFO WebSocket server attached at /ws
+2026-05-12T18:19:44.973Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:19:53.052Z INFO MongoDB connected
+2026-05-12T18:19:53.091Z INFO WebSocket server attached at /ws
+2026-05-12T18:19:53.102Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:20:01.225Z INFO MongoDB connected
+2026-05-12T18:20:01.258Z INFO WebSocket server attached at /ws
+2026-05-12T18:20:01.266Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:25:04.262Z INFO MongoDB connected
+2026-05-12T18:25:04.291Z INFO WebSocket server attached at /ws
+2026-05-12T18:25:04.297Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:27:41.497Z INFO MongoDB connected
+2026-05-12T18:27:41.524Z INFO WebSocket server attached at /ws
+2026-05-12T18:27:41.532Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:27:50.553Z INFO MongoDB connected
+2026-05-12T18:27:50.574Z INFO WebSocket server attached at /ws
+2026-05-12T18:27:50.579Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:28:06.309Z WARN Received SIGINT; shutting down...
+2026-05-12T18:28:10.441Z INFO MongoDB connected
+2026-05-12T18:28:10.463Z INFO WebSocket server attached at /ws
+2026-05-12T18:28:10.468Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:31:18.684Z INFO MongoDB connected
+2026-05-12T18:31:18.708Z INFO WebSocket server attached at /ws
+2026-05-12T18:31:18.715Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:31:56.304Z INFO MongoDB connected
+2026-05-12T18:31:56.327Z INFO WebSocket server attached at /ws
+2026-05-12T18:31:56.331Z INFO API listening on http://localhost:8081 (development)
+2026-05-12T18:40:28.445Z INFO MongoDB connected
+2026-05-12T18:59:33.253Z WARN Task creator unavailable; falling back to deterministic {"message":"Single '}' in template."}
+2026-05-12T19:00:29.760Z WARN Task creator unavailable; falling back to deterministic {"message":"Single '}' in template."}
+2026-05-12T19:08:45.842Z WARN Task creator unavailable; falling back to deterministic {"message":"Single '}' in template."}

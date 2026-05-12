@@ -112,26 +112,23 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/api/auth/login`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || 'Invalid email or password');
       }
 
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        if (rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-        }
+      if (data?.user?.role) {
+        localStorage.setItem('userRole', String(data.user.role));
+      }
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+      }
         toast({
           title: 'Welcome back!',
           description: 'Redirecting to dashboard...',
@@ -139,7 +136,6 @@ export default function LoginPage() {
           duration: 2000,
         });
         setTimeout(() => router.push('/dashboard'), 1500);
-      }
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
       toast({

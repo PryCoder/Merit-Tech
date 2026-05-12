@@ -14,7 +14,10 @@ function buildAuthCookie(token: string) {
 }
 
 export async function POST(req: Request) {
-  const apiBaseUrl = process.env.API_BASE_URL || DEFAULT_API_BASE_URL;
+  const apiBaseUrl =
+    process.env.API_BASE_URL ||
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    DEFAULT_API_BASE_URL;
 
   let body: unknown;
   try {

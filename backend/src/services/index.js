@@ -5,6 +5,8 @@ module.exports = {
   ...require('./ghostReplay.service'),
   ...require('./meritScore.service'),
   ...require('./mentor.service'),
+  ...require('./roadmap.service'),
+  ...require('./taskCreator.service'),
   ...require('./auth.service'),
   ...require('./pipeline.service'),
 };

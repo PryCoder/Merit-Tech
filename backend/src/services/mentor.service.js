@@ -1,8 +1,8 @@
 // Non-spoiler mentor hints.
-// Uses Grok via LangChain when configured; falls back to deterministic hints.
+// Uses Groq (OpenAI-compatible) via LangChain when configured; falls back to deterministic hints.
 
 const { logger } = require('../utils/logger');
-const { createGrokMentor } = require('./grokMentor.chain');
+const { createGroqMentor } = require('./groqMentor.chain');
 
 function normalize(s) {
   return String(s || '').toLowerCase();
@@ -65,9 +65,10 @@ const deterministicMentor = {
 let grokMentorPromise = null;
 
 async function getGrokMentor(config) {
-  if (!config?.grok?.enabled) return null;
+  const llm = config?.groq || config?.grok;
+  if (!llm?.enabled) return null;
   if (!grokMentorPromise) {
-    grokMentorPromise = createGrokMentor({ grokConfig: config.grok });
+    grokMentorPromise = createGroqMentor({ groqConfig: llm });
   }
   return grokMentorPromise;
 }
@@ -81,7 +82,7 @@ const mentorService = {
       }
     } catch (err) {
       logger.warn(
-        'Grok mentor unavailable; falling back to deterministic hints',
+        'Groq mentor unavailable; falling back to deterministic hints',
         {
           message: err?.message,
         }

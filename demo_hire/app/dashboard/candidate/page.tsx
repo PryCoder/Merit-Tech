@@ -18,35 +18,56 @@ import {
   useToast,
   Badge,
   useBreakpointValue,
-  Drawer,
-  DrawerBody,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
-  IconButton,
 } from '@chakra-ui/react';
 import {
   TrophyIcon,
   ClockIcon,
   ChartBarIcon,
   ArrowRightIcon,
-  CpuChipIcon,
-  Bars3Icon,
 } from '@heroicons/react/24/outline';
 import { CandidateSidebar } from '@/app/component/candidate-sidebar';
+import { ApiError, fetchJson } from '../../lib/fetchJson';
 
 interface Assessment {
-  _id: string;
+  id: string;
   title: string;
-  description: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  category: string;
+  description?: string;
+  revealThreshold?: number;
+}
+
+type DashboardResponse = {
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    role?: string;
+  };
+  candidate: {
+    publicId: string;
+    revealed: boolean;
+  };
+  pendingInvites: Assessment[];
+  completed: Array<{
+    sessionId: string;
+    assessment: {
+      id: string;
+      title: string;
+      revealThreshold?: number;
+    } | null;
+    submittedAt?: string;
+    score?: { score: number };
+    submission?: { timeMs?: number | null };
+  }>;
+  progression: Array<{ ts: string; score: number }>;
+};
+
+function round1(n: number) {
+  return Math.round(n * 10) / 10;
 }
 
 export default function CandidateDashboard() {
   const router = useRouter();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, lg: false });
   
   const [loading, setLoading] = useState(true);
@@ -58,96 +79,71 @@ export default function CandidateDashboard() {
     totalHours: 0,
   });
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('userRole');
+    let cancelled = false;
 
-    if (!token || role !== 'candidate') {
-      router.push('/login');
-      return;
-    }
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await fetchJson<DashboardResponse>(
+          '/api/candidate/me/dashboard'
+        );
 
-    fetchUserProfile(token);
-    fetchAssessments(token);
-  }, []);
+        const role = String(data?.user?.role || '').toLowerCase();
+        if (role) localStorage.setItem('userRole', role);
+        if (role !== 'candidate') {
+          router.push('/login');
+          return;
+        }
 
-  const fetchUserProfile = async (token: string) => {
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (res.ok) {
+        if (cancelled) return;
+
         setUser(data.user);
-      }
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
-    }
-  };
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-  const fetchAssessments = async (token: string) => {
-    try {
-      const res = await fetch(`${API_BASE}/api/v1/assessments`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (res.ok && data.assessments) {
-        setAssessments(data.assessments);
-      } else {
-        // Mock data
-        setAssessments([
-          { _id: '1', title: 'Two Sum Problem', description: 'Find two numbers that add up to target', difficulty: 'Easy', category: 'Arrays' },
-          { _id: '2', title: 'LRU Cache Implementation', description: 'Implement Least Recently Used cache', difficulty: 'Medium', category: 'Data Structures' },
-          { _id: '3', title: 'Real-time Chat Server', description: 'Build a WebSocket chat server', difficulty: 'Hard', category: 'System Design' },
-          { _id: '4', title: 'Merge K Sorted Lists', description: 'Merge k sorted linked lists', difficulty: 'Hard', category: 'Linked Lists' },
-        ]);
+        const pending = Array.isArray(data.pendingInvites)
+          ? data.pendingInvites
+          : [];
+        const completed = Array.isArray(data.completed) ? data.completed : [];
+
+        setAssessments(pending);
+
+        const totalCompleted = completed.length;
+        const avgScore = totalCompleted
+          ? completed.reduce((acc, s) => acc + (s?.score?.score ?? 0), 0) /
+            totalCompleted
+          : 0;
+        const totalHours = completed.reduce((acc, s) => {
+          const ms = s?.submission?.timeMs;
+          return acc + (typeof ms === 'number' && ms > 0 ? ms : 0);
+        }, 0);
+
+        setStats({
+          totalCompleted,
+          averageScore: Math.round(avgScore),
+          totalHours: round1(totalHours / 3_600_000),
+        });
+      } catch (err) {
+        const msg = err instanceof ApiError ? err.message : 'Failed to load';
+        toast({
+          title: 'Unable to load dashboard',
+          description: msg,
+          status: 'error',
+          duration: 2500,
+        });
+        router.push('/login');
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      setStats({
-        totalCompleted: 3,
-        averageScore: 87,
-        totalHours: 24,
-      });
-    } catch (error) {
-      console.error('Failed to fetch assessments:', error);
-      setAssessments([
-        { _id: '1', title: 'Two Sum Problem', description: 'Find two numbers that add up to target', difficulty: 'Easy', category: 'Arrays' },
-        { _id: '2', title: 'LRU Cache Implementation', description: 'Implement Least Recently Used cache', difficulty: 'Medium', category: 'Data Structures' },
-        { _id: '3', title: 'Real-time Chat Server', description: 'Build a WebSocket chat server', difficulty: 'Hard', category: 'System Design' },
-      ]);
-      setStats({
-        totalCompleted: 3,
-        averageScore: 87,
-        totalHours: 24,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router, toast]);
 
   const startAssessment = async (assessmentId: string) => {
-    const token = localStorage.getItem('token');
-    
-    try {
-      const res = await fetch(`${API_BASE}/api/v1/assessments/${assessmentId}/sessions/self`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      
-      const data = await res.json();
-      
-      if (res.ok && data.sessionId) {
-        router.push(`/assessment/${assessmentId}/session/${data.sessionId}`);
-      } else {
-        router.push(`/assessment/${assessmentId}`);
-      }
-    } catch (error) {
-      router.push(`/assessment/${assessmentId}`);
-    }
+    router.push(`/assessment/${assessmentId}/setup`);
   };
 
   if (loading) {
@@ -160,37 +156,21 @@ export default function CandidateDashboard() {
 
   return (
     <Flex minH="100vh" bg="#0A0A0F">
-      {/* Desktop Sidebar */}
-      {!isMobile && <CandidateSidebar user={user} />}
+      {/* Sidebar - Desktop only */}
+      <Box display={{ base: 'none', lg: 'block' }}>
+        <CandidateSidebar user={user} />
+      </Box>
 
-      {/* Mobile Drawer Button */}
-      {isMobile && (
-        <IconButton
-          aria-label="Open menu"
-          icon={<Bars3Icon className="w-5 h-5" />}
-          position="fixed"
-          top={4}
-          left={4}
-          zIndex={20}
-          bg="rgba(0,0,0,0.8)"
-          backdropFilter="blur(10px)"
-          onClick={onOpen}
-          _hover={{ bg: 'rgba(0,0,0,0.9)' }}
-        />
-      )}
-
-      {/* Mobile Drawer */}
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="xs">
-        <DrawerOverlay />
-        <DrawerContent bg="#0A0A0F" borderRight="1px solid rgba(255,255,255,0.06)">
-          <DrawerBody p={0}>
-            <CandidateSidebar user={user} onClose={onClose} />
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      {/* Mobile - Sidebar component will render bottom navigation */}
+      {isMobile && <CandidateSidebar user={user} />}
 
       {/* Main Content */}
-      <Box flex={1} overflowX="auto">
+      <Box 
+        flex={1} 
+        overflowX="auto" 
+        pb={{ base: "80px", lg: 0 }} // Add bottom padding for mobile to account for bottom nav
+        mb={{ base: 0, lg: 0 }}
+      >
         <Box maxW="1400px" mx="auto" px={{ base: 4, md: 6, lg: 8 }} py={{ base: 6, md: 8, lg: 10 }}>
           {/* Welcome Section */}
           <VStack align="flex-start" mb={8}>
@@ -240,34 +220,24 @@ export default function CandidateDashboard() {
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
             {assessments.map((assessment) => (
               <Card
-                key={assessment._id}
+                key={assessment.id}
                 bg="rgba(255,255,255,0.03)"
                 border="1px solid rgba(255,255,255,0.06)"
                 borderRadius="2xl"
                 _hover={{ borderColor: 'rgba(200,241,53,0.3)', transform: 'translateY(-2px)' }}
                 transition="all 0.2s"
                 cursor="pointer"
-                onClick={() => startAssessment(assessment._id)}
+                onClick={() => startAssessment(assessment.id)}
               >
                 <CardBody>
                   <HStack justify="space-between" mb={4}>
-                    <Badge
-                      px={2}
-                      py={1}
-                      borderRadius="md"
-                      bg={assessment.difficulty === 'Easy' ? 'rgba(74,222,128,0.1)' : assessment.difficulty === 'Medium' ? 'rgba(251,191,36,0.1)' : 'rgba(255,77,109,0.1)'}
-                      color={assessment.difficulty === 'Easy' ? '#4ADE80' : assessment.difficulty === 'Medium' ? '#FBBF24' : '#FF4D6D'}
-                      fontSize="xs"
-                    >
-                      {assessment.difficulty}
-                    </Badge>
                     <Badge bg="rgba(200,241,53,0.1)" color="#C8F135" fontSize="xs">
-                      {assessment.category}
+                      Assessment
                     </Badge>
                   </HStack>
                   <Text fontWeight="bold" fontSize="lg" mb={2}>{assessment.title}</Text>
                   <Text color="rgba(255,255,255,0.4)" fontSize="sm" mb={4} noOfLines={2}>
-                    {assessment.description}
+                    {assessment.description || ''}
                   </Text>
                   <Button
                     rightIcon={<ArrowRightIcon className="w-3 h-3" />}

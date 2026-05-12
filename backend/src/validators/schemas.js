@@ -99,6 +99,18 @@ const pipelineMoveSchema = z
   })
   .strict();
 
+const generateAssessmentSchema = z
+  .object({
+    jobDescription: z.string().min(20).max(20_000),
+    companyId: z.string().nullable().optional(),
+    titleHint: z.string().min(2).max(160).optional(),
+    difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
+    techStack: z.array(z.string()).max(20).optional(),
+    tasksCount: z.number().int().min(1).max(5).optional(),
+    revealThreshold: z.number().int().min(0).max(100).optional(),
+  })
+  .strict();
+
 module.exports = {
   createAssessmentSchema,
   startSessionSchema,
@@ -109,4 +121,5 @@ module.exports = {
   loginSchema,
   pipelineMoveSchema,
   updateProfileSchema,
+  generateAssessmentSchema,
 };

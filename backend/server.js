@@ -4,7 +4,7 @@ const { createApp } = require('./src/app');
 const { loadConfig } = require('./src/config');
 const { bootstrap } = require('./src/loaders');
 const { logger } = require('./src/utils/logger');
-const cors = require('cors');
+const { attachWsServer } = require('./src/realtime/wsServer');
 
 async function main() {
   const config = loadConfig();
@@ -12,6 +12,9 @@ async function main() {
   const app = await createApp({ config });
 
   const server = http.createServer(app);
+
+  // Live-sync IDE + hint streaming
+  attachWsServer({ server, config });
 
   server.listen(config.port, () => {
     logger.info(

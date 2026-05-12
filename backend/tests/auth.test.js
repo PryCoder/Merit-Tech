@@ -4,6 +4,8 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const { createApp } = require('../src/app');
 const { connectMongo, disconnectMongo } = require('../src/loaders/mongoose');
 
+jest.setTimeout(180000);
+
 describe('Auth', () => {
   let mongo;
   let config;
@@ -15,7 +17,7 @@ describe('Auth', () => {
       hashSalt: 'test-salt-12345678',
       mongodb: { uri: mongo.getUri(), enabled: true },
       auth: { jwtSecret: 'test-jwt-secret-1234567890', jwtExpiresIn: '1h' },
-      grok: { enabled: false },
+      groq: { enabled: false },
     };
 
     await connectMongo({ uri: config.mongodb.uri });

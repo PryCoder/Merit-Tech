@@ -20,6 +20,15 @@ function loadConfig() {
       .enum(['error', 'warn', 'info', 'http', 'debug'])
       .default('info'),
     HASH_SALT: z.string().min(8).default('dev-only-change-me'),
+    // Preferred: Groq (OpenAI-compatible)
+    GROQ_API_KEY: z.string().optional(),
+    GROQ_BASE_URL: z
+      .string()
+      .url()
+      .default('https://api.groq.com/openai/v1'),
+    GROQ_MODEL: z.string().default('llama-3.3-70b-versatile'),
+
+    // Backward compatibility: Grok (xAI)
     GROK_API_KEY: z.string().optional(),
     GROK_BASE_URL: z.string().url().default('https://api.x.ai/v1'),
     GROK_MODEL: z.string().default('grok-2-latest'),
@@ -39,18 +48,36 @@ function loadConfig() {
 
   const env = parsed.data;
 
+  const groqEnabled = Boolean(env.GROQ_API_KEY);
+  const grokEnabled = Boolean(env.GROK_API_KEY);
+
+  const llm = groqEnabled
+    ? {
+        provider: 'groq',
+        apiKey: env.GROQ_API_KEY,
+        baseUrl: env.GROQ_BASE_URL,
+        model: env.GROQ_MODEL,
+        enabled: true,
+      }
+    : {
+        provider: 'grok',
+        apiKey: env.GROK_API_KEY,
+        baseUrl: env.GROK_BASE_URL,
+        model: env.GROK_MODEL,
+        enabled: grokEnabled,
+      };
+
   return {
     nodeEnv: env.NODE_ENV,
     port: env.PORT,
     corsOrigin: env.CORS_ORIGIN,
     logLevel: env.LOG_LEVEL,
     hashSalt: env.HASH_SALT,
-    grok: {
-      apiKey: env.GROK_API_KEY,
-      baseUrl: env.GROK_BASE_URL,
-      model: env.GROK_MODEL,
-      enabled: Boolean(env.GROK_API_KEY),
-    },
+    // New preferred config key
+    groq: llm,
+
+    // Backward compatible alias (some services still read config.grok)
+    grok: llm,
 
     mongodb: {
       uri: env.MONGODB_URI,

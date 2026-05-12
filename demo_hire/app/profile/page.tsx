@@ -120,8 +120,7 @@ export default function ProfilePage() {
     try {
       await fetchJson('/api/auth/me/profile', {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(body),
+        body,
       });
       setSuccess('Saved');
       await load();
